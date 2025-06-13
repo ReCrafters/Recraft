@@ -77,7 +77,7 @@ cd ReCraft
 ### 2. Install Dependencies
 
 npm install
-
+npm start
 
 ### 3. Environment Configuration
 
@@ -86,6 +86,7 @@ Create a .env file with the following keys:
 
 MONGODB_URI=mongodb://localhost:27017/recraft
 SECRET=your_secret_key
+PORT=port_number
 
 ### 4. Run the App
 
