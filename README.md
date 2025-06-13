@@ -2,7 +2,7 @@
 
 ReCraft is a gamified sustainability platform designed to promote conscious consumption through community-driven product transparency, eco-friendly marketplaces, and digital rewards. It empowers users, sellers, and administrators through separate dashboards that track impact, verify transparency, and manage sustainable commerce at scale.
 
-![ReCraft Banner](./public/images/recraft-banner.png)
+![ReCraft Banner](./src/public/images/recraft-banner.png)
 
 ## 🌍 Core Idea
 ReCraft brings **Reduce, Reuse, Recycle (RRR)** actions into the digital age by incentivizing eco-conscious behavior with **GreenBits**, a platform currency. It verifies product sustainability, supports local artisans, and creates a transparent, rewarding ecosystem for green living.
