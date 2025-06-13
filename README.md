@@ -71,7 +71,7 @@ ReCraft brings **Reduce, Reuse, Recycle (RRR)** actions into the digital age by 
 ## 🛠️ Setup Instructions
 
 ### 1. Clone the Repository
-git clone https://github.com/your-username/ReCraft.git
+git clone https://github.com/itsme-saksham18/ReCraft.git
 cd ReCraft
 
 ### 2. Install Dependencies
