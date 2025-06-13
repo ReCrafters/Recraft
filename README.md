@@ -12,7 +12,7 @@ ReCraft brings **Reduce, Reuse, Recycle (RRR)** actions into the digital age by 
 ## 🚀 Key Features
 
 ### 👤 User Dashboard
-- 📱 Post proof of RRR activities to earn GreenBits
+- 📱 Post proof of RRR activities to earn eco-Bits
 - 🏅 Maintain streaks for bonus rewards
 - 🧾 Scan/search products to check **TSV (Transparency Score Value)** and **SSV (Sustainability Score Value)**
 - 🛒 Shop eco-friendly products from verified sellers
@@ -89,7 +89,7 @@ SECRET=your_secret_key
 
 ### 4. Run the App
 
-nodemon src/app.js
+node src/app.js
 \`\`\`
 
 ---
