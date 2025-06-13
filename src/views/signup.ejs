@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ReCraft - Sign Up</title>
+  <link rel="stylesheet" href="/css/signup.css" />
+  <link rel="icon" href="/images/recraft-logo.png" />
+</head>
+<body>
+
+  <!-- Flash Messages -->
+  <% if (success && success.length) { %>
+    <div class="alert alert-success col-6 offset-3" role="alert"><%= success %></div>
+  <% } %>
+  <% if (error && error.length) { %>
+    <div class="alert alert-danger col-6 offset-3" role="alert"><%= error %></div>
+  <% } %>
+
+  <h1>ReCraft</h1>
+    <div class="container">
+    <div class="logo-placeholder">
+     <img src="/images/recraft-logo.png" alt="ReCraft Logo">
+    </div>
+  <div class="container">
+    <form action="/users/signup" method="POST">
+  <h3>Join the Green Revolution</h3>
+
+  <input type="text" name="email" placeholder="Email" required />
+  <input type="text" name="name" placeholder="Full Name" required />
+  <input type="text" name="username" placeholder="Username" required />
+  <input type="number" name="phone" placeholder="Phone Number" required />
+  <input type="password" name="password" placeholder="Password" required />
+
+  <select name="role" id="role" required>
+    <option value="">Select Role</option>
+    <option value="user">User</option>
+    <option value="seller">Seller</option>
+    <option value="admin">Admin</option>
+  </select>
+
+  <div class="user-fields hidden">
+    <input type="text" name="address" placeholder="Address" />
+  </div>
+
+  <div class="seller-fields hidden">
+    <input type="text" name="businessName" placeholder="Business Name" />
+    <input type="text" name="businessType" placeholder="Business Type" />
+    <input type="text" name="gstNumber" placeholder="GST Number" />
+  </div>
+
+  <div class="admin-fields hidden">
+    <input type="text" name="employeeId" placeholder="Employee ID" />
+    <input type="text" name="designation" placeholder="Designation" />
+  </div>
+
+  <button type="submit">Sign Up</button>
+</form>
+
+    <p>Already registered? <a href="/users/login">Login here</a></p>
+  </div>
+
+<footer class="footer">
+    <div class="footer-container">
+      <div class="footer-logo">
+        <img src="/images/recraft-logo.png" alt="ReCraft Logo" />
+        <p class="tagline">Recycle. Reuse. ReCraft.</p>
+      </div>
+      <div class="footer-social">
+        <a href="#"><img src="https://img.icons8.com/?size=100&id=118497&format=png&color=000000" alt="Facebook"></a>
+        <a href="mailto:sync.with.saksham@gmail.com"><img src="https://img.icons8.com/?size=100&id=mXcvtsj8e1Ug&format=png&color=000000" alt="Mail"></a>
+        <a href="#"><img src="https://img.icons8.com/?size=100&id=ZRiAFreol5mE&format=png&color=000000" alt="Instagram"></a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="currentYear"></span> ReCraft. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+
+<script src="/js/signup.js"></script>
+</body>
+</html>
