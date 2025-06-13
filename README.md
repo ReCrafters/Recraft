@@ -67,40 +67,6 @@ ReCraft brings **Reduce, Reuse, Recycle (RRR)** actions into the digital age by 
 
 ---
 
-## 📁 Project Structure (Simplified)
-
-
-src/
-├── config/
-│   ├── db.js
-├── controllers/
-│   ├── users.js
-├── models/
-│   ├── info
-│        ├── user.js
-│        ├── seller.js
-│        └── admin.js
-├── routes/
-│   ├── users.js
-│   
-├── views/
-│   ├── signup.ejs
-│   ├── login.ejs
-│   
-├── public/
-│   ├── css/
-|        ├── signup.css
-|        ├── login.css
-│   ├── js/
-|        ├── signup.js
-│   └── images/
-├
-├── util/
-│   └── wrapAsync.js
-├── app.js
-└── middleware.js
-
----
 
 ## 🛠️ Setup Instructions
 
