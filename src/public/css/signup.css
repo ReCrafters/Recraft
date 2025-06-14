@@ -116,3 +116,68 @@ footer {
   width: 100%;
   object-fit: cover;
 }
+
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    small {
+      color: #777;
+      display: block;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    button {
+      width: 100%;
+      background: #2e7d32;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background: #1b5e20;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+   .password-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .password-container input[type="password"],
+  .password-container input[type="text"] {
+    width: 100%;
+    padding: 10px 40px 10px 10px; /* Add space for icon */
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 20%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .toggle-password .material-symbols-outlined {
+    font-size: 22px;
+    color: #555;
+  }
+
+  .toggle-password:hover .material-symbols-outlined {
+    color: #000;
+  }

@@ -8,11 +8,6 @@ const AdminSchema = new mongoose.Schema({
     unique: true
   },
 
-  age: {
-    type: Number,
-    required: true
-  },
-
   designation: {
     type: String, //Have to create enum for this
     required: true

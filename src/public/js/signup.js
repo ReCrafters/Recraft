@@ -15,3 +15,12 @@
       else if (this.value === 'seller') sellerFields.classList.remove('hidden');
       else if (this.value === 'admin') adminFields.classList.remove('hidden');
     });
+
+  const toggle = document.getElementById('togglePassword');
+  const passwordField = document.getElementById('password');
+  const eyeIcon = document.getElementById('eyeIcon');
+
+  toggle.addEventListener('change', function () {
+    const isChecked = this.checked;
+    passwordField.type = isChecked ? 'text' : 'password';
+  });

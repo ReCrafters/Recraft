@@ -6,6 +6,8 @@
   <title>ReCraft - Sign Up</title>
   <link rel="stylesheet" href="/css/signup.css" />
   <link rel="icon" href="/images/recraft-logo.png" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=visibility" />
+  
 </head>
 <body>
 
@@ -23,40 +25,66 @@
      <img src="/images/recraft-logo.png" alt="ReCraft Logo">
     </div>
   <div class="container">
-    <form action="/users/signup" method="POST">
-  <h3>Join the Green Revolution</h3>
+    <form action="/users/signup" method="POST" id="signupForm">
+      <h3>Join the Green Revolution</h3>
 
-  <input type="text" name="email" placeholder="Email" required />
-  <input type="text" name="name" placeholder="Full Name" required />
-  <input type="text" name="username" placeholder="Username" required />
-  <input type="number" name="phone" placeholder="Phone Number" required />
-  <input type="password" name="password" placeholder="Password" required />
+      <input type="email" name="email" placeholder="Email" required />
 
-  <select name="role" id="role" required>
-    <option value="">Select Role</option>
-    <option value="user">User</option>
-    <option value="seller">Seller</option>
-    <option value="admin">Admin</option>
-  </select>
+      <input type="text" name="name" placeholder="Full Name" required />
 
-  <div class="user-fields hidden">
-    <input type="text" name="address" placeholder="Address" />
-  </div>
+      <input type="text" name="username" placeholder="Username" required minlength="5" />
 
-  <div class="seller-fields hidden">
-    <input type="text" name="businessName" placeholder="Business Name" />
-    <input type="text" name="businessType" placeholder="Business Type" />
-    <input type="text" name="gstNumber" placeholder="GST Number" />
-  </div>
 
-  <div class="admin-fields hidden">
-    <input type="text" name="employeeId" placeholder="Employee ID" />
-    <input type="text" name="designation" placeholder="Designation" />
-  </div>
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone" placeholder="10-digit Mobile Number"
+              inputmode="numeric" pattern="[6-9][0-9]{9}" required />
 
-  <button type="submit">Sign Up</button>
-</form>
+      <small>Must contain 10 digits.</small>
 
+      <input type="number" name="age" placeholder="Age" required min="18" max="90" />
+
+      <label for="password">Password</label>
+      <div class="password-container">
+        <input type="password" id="password" name="password"
+              placeholder="Enter your password"
+              pattern="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&^])[A-Za-z\\d@$!%*#?&^]{8,}$"
+              required />
+
+        <input type="checkbox" id="togglePassword" class="hidden" />
+        <label for="togglePassword" class="toggle-password">
+          <span class="material-symbols-outlined" id="eyeIcon">visibility</span>
+        </label>
+      </div>
+      <small>Password must include at least 1 letter, 1 number & 1 special character.</small>
+
+      <label for="role">Select Role</label>
+        <select name="role" id="role" required>
+          <option value="">-- Select Role --</option>
+          <option value="user">User</option>
+          <option value="seller">Seller</option>
+          <option value="admin">Admin</option>
+        </select>
+
+      <div class="user-fields hidden">
+        <input type="text" name="address" placeholder="Address" />
+      </div>
+
+      <div class="seller-fields hidden">
+        <input type="text" name="businessName" placeholder="Business Name" />
+        <input type="text" name="businessType" placeholder="Business Type" />
+        <label for="gstNumber">GST Number</label>
+        <input type="text" name="gstNumber" id="gstNumber" placeholder="15-digit GSTIN"
+                pattern="\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}" />
+        <small>Format: 15-character valid GSTIN</small>
+      </div>
+
+      <div class="admin-fields hidden">
+        <input type="text" name="employeeId" placeholder="Employee ID" />
+        <input type="text" name="designation" placeholder="Designation" />
+      </div>
+
+      <button type="submit">Sign Up</button>
+    </form>
     <p>Already registered? <a href="/users/login">Login here</a></p>
   </div>
 

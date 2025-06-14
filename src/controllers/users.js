@@ -23,6 +23,7 @@ module.exports.signup = async (req, res, next) => {
       gstNumber,
       employeeId,
       designation,
+      age
     } = req.body;
 
     // Base fields for all users
@@ -32,6 +33,7 @@ module.exports.signup = async (req, res, next) => {
       name,
       phone,
       role,
+      age
     };
 
     // Role-specific fields
