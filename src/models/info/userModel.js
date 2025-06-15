@@ -38,6 +38,16 @@ const userSchema = new mongoose.Schema({
     default: 0,
   },
 
+  followers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user'
+  }],
+
+  following: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user'
+  }],
+
 });
 
 const UserModel = BaseUser.discriminator('user', userSchema);
