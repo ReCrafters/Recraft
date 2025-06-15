@@ -29,7 +29,7 @@ const AdminSchema = new mongoose.Schema({
 
   auditReports: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Report"
+    ref: "AuditReport"
   }]
 });
 
