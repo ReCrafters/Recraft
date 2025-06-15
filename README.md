@@ -94,24 +94,3 @@ node src/app.js
 \`\`\`
 
 ---
-
-## 👥 Team ReCraft
-
-
-Want to contribute? Open a pull request or raise an issue!
-
----
-
-## 📝 License
-
-This project is under the [MIT License](./LICENSE). You are free to use, modify, and distribute with attribution.
-
----
-
-## 🙌 Support & Feedback
-
-Have questions or suggestions?
-
-📧 Email: [sync.with.saksham@gmail.com](mailto:sync.with.saksham@gmail.com)
-
-> “Recycle. Reuse. ReCraft.” – Build a better planet, one GreenBit at a time 🌱
