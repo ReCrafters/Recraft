@@ -72,3 +72,14 @@ module.exports.logout = (req, res, next) => {
   });
 };
 
+module.exports.showUser = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  res.json(user);
+};
+
+module.exports.updateUser = async (req, res) => {
+  const { id } = req.params;
+  const updatedUser = await User.findByIdAndUpdate(id, req.body, { new: true });
+  res.json(updatedUser);
+};

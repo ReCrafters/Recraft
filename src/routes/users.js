@@ -27,6 +27,10 @@ router.route('/signup')
 // Logout route
 router.get('/logout', userController.logout);
 
+router.route('/:id')
+  .get(userController.showUser)
+  .put(userController.updateUser);
+
 
 
 module.exports = router;

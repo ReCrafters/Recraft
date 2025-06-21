@@ -20,11 +20,25 @@ const User = require("./models/info/userModel");
 const Seller = require("./models/info/sellerModel");
 const Admin = require("./models/info/adminModel");
 
+//Model for Products
+const Product = require("./models/products.js");
+
+// Model for Posts
+const Post = require("./models/posts.js");
+
+//Form for sustainability form
+const Form = require("./models/form.js");
+
 // Middleware and Helper
 const { isLoggedIn } = require("./middleware.js");
 
 // Routes
 const userRouter = require("./routes/users.js"); // handle signup logic inside based on role
+const productRouter = require("./routes/products.js");
+const postRouter = require("./routes/posts.js");
+const formRouter = require("./routes/form.js");
+
+
 
 const app = express();
 const port = process.env.PORT;
@@ -71,6 +85,15 @@ passport.deserializeUser(BaseUser.deserializeUser());
 
 //Route 1: Role-based login/signup routes
 app.use('/users', userRouter);
+
+//Route 2: Products
+app.use('/products', productRouter);
+
+//Route 3: Posts
+app.use('/posts', postRouter);
+
+//Route 4: Sustainability Form
+app.use('/form', formRouter);
 
 // Auth Check
 app.get('/check-auth', (req, res) => {
