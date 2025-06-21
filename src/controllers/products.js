@@ -1,13 +1,25 @@
 
 const Product = require('../models/products.js');
+const Form = require('../models/form.js');
 module.exports.index= async (req, res) => {
-    try{
-        const products = await Product.find({});
-        res.json(products);
-    }catch(err){
-        console.log(err);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+    try {
+    const products = await Product.find({});
+    const productIds = products.map(p => p._id);
+    const forms = await Form.find({ productID: { $in: productIds } });
+    const formMap = {};
+    forms.forEach(form => {
+      formMap[form.productID.toString()] = form;
+    });
+    const combined = products.map(product => {
+      const prodObj = product.toObject();
+      prodObj.form = formMap[product._id.toString()] || null;
+      return prodObj;
+    });
+    res.json(combined);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 }
 
 module.exports.createProduct = async (req, res) => {
