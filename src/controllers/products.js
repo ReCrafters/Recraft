@@ -81,17 +81,22 @@ module.exports.createProduct = async (req, res) => {
 */
 
 module.exports.showProduct = async (req, res) => {
-    try{
-        const product = await Product.findById(req.params.id);
-        if(!product){
-            return res.status(404).json({ error: 'Product not found' });
-        }
-        res.json(product);
-    }catch(err){
-        console.log(err);
-        res.status(500).json({ error: 'Internal Server Error' });
+  try {
+    const product = await Product.findById(req.params.id).lean();
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
     }
-}
+    const form = await Form.findOne({ productID: product._id })
+      .sort({ createdAt: -1 }) 
+      .lean();
+    product.form = form || null;
+    res.json(product);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 module.exports.updateProduct = async (req, res) => {
     try{
         const { name, description, price, category, images, stock, tags, isVerified, verifiedDocuments, qrCodeLink } = req.body;
