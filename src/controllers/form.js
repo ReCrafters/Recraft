@@ -15,10 +15,13 @@ module.exports.createForm = async (req, res) => {
       return res.status(400).json({ error: 'productID and metrices are required.' });
     }
     const sellerID = req.user._id; 
+    const parsedMetrices = typeof metrices === 'string' ? JSON.parse(metrices) : metrices;
+    const certificationPDFs = req.files?.map(file => file.path) || [];
+    parsedMetrices.ecoCertification = certificationPDFs;
     const newForm = new Form({
       productID,
       sellerID,
-      metrices
+      metrices: parsedMetrices,
     });
     await newForm.save();
     res.status(201).json({ message: 'Form submitted successfully.', form: newForm });
@@ -36,10 +39,13 @@ module.exports.createForm = async (req, res) => {
     if (!productID || !metrices) {
       return res.status(400).json({ error: 'productID and metrices are required.' });
     }
+    const parsedMetrices = typeof metrices === 'string' ? JSON.parse(metrices) : metrices;
+    const certificationPDFs = req.files?.map(file => file.path) || [];
+    parsedMetrices.ecoCertification = certificationPDFs;
     const newForm = new Form({
       productID,
       sellerID,
-      metrices
+      metrices: parsedMetrices
     });
     await newForm.save();
     res.status(201).json({ message: 'Form submitted successfully.', form: newForm });
@@ -48,7 +54,6 @@ module.exports.createForm = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
 */
 
 module.exports.showForm = async (req, res) => {

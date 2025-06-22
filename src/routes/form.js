@@ -3,10 +3,11 @@ const router = express.Router();
 const Form = require('../models/form');
 const wrapAsync = require('../util/wrapAsync');
 const formController = require('../controllers/form');
+const upload = require('../config/multer');
 
 router.route('/')
   .get(wrapAsync(formController.index))
-  .post(wrapAsync(formController.createForm));
+  .post(upload.array('certifications', 5),wrapAsync(formController.createForm));
 
 router.route('/:id')
   .get(wrapAsync(formController.showForm))
