@@ -71,7 +71,7 @@ ReCraft brings **Reduce, Reuse, Recycle (RRR)** actions into the digital age by 
 ## 🛠️ Setup Instructions
 
 ### 1. Clone the Repository
-git clone https://github.com/itsme-saksham18/ReCraft.git
+git clone https://github.com/ReCrafters/Recraft.git
 cd ReCraft
 
 ### 2. Install Dependencies
@@ -87,6 +87,9 @@ Create a .env file with the following keys:
 MONGODB_URI=mongodb://localhost:27017/recraft
 SECRET=your_secret_key
 PORT=port_number
+CLOUDINARY_CLOUD_NAME= cloud_name
+CLOUDINARY_API_KEY= api_key 
+CLOUDINARY_API_SECRET= secret_cloudinary_key
 
 ### 4. Run the App
 
