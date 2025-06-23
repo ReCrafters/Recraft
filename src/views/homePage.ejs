@@ -47,15 +47,15 @@
 
   <!-- Product Grid -->
   <section class="product-section" id="products">
-    <h2>Best Fit For You Today</h2>
+    <h2>Keep Shopping For</h2>
     <div class="product-grid">
       <% products.forEach(function(product) { %>
         <div class="product-card">
-          <img src="<%= product.image %>" alt="<%= product.name %>" class="product-img">
+          <img src="<%= product.images[0] %>" alt="<%= product.name %>" class="product-img">
           <div class="product-info">
             <h3><%= product.name %></h3>
             <div class="product-meta">
-              <span class="greenbits">GreenBits: <%= product.greenBits %></span>
+              <span class="greenbits">🍀: <%= product.greenBits %></span>
               <span class="eco-score"><%= product.ecoScore %>% CO₂</span>
             </div>
             <div class="product-price">
@@ -64,7 +64,7 @@
                 <span class="old-price">₹<%= product.oldPrice %></span>
               <% } %>
             </div>
-            <button class="btn add-cart-btn">Add to cart</button>
+            <button class="btn add-cart-btn">     Add to cart      </button>
           </div>
         </div>
       <% }) %>

@@ -155,10 +155,10 @@ body {
 }
 
 .product-card {
-  background: #fff;
+  background: #d7d6d6;
   border-radius: 18px;
   box-shadow: 0 2px 12px rgba(34, 28, 26, 0.10);
-  padding: 1.2rem;
+  padding: 1rem;
   width: 240px;
   display: flex;
   flex-direction: column;
@@ -182,8 +182,9 @@ body {
 
 .product-info h3 {
   color: #1D1C1A;
-  font-size: 1.1rem;
+  font-size: 0.8rem;
   margin: 0.5rem 0 0.7rem 0;
+  align-items: center;
 }
 
 .product-meta {
@@ -195,7 +196,7 @@ body {
 }
 
 .greenbits {
-  background: #A99480;
+  background: #b2f5c5;
   color: #fff;
   border-radius: 8px;
   padding: 0.1rem 0.5rem;
@@ -212,6 +213,7 @@ body {
 .product-price {
   font-size: 1.1rem;
   color: #553820;
+  font-weight: bold;
   margin-bottom: 0.7rem;
 }
 
@@ -231,6 +233,7 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
+  
 }
 
 .btn.add-cart-btn:hover {

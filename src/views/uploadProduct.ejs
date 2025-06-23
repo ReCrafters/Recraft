@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Product | ReCraft</title>
+  <link rel="stylesheet" href="/css/form.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="form-header">
+      <h1><i class="fas fa-box-open"></i> Upload New Product</h1>
+      <p>Only sellers can upload products. Fill in the details below.</p>
+    </div>
+
+    <% if (success && success.length > 0) { %>
+      <% success.forEach(msg => { %>
+        <div class="alert alert-success"><%= msg %></div>
+      <% }); %>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+      <% error.forEach(msg => { %>
+        <div class="alert alert-danger"><%= msg %></div>
+      <% }); %>
+    <% } %>
+
+    <form id="uploadProductForm" method="POST" action="/products" enctype="application/json">
+      <div class="form-section">
+        <h2>Product Details</h2>
+
+        <div class="form-group">
+          <label for="name">Product Name *</label>
+          <input type="text" name="name" id="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea name="description" id="description" rows="3"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="price">Price (₹) *</label>
+            <input type="number" name="price" id="price" min="1" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label for="stock">Stock *</label>
+            <input type="number" name="stock" id="stock" min="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category *</label>
+            <select name="category" id="category" required>
+            <option value="">-- Select Category --</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Home Decor">Home Decor</option>
+            <option value="Beauty">Beauty</option>
+            <option value="Fitness">Fitness</option>
+            <option value="Stationery">Stationery</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Food">Food</option>
+            <option value="Kitchenware">Kitchenware</option>
+            <option value="Toys">Toys</option>
+            <option value="Footwear">Footwear</option>
+            <option value="Bags">Bags</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Others">Others</option>
+            </select>
+
+        </div>
+
+        <div class="form-group">
+          <label for="tags">Tags (comma-separated)</label>
+          <input type="text" name="tags" id="tags">
+        </div>
+ <div class="form-group full-width-upload">
+  <label for="images">Upload Product Images (max 5)</label>
+  <div class="image-upload-box">
+    <input type="file" name="images" id="images" multiple accept="image/*" required>
+    <label for="images" class="image-upload-label">
+      <i class="fas fa-cloud-upload-alt fa-3x"></i>
+      <p>Click to upload images</p>
+    </label>
+  </div>
+  <div id="imageFileList" class="file-list"></div>
+</div>
+
+
+        <div class="form-group">
+                    <label for="certifications">Upload Certifications (PDF only, max 3)</label>
+                    <div class="file-upload-container">
+                        <input type="file" name="verifiedDocuments" id="certifications" multiple accept="application/pdf" >
+                        <label for="certifications" class="file-upload-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Choose Files</span>
+                        </label>
+                        <div id="fileList" class="file-list"></div>
+                    </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-upload"></i> Upload Product
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script src="/js/uploadProduct.js"></script>
+  <script>
+    
+    document.getElementById('uploadProductForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        name: form.name.value,
+        description: form.description.value,
+        price: parseFloat(form.price.value),
+        stock: parseInt(form.stock.value),
+        category: form.category.value,
+        tags: form.tags.value.split(',').map(t => t.trim()).filter(Boolean),
+        images: form.images.value.split(',').map(i => i.trim()).filter(Boolean),
+        qrCodeLink: form.qrCodeLink.value,
+        verifiedDocuments: form.verifiedDocuments.value.split(',').map(d => d.trim()).filter(Boolean),
+        isVerified: form.isVerified.value === 'true'
+      };
+
+      fetch('/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      }).then(res => res.json())
+        .then(response => {
+          if (response.error) {
+            alert('Error: ' + response.error);
+          } else {
+            alert('Product uploaded successfully!');
+            form.reset();
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert('An error occurred while uploading the product.');
+        });
+    });
+  </script>
+</body>
+</html>
+
+
