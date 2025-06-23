@@ -23,15 +23,30 @@ module.exports.createProduct = async (req, res) => {
       description,
       price,
       category,
-      images,
       stock,
       tags,
-      isVerified = false, 
-      verifiedDocuments = [],
-      qrCodeLink = ''
+      isVerified = false,
     } = req.body;
     if (!name || !price || !category || !stock) {
       return res.status(400).json({ error: 'Required fields: name, price, category, stock' });
+    }
+    const images = [];
+    let qrCodeLink = '';
+    const verifiedDocuments = [];
+    if (req.files?.images?.length > 0) {
+      req.files.images.forEach(file => {
+        images.push(file.path); 
+      });
+    }
+    if (req.files?.qrCodeLink?.[0]) {
+      qrCodeLink = req.files.qrCodeLink[0].path;
+    }
+    if (req.files?.verifiedDocuments?.length > 0) {
+      const pdfFiles = req.files.verifiedDocuments.filter(file => file.mimetype === 'application/pdf');
+      if (pdfFiles.length > 3) {
+        return res.status(400).json({ error: 'Maximum 3 verified documents allowed' });
+      }
+      pdfFiles.forEach(file => verifiedDocuments.push(file.path));
     }
     const sellerId = req.user._id;
     const product = new Product({
@@ -47,15 +62,14 @@ module.exports.createProduct = async (req, res) => {
       qrCodeLink,
       sellerId
     });
-
     await product.save();
     res.status(201).json({ message: 'Product created successfully', product });
-    
   } catch (err) {
     console.error('Product Creation Error:', err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 /* Kindly ignore this, it's just for testing
 module.exports.createProduct = async (req, res) => {
