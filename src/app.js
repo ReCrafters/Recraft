@@ -7,6 +7,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
 const MongoStore = require("connect-mongo");
+const {getCombinedProductData} = require("./util/productService.js");
 require("dotenv").config();
 
 // DB Utils
@@ -105,12 +106,33 @@ app.get('/check-auth', (req, res) => {
 });
 
 // Dashboard (example of role-based dashboard redirection)
-app.get('/dashboard', isLoggedIn, (req, res) => {
+
+const products = [];
+app.get('/dashboard', isLoggedIn, async (req, res) => {
   const role = req.user.role;
   if (role === 'admin') return res.redirect('/admin-dashboard');
   if (role === 'seller') return res.redirect('/seller-dashboard');
-  return res.render('homePage.ejs', { user: req.user });
+  try {
+    const combined = await getCombinedProductData();
+    const name=req.user.name;
+    res.render('homePage.ejs', {
+      products: combined,
+      user: name
+
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
+app.get('/admin-dashboard', isLoggedIn, (req, res) => {
+  res.render('adminDashboard', { user: req.user });
+});
+app.get('/seller-dashboard', isLoggedIn, (req, res) => {
+  res.render('sellerDashboard', { user: req.user });
+});
+
 
 // Public Landing Page
 app.get('/', (req, res) => {

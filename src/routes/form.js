@@ -9,6 +9,10 @@ router.route('/')
   .get(wrapAsync(formController.index))
   .post(upload.array('certifications', 5),wrapAsync(formController.createForm));
 
+router.route('/newForm')
+  .get(formController.newForm);
+
+
 router.route('/:id')
   .get(wrapAsync(formController.showForm))
   .put(wrapAsync(formController.updateForm))
@@ -16,6 +20,7 @@ router.route('/:id')
 
 router.route('/:id/review')
   .put(wrapAsync(formController.reviewForm));
+
 
 
 module.exports = router;

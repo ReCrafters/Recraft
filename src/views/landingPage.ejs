@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ReCraft – Sustainable Living</title>
+  <link rel="stylesheet" href="/css/landing.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="main-nav">
+    <div class="nav-left">
+      <img src="/images/recraft-logo-transparent.png" alt="ReCraft Logo" class="nav-logo">
+      <span class="nav-brand">ReCraft</span>
+    </div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="#features">Features</a>
+      <a href="#community">Community</a>
+      <a href="#rewards">Rewards</a>
+      <a href="/users/login" class="btn btn-nav">Login</a>
+      <a href="/users/signup" class="btn btn-outline btn-nav">Sign Up</a>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+  <div class="hero-carousel">
+    <img id="heroImage" src="/images/hero-banner.png" alt="Hero Banner" class="hero-image">
+    <div class="carousel-dots">
+      <span class="dot active" onclick="showSlide(0)"></span>
+      <span class="dot" onclick="showSlide(1)"></span>
+      <span class="dot" onclick="showSlide(2)"></span>
+      <span class="dot" onclick="showSlide(3)"></span>
+    </div>
+  </div>
+  <div class="hero-content">
+    <h1>Redefine Sustainability with <span class="brand">ReCraft</span></h1>
+    <p>Track your eco actions, join a thriving community, and earn rewards for making a difference.</p>
+    <a href="/users/signup" class="btn btn-outline btn-large">Get Started</a>
+    <a href="/users/signup" class="btn btn-large">View Products</a>
+  </div>
+</section>
+<script src="/js/landing.js"></script>
+
+  <!-- Feature Cards Row -->
+  <section class="feature-cards-row" id="features">
+    <div class="feature-card">
+      <img src="/images/logo1.png" alt="Eco Actions" class="feature-icon">
+      <h3>Track Eco Actions</h3>
+      <p>Monitor your greenBits, streaks, and impact stats as you make sustainable choices every day.</p>
+    </div>
+    <div class="feature-card">
+      <img src="/images/logo2.png" alt="Community" class="feature-icon">
+      <h3>Join the Community</h3>
+      <p>Connect with like-minded users, share your progress, and climb the leaderboard together.</p>
+    </div>
+    <div class="feature-card">
+      <img src="/images/logo3.png" alt="Rewards" class="feature-icon">
+      <h3>Earn Rewards</h3>
+      <p>Get recognized for your efforts and redeem rewards for your sustainable lifestyle.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div>© <%= new Date().getFullYear() %> ReCraft. All rights reserved.</div>
+  </footer>
+</body>
+</html>

@@ -8,29 +8,55 @@ module.exports.index = async (req, res) => {
 module.exports.createForm = async (req, res) => {
   try {
     if (!req.isAuthenticated() || req.user.role !== 'seller') {
-      return res.status(401).json({ error: 'Unauthorized: Only sellers can submit forms.' });
+      req.flash('error', 'Unauthorized: Only sellers can submit forms.');
+      return res.status(401).redirect('/login');
     }
-    const { productID, metrices } = req.body;
-    if (!productID || !metrices) {
-      return res.status(400).json({ error: 'productID and metrices are required.' });
+    console.log('Received form data:', req.body);
+    const {       
+      productID,
+      isRecycled,
+      recycledPercent,
+      isBiodegradable,
+      isReusable,
+      isLocal,
+      isHandmade,
+      energyUsed,
+      waterUsed,
+      comments
+    } = req.body;
+    if (!productID) {
+      req.flash('error', 'Product ID is required.');
+      return res.redirect('/form'); 
     }
     const sellerID = req.user._id; 
-    const parsedMetrices = typeof metrices === 'string' ? JSON.parse(metrices) : metrices;
     const certificationPDFs = req.files?.map(file => file.path) || [];
-    parsedMetrices.ecoCertification = certificationPDFs;
+    const metrices = {
+      isRecycledMaterial: isRecycled === 'true',
+      recycledPercentage: isRecycled === 'true' ? parseInt(recycledPercent || '0') : 0,
+      isBiodegradable: isBiodegradable === 'true',
+      isReusable: isReusable === 'true',
+      isLocallySourced: isLocal === 'true',
+      isHandmade: isHandmade === 'true',
+      energyUsedForProduction: parseFloat(energyUsed),
+      waterUsageLevel: parseFloat(waterUsed),
+      ecoCertification: certificationPDFs,
+      additionalComments: comments || ''
+    };
     const newForm = new Form({
       productID,
       sellerID,
-      metrices: parsedMetrices,
+      metrices  
     });
     await newForm.save();
-    res.status(201).json({ message: 'Form submitted successfully.', form: newForm });
+    req.flash('success', 'Form submitted successfully.');
   } catch (err) {
     console.error('Error creating form:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ 
+      error: 'Internal server error',
+      details: err.message 
+    });
   }
 };
-
 /* Kindly Ignore this- it is for api checking as it is not secured
 
 module.exports.createForm = async (req, res) => {
@@ -148,3 +174,14 @@ module.exports.reviewForm = async (req, res) => {
   }
 };
 
+module.exports.newForm = async (req, res) => {
+    if (!req.isAuthenticated() || req.user.role !== 'seller') {
+      req.flash('error', 'Unauthorized: Only sellers can submit forms.');
+      return res.status(401).redirect('/login');
+    }
+    const sellerID = req.user._id;
+    const products= await Product.find({ sellerId: sellerID });
+    console.log(products);
+
+  res.render('sellerForm.ejs', { products });
+};

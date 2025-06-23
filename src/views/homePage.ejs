@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ReCraft | Dashboard</title>
+  <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="main-nav">
+    <div class="nav-left">
+      <img src="/images/recraft-logo-transparent.png" alt="ReCraft Logo" class="nav-logo">
+      <span class="nav-brand">ReCraft</span>
+    </div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="#products">Products</a>
+      <a href="#impact">Impact</a>
+      <a href="#profile">Profile</a>
+      <a href="/posts">My Posts</a>
+      <a href="/users/logout" class="btn btn-nav">Logout</a>
+    </div>
+  </nav>
+
+  <!-- Welcome Banner -->
+  <section class="welcome-banner">
+    <div class="welcome-content">
+      <h1>Welcome, <span class="username"><%= user %></span>!</h1>
+      <p>Track your sustainable journey, discover eco-friendly products, and see your positive impact grow.</p>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">GreenBits</div>
+          <div class="stat-value" id="greenBits"><%= user && user.greenBits ? user.greenBits : 0 %></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Streak</div>
+          <div class="stat-value" id="streakCount"><%= user && user.streakCount ? user.streakCount : 0 %></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Leaderboard</div>
+          <div class="stat-value" id="leaderboardPoints"><%= user && user.leaderboardPoints ? user.leaderboardPoints : 0 %></div>
+        </div>
+      </div>
+      <div id="userLevel"></div>
+    </div>
+    <img src="/images/dashboard-hero.png" alt="Dashboard Hero" class="dashboard-hero-img">
+  </section>
+
+  <!-- Product Grid -->
+  <section class="product-section" id="products">
+    <h2>Best Fit For You Today</h2>
+    <div class="product-grid">
+      <% products.forEach(function(product) { %>
+        <div class="product-card">
+          <img src="<%= product.image %>" alt="<%= product.name %>" class="product-img">
+          <div class="product-info">
+            <h3><%= product.name %></h3>
+            <div class="product-meta">
+              <span class="greenbits">GreenBits: <%= product.greenBits %></span>
+              <span class="eco-score"><%= product.ecoScore %>% CO₂</span>
+            </div>
+            <div class="product-price">
+              ₹<%= product.price %>
+              <% if(typeof product.oldPrice !== 'undefined' && product.oldPrice) { %>
+                <span class="old-price">₹<%= product.oldPrice %></span>
+              <% } %>
+            </div>
+            <button class="btn add-cart-btn">Add to cart</button>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </section>
+
+  <!-- Impact Section -->
+  <section class="impact-section" id="impact">
+    <h2>Your Impact</h2>
+    <div class="impact-cards">
+      <div class="impact-card">
+        <div class="impact-label">Carbon Saved</div>
+        <div class="impact-value" id="carbonSaved"><%= user && user.impactStats && user.impactStats.carbonSaved ? user.impactStats.carbonSaved : 0 %></div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-label">Waste Recycled</div>
+        <div class="impact-value" id="wasteRecycled"><%= user && user.impactStats && user.impactStats.wasteRecycled ? user.impactStats.wasteRecycled : 0 %></div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-label">Total Impact</div>
+        <div class="impact-value" id="totalImpact">0</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="dashboard-footer">
+    <div class="footer-grid">
+      <div>
+        <h4>Exclusive</h4>
+        <p>Subscribe</p>
+        <span>Get 10% off your first order</span>
+        <form class="subscribe-form">
+          <input type="email" placeholder="Enter your email" />
+          <button type="submit">→</button>
+        </form>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <p>123 Green Lane, Eco City</p>
+        <p>support@recraft.com</p>
+        <p>+91-12345-67890</p>
+      </div>
+      <div>
+        <h4>Account</h4>
+        <a href="#profile">My Account</a><br>
+        <a href="/users/logout">Logout</a>
+      </div>
+      <div>
+        <h4>Quick Link</h4>
+        <a href="#">Privacy Policy</a><br>
+        <a href="#">Terms Of Use</a><br>
+        <a href="#">FAQ</a>
+      </div>
+      <div>
+        <h4>Download App</h4>
+        <img src="/images/qr-code.png" alt="QR Code" class="footer-qr">
+        <div class="app-links">
+          <img src="/images/google-play.png" alt="Google Play" class="app-icon">
+          <img src="/images/app-store.png" alt="App Store" class="app-icon">
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <%= (new Date()).getFullYear() %> ReCraft. All rights reserved.</span>
+      <span class="footer-social">
+        <a href="#"><img src="/images/icon-fb.png" alt="Facebook"></a>
+        <a href="#"><img src="/images/icon-ig.png" alt="Instagram"></a>
+        <a href="#"><img src="/images/icon-x.png" alt="X"></a>
+        <a href="#"><img src="/images/icon-li.png" alt="LinkedIn"></a>
+      </span>
+    </div>
+  </footer>
+  <script src="/js/home.js"></script>
+</body>
+</html>

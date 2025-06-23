@@ -1,0 +1,402 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #CCB39E;
+  color: #1D1C1A;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1D1C1A;
+  padding: 1rem 3vw;
+  color: #CCB39E;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  background: transparent;
+}
+
+.nav-brand {
+  font-size: 1.7rem;
+  color: #CCB39E;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: #CCB39E;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: #A99480;
+}
+
+.btn-nav {
+  margin-left: 1rem;
+  background: #553820;
+  color: #fff;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  transition: background 0.2s;
+}
+
+.btn-nav:hover {
+  background: #9A836D;
+}
+
+.welcome-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #A99480 60%, #F5E9DA 100%);
+  padding: 2.5rem 6vw 2rem 6vw;
+  min-height: 320px;
+  gap: 2rem;
+}
+
+.welcome-content {
+  max-width: 600px;
+}
+
+.welcome-content h1 {
+  font-size: 2.3rem;
+  color: #1D1C1A;
+  margin-bottom: 0.7rem;
+}
+
+.username {
+  color: #553820;
+  font-weight: bold;
+}
+
+.welcome-content p {
+  color: #553820;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stats-row {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 1rem;
+}
+
+.stat-card {
+  background: rgba(204, 179, 158, 0.18);
+  border: 2px solid #A99480;
+  border-radius: 14px;
+  padding: 1rem 1.5rem;
+  min-width: 110px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(34, 28, 26, 0.07);
+}
+
+.stat-label {
+  color: #553820;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.stat-value {
+  font-size: 1.3rem;
+  color: #1D1C1A;
+  font-weight: bold;
+}
+
+.dashboard-hero-img {
+  width: 260px;
+  height: 260px;
+  object-fit: contain;
+  border-radius: 18px;
+  box-shadow: 0 8px 40px rgba(34, 28, 26, 0.18);
+  background: transparent;
+}
+
+.product-section {
+  padding: 2rem 4vw;
+}
+
+.product-section h2 {
+  color: #553820;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(34, 28, 26, 0.10);
+  padding: 1.2rem;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.product-card:hover {
+  box-shadow: 0 8px 24px rgba(34, 28, 26, 0.18);
+  transform: translateY(-6px) scale(1.03);
+}
+
+.product-img {
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  background: #F5E9DA;
+}
+
+.product-info h3 {
+  color: #1D1C1A;
+  font-size: 1.1rem;
+  margin: 0.5rem 0 0.7rem 0;
+}
+
+.product-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  color: #553820;
+}
+
+.greenbits {
+  background: #A99480;
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.1rem 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.eco-score {
+  background: #CCB39E;
+  color: #1D1C1A;
+  border-radius: 8px;
+  padding: 0.1rem 0.5rem;
+}
+
+.product-price {
+  font-size: 1.1rem;
+  color: #553820;
+  margin-bottom: 0.7rem;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #A99480;
+  font-size: 0.95rem;
+  margin-left: 0.5rem;
+}
+
+.btn.add-cart-btn {
+  background: #553820;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn.add-cart-btn:hover {
+  background: #9A836D;
+}
+
+.impact-section {
+  padding: 2rem 4vw;
+  text-align: center;
+}
+
+.impact-section h2 {
+  color: #553820;
+  margin-bottom: 1.2rem;
+}
+
+.impact-cards {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.impact-card {
+  background: rgba(169, 148, 128, 0.18);
+  border: 2px solid #A99480;
+  border-radius: 16px;
+  padding: 1.2rem 2rem;
+  min-width: 140px;
+  text-align: center;
+}
+
+.impact-label {
+  color: #553820;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.impact-value {
+  font-size: 1.4rem;
+  color: #1D1C1A;
+  font-weight: bold;
+}
+
+.dashboard-footer {
+  background: #1D1C1A;
+  color: #CCB39E;
+  padding: 2.5rem 4vw 1rem 4vw;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.footer-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.footer-grid > div {
+  min-width: 180px;
+  max-width: 220px;
+}
+
+.footer-grid h4 {
+  color: #fff;
+  margin-bottom: 0.7rem;
+}
+
+.footer-grid a, .footer-grid p, .footer-grid span {
+  color: #CCB39E;
+  font-size: 0.98rem;
+  text-decoration: none;
+}
+
+.subscribe-form {
+  display: flex;
+  margin-top: 0.5rem;
+}
+
+.subscribe-form input {
+  border: none;
+  border-radius: 6px 0 0 6px;
+  padding: 0.4rem 0.8rem;
+  font-size: 1rem;
+  outline: none;
+}
+
+.subscribe-form button {
+  border: none;
+  background: #553820;
+  color: #fff;
+  border-radius: 0 6px 6px 0;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.footer-qr {
+  width: 60px;
+  margin: 0.5rem 0;
+}
+
+.app-links {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.app-icon {
+  width: 80px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #A99480;
+  padding-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.footer-social img {
+  width: 22px;
+  margin-left: 0.7rem;
+  vertical-align: middle;
+  filter: grayscale(1) brightness(0.8);
+  transition: filter 0.2s;
+}
+
+.footer-social img:hover {
+  filter: none;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .footer-grid {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .dashboard-hero-img {
+    display: none;
+  }
+  .welcome-banner {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 700px) {
+  .product-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
+  .impact-cards {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 0.7rem;
+    text-align: center;
+  }
+}

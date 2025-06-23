@@ -1,0 +1,169 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at 60% 40%, #F5E9DA 0%, #A99480 60%, #1D1C1A 100%);
+  color: #1D1C1A;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 4vw 1rem 4vw;
+  background: transparent;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 2rem;
+  color: #553820;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #A99480;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(34, 28, 26, 0.15);
+}
+
+.logout-btn {
+  background: #553820;
+  color: #fff;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  transition: background 0.2s;
+}
+
+.logout-btn:hover {
+  background: #9A836D;
+}
+
+.dashboard-main {
+  flex: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #553820;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.username {
+  color: #CCB39E;
+}
+
+.stats-row {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.stat-card {
+  background: rgba(204, 179, 158, 0.18);
+  border: 2px solid #A99480;
+  border-radius: 16px;
+  padding: 1.5rem 2.5rem;
+  min-width: 160px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(34, 28, 26, 0.07);
+}
+
+.stat-label {
+  color: #553820;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.stat-value {
+  font-size: 2rem;
+  color: #1D1C1A;
+  font-weight: bold;
+}
+
+.impact-section {
+  margin: 2.5rem 0 1.5rem 0;
+  width: 100%;
+  text-align: center;
+}
+
+.impact-section h2 {
+  color: #553820;
+  margin-bottom: 1.2rem;
+}
+
+.impact-cards {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.impact-card {
+  background: rgba(169, 148, 128, 0.18);
+  border: 2px solid #A99480;
+  border-radius: 16px;
+  padding: 1.2rem 2rem;
+  min-width: 140px;
+  text-align: center;
+}
+
+.impact-label {
+  color: #553820;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.impact-value {
+  font-size: 1.4rem;
+  color: #1D1C1A;
+  font-weight: bold;
+}
+
+.address-section {
+  margin-top: 2rem;
+  background: rgba(245, 233, 218, 0.25);
+  border-radius: 12px;
+  padding: 1.2rem 2rem;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(34, 28, 26, 0.05);
+}
+
+.address-section h3 {
+  color: #553820;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-footer {
+  background: #A99480;
+  color: #1D1C1A;
+  text-align: center;
+  padding: 1rem 0;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  margin-top: 2rem;
+}
