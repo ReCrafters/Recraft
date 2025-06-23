@@ -7,6 +7,9 @@ router.route('/')
     .get(wrapAsync(productsController.index))
     .post(wrapAsync(productsController.createProduct))
 
+router.route('/newProduct')
+    .get(productsController.newProduct)
+
 router.route('/:id')
     .get(wrapAsync(productsController.showProduct))
     .put(wrapAsync(productsController.updateProduct))

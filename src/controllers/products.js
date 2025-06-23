@@ -114,3 +114,14 @@ module.exports.deleteProduct = async (req, res) => {
     }
 }
 
+module.exports.newProduct = async (req, res) => {
+  try {
+    if (!req.user || req.user.role !== 'seller') {
+      return res.status(403).send('Unauthorized: Only sellers can upload products.');
+    }
+    res.render('uploadProduct.ejs');
+  } catch (err) {
+    console.error('Error loading product upload form:', err);
+    res.status(500).send('Internal Server Error');
+  }
+};
