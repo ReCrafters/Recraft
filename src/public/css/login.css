@@ -1,30 +1,33 @@
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #1D1C1A;
-  color: #1D1C1A;
+  background-color: #4c4944;
+  color: #EAE0D5;
   margin: 0;
   padding: 0;
 }
 
 h1 {
   text-align: center;
-  color: #CCB39E;
+  color: #E5C9B6;
   margin-top: 2rem;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .container {
-  background-color: #CCB39E;
+  background-color: #2B2621;
   border-radius: 12px;
-  max-width: 450px;
+  max-width: 550px;
   margin: 2rem auto;
   padding: 2rem;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 form h3 {
   text-align: center;
-  color: #553820;
+  color: #D9B79C;
   margin-bottom: 1.5rem;
+  font-size: 1.3rem;
 }
 
 input {
@@ -32,34 +35,47 @@ input {
   width: 95%;
   padding: 0.7rem;
   margin: 0.7rem 0;
-  border: 1px solid #A99480;
+  border: 1px solid #8A7E74;
+  background-color: #3C3732;
   border-radius: 8px;
+  color: #F5EDE5;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+
+input:focus {
+  border-color: #CCB39E;
+  outline: none;
+  background-color: #48413A;
 }
 
 button {
-  background-color: #553820;
+  background-color: #7C5A43;
   color: #fff;
   border: none;
   padding: 0.8rem;
   width: 100%;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 1rem;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.2s ease-in-out;
 }
 
 button:hover {
-  background-color: #9A836D;
+  background-color: #A37C63;
 }
 
 p {
   text-align: center;
   margin-top: 1rem;
+  font-size: 0.95rem;
 }
 
 a {
-  color: #553820;
+  color: #D9B79C;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 a:hover {
@@ -67,28 +83,28 @@ a:hover {
 }
 
 .logo-placeholder {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  max-width: 100px;
   margin: 0 auto 1.5rem;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: #A99480;
+  background-color: transparent;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  box-shadow: none;
 }
 
 .logo-placeholder img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
 }
+
 footer {
-  background-color: #A99480;
+  background-color: #2C2621;
   padding: 1rem;
   text-align: center;
-  color: #1D1C1A;
-  font-size: 0.9rem;
+  color: #B3A69C;
+  font-size: 0.85rem;
 }
 
 .footer-social img {
@@ -103,44 +119,43 @@ footer {
   margin-bottom: 0.5rem;
 }
 
-
-.footer-logo img{
+.footer-logo img {
   height: 100%;
   width: 100%;
   object-fit: cover;
 }
 
-    .hidden {
-      display: none;
-    }
+.hidden {
+  display: none;
+}
 
-   .password-container {
-    position: relative;
-    width: 100%;
-  }
+.password-container {
+  position: relative;
+  width: 100%;
+}
 
-  .password-container input[type="password"],
-  .password-container input[type="text"] {
-    width: 100%;
-    padding: 10px 40px 10px 10px; /* Add space for icon */
-    box-sizing: border-box;
-    font-size: 1rem;
-  }
+.password-container input[type="password"],
+.password-container input[type="text"] {
+  width: 100%;
+  padding: 10px 40px 10px 10px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
 
-  .toggle-password {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    user-select: none;
-  }
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+}
 
-  .toggle-password .material-symbols-outlined {
-    font-size: 22px;
-    color: #555;
-  }
+.toggle-password .material-symbols-outlined {
+  font-size: 22px;
+  color: #BDA18A;
+}
 
-  .toggle-password:hover .material-symbols-outlined {
-    color: #000;
-  }
+.toggle-password:hover .material-symbols-outlined {
+  color: #E5C9B6;
+}

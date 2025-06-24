@@ -1,4 +1,71 @@
 document.addEventListener('DOMContentLoaded', function () {
+  // === Image Upload Management ===
+  const imageInput = document.getElementById('images');
+  const imageList = document.getElementById('imageFileList');
+  let selectedImages = [];
+
+  if (imageInput) {
+    imageInput.addEventListener('change', function () {
+      const newFiles = Array.from(this.files);
+      if (newFiles.length + selectedImages.length > 5) {
+        alert('You can upload a maximum of 5 images.');
+        return (this.value = '');
+      }
+
+      newFiles.forEach(file => {
+        const exists = selectedImages.some(f =>
+          f.name === file.name &&
+          f.size === file.size &&
+          f.lastModified === file.lastModified
+        );
+        if (!exists) selectedImages.push(file);
+      });
+
+      updateImageList();
+      updateImageInput();
+      this.value = '';
+    });
+  }
+
+  function updateImageList() {
+    imageList.innerHTML = '';
+    const totalSlots = 5;
+
+    for (let i = 0; i < totalSlots; i++) {
+      const item = document.createElement('div');
+      item.className = 'image-slot';
+
+      if (i < selectedImages.length) {
+        const file = selectedImages[i];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          item.innerHTML = `
+            <img src="${e.target.result}" alt="${file.name}" class="preview-thumb">
+            <button type="button" class="remove-image" data-index="${i}">
+              <i class="fas fa-times"></i>
+            </button>
+          `;
+          item.querySelector('.remove-image').addEventListener('click', function () {
+            selectedImages.splice(i, 1);
+            updateImageList();
+            updateImageInput();
+          });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        item.innerHTML = `<div class="empty-slot">+</div>`;
+      }
+
+      imageList.appendChild(item);
+    }
+  }
+
+  function updateImageInput() {
+    const dt = new DataTransfer();
+    selectedImages.forEach(file => dt.items.add(file));
+    imageInput.files = dt.files;
+  }
 
   // === Certification Upload Management ===
   const certInput = document.getElementById('certifications');
@@ -10,21 +77,21 @@ document.addEventListener('DOMContentLoaded', function () {
       const newFiles = Array.from(this.files);
       if (newFiles.length + selectedCerts.length > 3) {
         alert('You can upload a maximum of 3 certification files.');
-        return this.value = '';
+        return (this.value = '');
       }
 
       for (const file of newFiles) {
         if (file.type !== 'application/pdf') {
           alert('Only PDF files are allowed.');
-          return this.value = '';
+          return (this.value = '');
         }
-        if (!selectedCerts.some(f =>
+
+        const exists = selectedCerts.some(f =>
           f.name === file.name &&
           f.size === file.size &&
           f.lastModified === file.lastModified
-        )) {
-          selectedCerts.push(file);
-        }
+        );
+        if (!exists) selectedCerts.push(file);
       }
 
       updateCertList();
@@ -39,23 +106,24 @@ document.addEventListener('DOMContentLoaded', function () {
       certList.innerHTML = '<p class="no-files">No files selected</p>';
       return;
     }
+
     selectedCerts.forEach((file, index) => {
-      const fileItem = document.createElement('div');
-      fileItem.className = 'file-item';
-      fileItem.innerHTML = `
+      const item = document.createElement('div');
+      item.className = 'file-item';
+      item.innerHTML = `
         <span class="file-name">${file.name}</span>
         <span class="file-size">(${(file.size / 1024).toFixed(1)} KB)</span>
         <button type="button" class="remove-file" data-index="${index}">
           <i class="fas fa-times"></i>
         </button>
       `;
-      certList.appendChild(fileItem);
+      certList.appendChild(item);
     });
 
-    document.querySelectorAll('.remove-file').forEach(button => {
-      button.addEventListener('click', function () {
-        const index = parseInt(this.getAttribute('data-index'));
-        selectedCerts.splice(index, 1);
+    document.querySelectorAll('.remove-file').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const idx = parseInt(this.getAttribute('data-index'));
+        selectedCerts.splice(idx, 1);
         updateCertList();
         updateCertInput();
       });
@@ -63,102 +131,39 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updateCertInput() {
-    const dataTransfer = new DataTransfer();
-    selectedCerts.forEach(file => dataTransfer.items.add(file));
-    certInput.files = dataTransfer.files;
+    const dt = new DataTransfer();
+    selectedCerts.forEach(file => dt.items.add(file));
+    certInput.files = dt.files;
   }
 
-  updateCertList();
+// === QR Code Preview ===
+const qrInput = document.getElementById('qrCodeLink');
+const qrPreview = document.getElementById('qrPreview');
 
-// === Image Upload Management ===
-let selectedImages = [];
+if (qrInput) {
+  qrInput.addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
 
-const imageInput = document.getElementById('images');
-const imageList = document.getElementById('imageFileList');
-
-if (imageInput && imageList) {
-  imageInput.addEventListener('change', function () {
-    const newFiles = Array.from(this.files);
-
-    if (newFiles.length + selectedImages.length > 5) {
-      alert('You can upload a maximum of 5 images.');
-      return (this.value = '');
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload a valid image file for QR code.');
+      this.value = '';
+      return;
     }
 
-    newFiles.forEach(file => {
-      const fileExists = selectedImages.some(f =>
-        f.name === file.name &&
-        f.size === file.size &&
-        f.lastModified === file.lastModified
-      );
-      if (!fileExists) {
-        selectedImages.push(file);
-      }
-    });
-
-    updateImageList();
-    updateImageInput();
-    this.value = '';
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      qrPreview.innerHTML = `
+        <div class="qr-preview-container">
+          <img src="${e.target.result}" alt="QR Preview" class="qr-preview-image">
+        </div>
+      `;
+    };
+    reader.readAsDataURL(file);
   });
 }
-function updateImageList() {
-  imageList.innerHTML = '';
 
-  const totalSlots = 5;
-
-  for (let i = 0; i < totalSlots; i++) {
-    const item = document.createElement('div');
-    item.className = 'image-slot';
-
-    if (i < selectedImages.length) {
-      const file = selectedImages[i];
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        item.innerHTML = `
-          <img src="${e.target.result}" alt="${file.name}" class="preview-thumb">
-          <button type="button" class="remove-image" data-index="${i}">
-            <i class="fas fa-times"></i>
-          </button>
-        `;
-
-        item.querySelector('.remove-image').addEventListener('click', function () {
-          const idx = parseInt(this.getAttribute('data-index'));
-          selectedImages.splice(idx, 1);
-          updateImageList();
-          updateImageInput();
-        });
-      };
-
-      reader.readAsDataURL(file);
-    } else {
-      // Empty slot placeholder (optional)
-      item.innerHTML = `<div class="empty-slot">+</div>`;
-    }
-
-    imageList.appendChild(item);
-  }
-}
-
-
-function updateImageInput() {
-  const dt = new DataTransfer();
-  selectedImages.forEach(file => dt.items.add(file));
-  imageInput.files = dt.files;
-}
-
-
-  // === Handle Alert Close Buttons ===
-  document.querySelectorAll('.close-alert').forEach(button => {
-    button.addEventListener('click', function () {
-      this.parentElement.style.animation = 'fadeOut 0.3s forwards';
-      setTimeout(() => {
-        this.parentElement.remove();
-      }, 300);
-    });
-  });
-
-  // === Form Submission with Spinner and FormData ===
+  // === Form Submission ===
   const form = document.getElementById('uploadProductForm');
   if (form) {
     form.addEventListener('submit', async function (e) {
@@ -172,15 +177,14 @@ function updateImageInput() {
       try {
         const formData = new FormData(form);
 
-        // tags as array
         const tags = form.tags.value.split(',').map(tag => tag.trim()).filter(Boolean);
         formData.set('tags', JSON.stringify(tags));
 
-        // Replace certification field with selected files
-        formData.delete('certifications');
-        selectedCerts.forEach(file => {
-          formData.append('certifications', file);
-        });
+        formData.delete('verifiedDocuments');
+        selectedCerts.forEach(file => formData.append('verifiedDocuments', file));
+
+        formData.delete('images');
+        selectedImages.forEach(file => formData.append('images', file));
 
         const response = await fetch('/products', {
           method: 'POST',
@@ -192,15 +196,16 @@ function updateImageInput() {
         if (response.ok) {
           alert('Product uploaded successfully!');
           form.reset();
+          selectedImages = [];
+          selectedCerts = [];
           imageList.innerHTML = '';
           certList.innerHTML = '';
-          selectedCerts = [];
         } else {
-          alert(result.error || 'Something went wrong. Try again.');
+          alert(result.error || 'Something went wrong.');
         }
       } catch (err) {
-        console.error('Error uploading:', err);
-        alert('Network error or server failed. Try again later.');
+        console.error('Upload error:', err);
+        alert('Upload failed. Please try again.');
       }
 
       submitBtn.disabled = false;

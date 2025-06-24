@@ -24,7 +24,7 @@
       <% }); %>
     <% } %>
 
-    <form id="uploadProductForm" method="POST" action="/products" enctype="application/json">
+    <form id="uploadProductForm" method="POST" action="/products" enctype="multipart/form-data">
       <div class="form-section">
         <h2>Product Details</h2>
 
@@ -78,7 +78,7 @@
  <div class="form-group full-width-upload">
   <label for="images">Upload Product Images (max 5)</label>
   <div class="image-upload-box">
-    <input type="file" name="images" id="images" multiple accept="image/*" required>
+    <input type="file" name="images" id="images" multiple accept="image/*">
     <label for="images" class="image-upload-label">
       <i class="fas fa-cloud-upload-alt fa-3x"></i>
       <p>Click to upload images</p>
@@ -87,6 +87,17 @@
   <div id="imageFileList" class="file-list"></div>
 </div>
 
+<div class="form-group">
+  <label for="qrCodeLink">Upload QR Code (Image only)</label>
+  <div class="qr-upload-container">
+    <input type="file" name="qrCodeLink" id="qrCodeLink" accept="image/*">
+    <label for="qrCodeLink" class="file-upload-label">
+      <i class="fas fa-qrcode"></i>
+      <span>Select QR Code Image</span>
+    </label>
+    <div id="qrPreview" class="file-list"></div>
+  </div>
+</div>
 
         <div class="form-group">
                     <label for="certifications">Upload Certifications (PDF only, max 3)</label>
@@ -108,45 +119,6 @@
     </form>
   </div>
   <script src="/js/uploadProduct.js"></script>
-  <script>
-    
-    document.getElementById('uploadProductForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const form = e.target;
-      const data = {
-        name: form.name.value,
-        description: form.description.value,
-        price: parseFloat(form.price.value),
-        stock: parseInt(form.stock.value),
-        category: form.category.value,
-        tags: form.tags.value.split(',').map(t => t.trim()).filter(Boolean),
-        images: form.images.value.split(',').map(i => i.trim()).filter(Boolean),
-        qrCodeLink: form.qrCodeLink.value,
-        verifiedDocuments: form.verifiedDocuments.value.split(',').map(d => d.trim()).filter(Boolean),
-        isVerified: form.isVerified.value === 'true'
-      };
-
-      fetch('/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      }).then(res => res.json())
-        .then(response => {
-          if (response.error) {
-            alert('Error: ' + response.error);
-          } else {
-            alert('Product uploaded successfully!');
-            form.reset();
-          }
-        })
-        .catch(err => {
-          console.error(err);
-          alert('An error occurred while uploading the product.');
-        });
-    });
-  </script>
 </body>
 </html>
 

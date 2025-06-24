@@ -324,6 +324,22 @@ input[type="file"] {
   color: #ccc;
 }
 
+.qr-preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.qr-preview-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
+
 
 /* Animations */
 @keyframes slideIn {
