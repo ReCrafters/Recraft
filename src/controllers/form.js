@@ -1,5 +1,7 @@
 const Form = require('../models/form');
 const Product = require('../models/products');
+const SellerModel = require('../models/info/sellerModel');
+const adminModel = require('../models/info/adminModel');
 module.exports.index = async (req, res) => {
   const forms = await Form.find({});
   res.json(forms);
@@ -48,7 +50,9 @@ module.exports.createForm = async (req, res) => {
       metrices  
     });
     await newForm.save();
+    await SellerModel.findByIdAndUpdate(sellerID, { $push: { sustainabilityForms: newForm._id } });
     req.flash('success', 'Form submitted successfully.');
+    res.status(201).json({ message: 'Form submitted successfully.' });
   } catch (err) {
     console.error('Error creating form:', err);
     res.status(500).json({ 
@@ -83,7 +87,7 @@ module.exports.createForm = async (req, res) => {
 */
 
 module.exports.showForm = async (req, res) => {
-  const form = await Form.findById(req.params.id);
+  const form = await Form.findById(req.params._id);
   if (!form) {
     return res.status(404).json({ error: 'Form not found' });
   }
@@ -116,7 +120,13 @@ module.exports.deleteForm = async (req, res) => {
       return res.status(400).json({ error: 'Cannot delete form: related product still exists.' });
     }
     await Form.findByIdAndDelete(id);
-    res.json({ message: 'Form deleted successfully.' });
+        if (form.sellerID) {
+      await sellerModel.findByIdAndUpdate(
+        form.sellerID,
+        { $pull: { sustainabilityForms: form._id } }
+      );
+    }
+    res.status(201).json({ message: 'Form deleted successfully.' });
   } catch (err) {
     console.error('Error deleting form:', err);
     res.status(500).json({ error: 'Internal server error' });
@@ -167,6 +177,10 @@ module.exports.reviewForm = async (req, res) => {
     form.assignedTSV = assignedTSV;
     form.assignedSSV = assignedSSV;
     await form.save();
+    await adminModel.findByIdAndUpdate(
+      form.reviewerID,
+      { $push: { verificationHistory: form._id } }
+    );
     res.json({ message: 'Form reviewed successfully.', form });
   } catch (err) {
     console.error('Error reviewing form:', err);
@@ -181,7 +195,5 @@ module.exports.newForm = async (req, res) => {
     }
     const sellerID = req.user._id;
     const products= await Product.find({ sellerId: sellerID });
-    console.log(products);
-
   res.render('sellerForm.ejs', { products });
 };

@@ -3,6 +3,7 @@ const router = express.Router();
 const productsController = require('../controllers/products.js');
 const wrapAsync = require('../util/wrapAsync');
 const upload = require('../config/multer');
+const {verifyProductOwner} = require('../middleware.js');   
 
 router.route('/')
     .get(wrapAsync(productsController.index))
@@ -18,7 +19,7 @@ router.route('/newProduct')
 
 router.route('/:id')
     .get(wrapAsync(productsController.showProduct))
-    .put(wrapAsync(productsController.updateProduct))
-    .delete(wrapAsync(productsController.deleteProduct))
+    .put(wrapAsync(verifyProductOwner,productsController.updateProduct))
+    .delete(verifyProductOwner,wrapAsync(productsController.deleteProduct))
 
 module.exports = router;

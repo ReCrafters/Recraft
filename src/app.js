@@ -45,7 +45,7 @@ const productRouter = require("./routes/products.js");
 const postRouter = require("./routes/posts.js");
 const formRouter = require("./routes/form.js");
 const cartRouter = require('./routes/cart.js');
-const orderRouter = require('./routes/order.js');
+const orderRouter = require('./routes/orders.js');
 
 
 const app = express();

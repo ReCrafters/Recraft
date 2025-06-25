@@ -1,3 +1,4 @@
+const Product = require("./models/products");
 module.exports.isLoggedIn= (req, res, next)=> {
   if (req.isAuthenticated()) return next();
   req.flash("error", "You must be logged in");
@@ -15,9 +16,9 @@ module.exports.isSeller = (req, res, next) => {
 module.exports.verifyProductOwner = async (req, res, next) => {
   try {
     const product = await Product.findById(req.body.productID);
-    if (!product || product.seller.toString() !== req.user._id.toString()) {
+    if (!product || product.sellerId.toString() !== req.user._id.toString()) {
       req.flash('error', 'Invalid product selection');
-      return res.redirect('/form');
+      return res.status(403).json({ error: 'Not Product Owner' });
     }
     next();
   } catch (err) {

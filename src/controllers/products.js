@@ -1,7 +1,9 @@
 
 const Product = require('../models/products.js');
 const Form = require('../models/form.js');
+const User= require('../models/info/userModel');
 const {getCombinedProductData} = require('../util/productService.js');
+const SellerModel = require('../models/info/sellerModel.js');
 module.exports.index = async (req, res) => {
   try {
     const combined = await getCombinedProductData();
@@ -63,6 +65,10 @@ module.exports.createProduct = async (req, res) => {
       sellerId
     });
     await product.save();
+    await SellerModel.findByIdAndUpdate(
+      sellerId,
+      { $push: { inventory: product._id } }
+    );
     res.status(201).json({ message: 'Product created successfully', product });
   } catch (err) {
     console.error('Product Creation Error:', err);
@@ -121,6 +127,10 @@ module.exports.deleteProduct = async (req, res) => {
         if(!product){
             return res.status(404).json({ error: 'Product not found' });
         }
+        await SellerModel.findByIdAndUpdate(
+            product.sellerId,
+            { $pull: { inventory: product._id } }
+        );
         res.json({ message: 'Product deleted successfully' });
     }catch(err){
         console.log(err);

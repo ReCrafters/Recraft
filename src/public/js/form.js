@@ -106,13 +106,14 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             const data = await response.json();
-            
             if (response.ok) {
-                window.location.href = '/form/success?message=' + encodeURIComponent(data.message);
+                alert('Form submitted successfully!');
+                form.reset();
+                files = [];
+                updateFileList();
+                updateFileInput();
             } else {
-                alert(data.error || 'Submission failed. Please try again.');
-                submitButton.disabled = false;
-                submitButton.innerHTML = originalButtonText;
+                alert(data.error);
             }
         } catch (error) {
             console.error('Error:', error);
