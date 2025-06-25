@@ -33,6 +33,9 @@ const Form = require("./models/form.js");
 //Model for cart
 const Cart = require("./models/cart.js");
 
+//Model for order
+const Order=require("./models/orders.js");
+
 // Middleware and Helper
 const { isLoggedIn } = require("./middleware.js");
 
@@ -42,6 +45,7 @@ const productRouter = require("./routes/products.js");
 const postRouter = require("./routes/posts.js");
 const formRouter = require("./routes/form.js");
 const cartRouter = require('./routes/cart.js');
+const orderRouter = require('./routes/order.js');
 
 
 const app = express();
@@ -101,6 +105,9 @@ app.use('/form', formRouter);
 
 //Route 5: Cart
 app.use('/cart', cartRouter);
+
+//Route 6: Order
+app.use('/order', orderRouter);
 
 // Auth Check
 app.get('/check-auth', (req, res) => {
