@@ -31,6 +31,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const changeBtn = document.getElementById('changePhoto');
   const deleteBtn = document.getElementById('deletePhoto');
   const cancelBtn = document.getElementById('cancelMenu');
+  const userId= wrapper?.getAttribute('data-user-id');
   wrapper?.addEventListener('click', () => {
     photoMenu.style.display = 'block';
   });

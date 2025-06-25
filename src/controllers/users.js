@@ -1,4 +1,5 @@
 const User = require('../models/info/baseUser');
+const cloudinary = require('../config/cloudinary');
 
 module.exports.renderSignUp = (req, res) => {
   res.render('signup.ejs');
@@ -84,7 +85,7 @@ module.exports.updateUser = async (req, res) => {
   res.json(updatedUser);
 };
 
-module.exports.updateProfilePhoto = async (req, res) => {
+module.exports.updateUserPhoto = async (req, res) => {
   try {
     const userId = req.params.id;
     if (!req.file) {
@@ -105,6 +106,35 @@ module.exports.updateProfilePhoto = async (req, res) => {
     res.json({ message: 'Profile photo updated', user: updatedUser });
   } catch (err) {
     console.error('Error uploading photo:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports.deleteUserPhoto = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    if (user.image) {
+      const publicId = user.image.split('/').pop().split('.')[0];
+      await cloudinary.uploader.destroy(publicId, {
+        resource_type: 'image',
+        invalidate: true 
+      });
+    }
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        image: null,
+        updatedAt: new Date()
+      },
+      { new: true }
+    );
+    res.json({ message: 'Profile photo deleted', user: updatedUser });
+  } catch (err) {
+    console.error('Error deleting photo:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };

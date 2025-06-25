@@ -33,6 +33,9 @@ router.route('/:id')
   .put(userController.updateUser);
 
 
-router.put('/:id/photo', upload.single('image'), userController.updateProfilePhoto);
+router.route('/:id/photo')
+  .put(upload.single('image'), userController.updateUserPhoto)
+  .delete(userController.deleteUserPhoto);
+
 
 module.exports = router;
