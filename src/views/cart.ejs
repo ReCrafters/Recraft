@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Your Cart</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <h1>Your Cart</h1>
+
+  <% if (user) { %>
+    <p>Welcome, <strong><%= user.name %></strong></p>
+    <button onclick="syncCart('<%= user._id %>')">Sync Cart to Backend</button>
+  <% } else { %>
+    <p>You are browsing as a guest. <a href="/login">Log in</a> to save your cart.</p>
+  <% } %>
+
+  <div id="cart-items" data-user="<%= user ? user._id : '' %>"></div>
+
+
+  <script src="/js/cart.js"></script>
+</body>
+</html>

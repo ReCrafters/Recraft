@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const wrapAsync = require('../util/wrapAsync.js');
 const userController = require('../controllers/users.js');
+const upload = require('../config/multer');
 
 // Login routes
 router.route('/login')
@@ -32,5 +33,6 @@ router.route('/:id')
   .put(userController.updateUser);
 
 
+router.put('/:id/photo', upload.single('image'), userController.updateProfilePhoto);
 
 module.exports = router;

@@ -83,3 +83,28 @@ module.exports.updateUser = async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(id, req.body, { new: true });
   res.json(updatedUser);
 };
+
+module.exports.updateProfilePhoto = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+    const imagePath = req.file.path; 
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        image: imagePath,
+        updatedAt: new Date(),
+      },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ message: 'Profile photo updated', user: updatedUser });
+  } catch (err) {
+    console.error('Error uploading photo:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

@@ -30,6 +30,9 @@ const Post = require("./models/posts.js");
 //Form for sustainability form
 const Form = require("./models/form.js");
 
+//Model for cart
+const Cart = require("./models/cart.js");
+
 // Middleware and Helper
 const { isLoggedIn } = require("./middleware.js");
 
@@ -38,7 +41,7 @@ const userRouter = require("./routes/users.js"); // handle signup logic inside b
 const productRouter = require("./routes/products.js");
 const postRouter = require("./routes/posts.js");
 const formRouter = require("./routes/form.js");
-
+const cartRouter = require('./routes/cart.js');
 
 
 const app = express();
@@ -96,6 +99,9 @@ app.use('/posts', postRouter);
 //Route 4: Sustainability Form
 app.use('/form', formRouter);
 
+//Route 5: Cart
+app.use('/cart', cartRouter);
+
 // Auth Check
 app.get('/check-auth', (req, res) => {
   if (req.isAuthenticated()) {
@@ -107,18 +113,16 @@ app.get('/check-auth', (req, res) => {
 
 // Dashboard (example of role-based dashboard redirection)
 
-const products = [];
 app.get('/dashboard', isLoggedIn, async (req, res) => {
   const role = req.user.role;
   if (role === 'admin') return res.redirect('/admin-dashboard');
   if (role === 'seller') return res.redirect('/seller-dashboard');
   try {
     const combined = await getCombinedProductData();
-    const name=req.user.name;
+    const userDetails=req.user;
     res.render('homePage.ejs', {
       products: combined,
-      user: name
-
+      user: userDetails,
     });
   } catch (err) {
     console.log(err);
@@ -132,6 +136,7 @@ app.get('/admin-dashboard', isLoggedIn, (req, res) => {
 app.get('/seller-dashboard', isLoggedIn, (req, res) => {
   res.render('sellerDashboard', { user: req.user });
 });
+
 
 
 // Public Landing Page
