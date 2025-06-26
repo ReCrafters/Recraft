@@ -23,6 +23,11 @@ const SellerSchema = new mongoose.Schema({
     ref: 'Product' 
   }],
 
+  salesHistory: [{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Order'
+  }],
+
   sustainabilityForms: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Form' 

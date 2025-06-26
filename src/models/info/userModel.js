@@ -7,6 +7,11 @@ const userSchema = new mongoose.Schema({
     default: '',
   },
 
+  orderHistory: [{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Order'
+  }],
+
   greenBits: {
     type: Number,
     default: 0,

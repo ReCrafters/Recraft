@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
 
   shippingDetails: {
     fullName: String,
@@ -14,19 +14,22 @@ const orderSchema = new mongoose.Schema({
 
   items: [
     {
-      productId: String,
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
       name: String,
       price: Number,
-      quantity: Number
+      quantity: Number,
+      sellerId: { type: mongoose.Schema.Types.ObjectId, ref: 'seller' }  // 👈 Added seller reference
     }
   ],
 
   totalAmount: Number,
+
   paymentStatus: {
     type: String,
     enum: ['Pending', 'Paid', 'Failed'],
     default: 'Pending'
   },
+
   paymentMethod: {
     type: String,
     enum: ['COD', 'UPI', 'Card', 'Wallet'],
