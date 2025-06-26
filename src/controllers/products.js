@@ -174,3 +174,16 @@ module.exports.createOrUpdateReview = async (req, res) => {
   }
 };
 
+module.exports.showReview = async (req,res)=>{
+  try{
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+    const reviews = product.rating.reviews;
+    res.json(reviews);
+  }catch(err){
+    console.log(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
