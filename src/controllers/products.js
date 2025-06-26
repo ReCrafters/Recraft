@@ -149,3 +149,28 @@ module.exports.newProduct = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
+
+module.exports.createOrUpdateReview = async (req, res) => {
+  try {
+    const { rating, comment } = req.body;
+    const productId = req.params.id;
+    const userId = req.user._id;
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+     const existingReview = product.rating.reviews.find(r => r.userId.toString() === userId.toString());
+    if (existingReview) {
+      existingReview.rating = rating;
+      existingReview.comment = comment;
+    } else {
+      product.rating.reviews.push({ userId, rating, comment });
+    }
+    await product.calculateAvgRating();
+    res.status(200).json({ message: 'Review submitted', avgRating: product.rating.avgRating });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+

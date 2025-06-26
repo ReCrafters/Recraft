@@ -120,4 +120,15 @@ const productSchema = new Schema({
     timestamps: true
 });
 
+productSchema.methods.calculateAvgRating = function () {
+  const reviews = this.rating.reviews;
+  if (reviews.length === 0) {
+    this.rating.avgRating = 0;
+  } else {
+    const sum = reviews.reduce((total, r) => total + r.rating, 0);
+    this.rating.avgRating = sum / reviews.length;
+  }
+  return this.save();
+};
+
 module.exports = mongoose.model('Product', productSchema);

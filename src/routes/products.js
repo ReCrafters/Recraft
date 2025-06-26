@@ -22,4 +22,7 @@ router.route('/:id')
     .put(wrapAsync(verifyProductOwner,productsController.updateProduct))
     .delete(verifyProductOwner,wrapAsync(productsController.deleteProduct))
 
+router.route('/:id/review')
+    .post(isLoggedIn, wrapAsync(productsController.createOrUpdateReview))
+
 module.exports = router;
