@@ -112,6 +112,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 files = [];
                 updateFileList();
                 updateFileInput();
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
             } else {
                 alert(data.error);
             }

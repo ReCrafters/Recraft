@@ -8,5 +8,6 @@ router.route('/create/:id')
     .get((req,res)=>{res.render('qrForm')})
     .post(wrapAsync(qrInfoController.createQRInfo));
 
-    
+router.route('/generate/:id')
+    .get( wrapAsync(qrInfoController.generateQR));
 module.exports = router;

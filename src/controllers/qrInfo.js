@@ -19,12 +19,23 @@ module.exports.createQRInfo = async (req, res) => {
       ...req.body
     });
     await qrInfo.save();
-    await qrGenerate.generateQR(productID);
-    res.status(201).json({ message: 'QR info saved successfully and Qr code generated successfully.', qrInfo });
+    res.status(201).json({ message: 'QR info saved successfully.', qrInfo });
   } catch (err) {
     console.error('QR Info Creation Error:', err);
     res.status(500).json({ error: 'Failed to save QR info' });
   }
 };
+
+module.exports.generateQR = async (req, res) => {
+  try {
+    const productID = req.params.id;
+    qrGenerate.generateQR(productID);
+    res.status(200).json({ message: 'QR code generated successfully.' });
+  }catch (err) {
+    console.error('QR Generation Error:', err);
+    res.status(500).json({ error: 'Failed to generate QR code' });
+  }
+  };
+
 
 
