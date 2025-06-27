@@ -8,7 +8,7 @@ module.exports.isLoggedIn= (req, res, next)=> {
 module.exports.isSeller = (req, res, next) => {
   if (!req.isAuthenticated() || req.user.role !== 'seller') {
     req.flash('error', 'Seller access required');
-    return res.redirect('/login');
+    return res.redirect('/users/login');
   }
   next();
 };

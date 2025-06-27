@@ -191,7 +191,7 @@ module.exports.reviewForm = async (req, res) => {
 module.exports.newForm = async (req, res) => {
     if (!req.isAuthenticated() || req.user.role !== 'seller') {
       req.flash('error', 'Unauthorized: Only sellers can submit forms.');
-      return res.status(401).redirect('/login');
+      return res.status(401).redirect('/users/login');
     }
     const sellerID = req.user._id;
     const products= await Product.find({ sellerId: sellerID });

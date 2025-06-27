@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QR Additional Info Form</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f5f5f5;
+      padding: 2rem;
+      max-width: 700px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #1d1c1a;
+    }
+    form {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+    }
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.25rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+    }
+    .checkbox-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    button {
+      margin-top: 2rem;
+      background: #1d1c1a;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>QR Code Transparency Details</h1>
+
+  <form id="qrInfoForm">
+    <label for="transportationMethod">Transportation Method</label>
+    <input type="text" id="transportationMethod" name="transportationMethod" placeholder="e.g., Electric Vehicle Delivery" required>
+
+    <label for="carbonEmissionsEstimate">Carbon Emissions Estimate</label>
+    <input type="text" id="carbonEmissionsEstimate" name="carbonEmissionsEstimate" placeholder="e.g., 5.2kg CO2e">
+
+    <label for="packagingMaterial">Packaging Material</label>
+    <input type="text" id="packagingMaterial" name="packagingMaterial" placeholder="e.g., Recycled Kraft Paper">
+
+    <label>Is Plastic-Free Packaging?</label>
+    <div class="checkbox-group">
+      <label><input type="radio" name="isPlasticFreePackaging" value="true"> Yes</label>
+      <label><input type="radio" name="isPlasticFreePackaging" value="false" checked> No</label>
+    </div>
+
+    <label for="endOfLifeInstructions">End-of-Life Instructions</label>
+    <input type="text" id="endOfLifeInstructions" name="endOfLifeInstructions" placeholder="e.g., Compostable or Recyclable">
+
+    <label for="lifespanEstimate">Estimated Lifespan</label>
+    <input type="text" id="lifespanEstimate" name="lifespanEstimate" placeholder="e.g., 3 years">
+
+    <label>Is Renewable Energy Used in Manufacturing?</label>
+    <div class="checkbox-group">
+      <label><input type="radio" name="renewableEnergyUsedInManufacturing" value="true"> Yes</label>
+      <label><input type="radio" name="renewableEnergyUsedInManufacturing" value="false" checked> No</label>
+    </div>
+
+    <label>Is Local Collector Network Available?</label>
+    <div class="checkbox-group">
+      <label><input type="radio" name="localCollectorNetwork" value="true"> Yes</label>
+      <label><input type="radio" name="localCollectorNetwork" value="false" checked> No</label>
+    </div>
+
+    <label>Ingredients</label>
+    <textarea name="ingredients" id="ingredients"></textarea>
+
+    <label for="notesToConsumer">Notes to Consumer (optional)</label>
+    <textarea id="notesToConsumer" name="notesToConsumer" rows="3" placeholder="Any sustainability message or instructions..."></textarea>
+
+    <button type="submit">Submit QR Info</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('qrInfoForm');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const productID = '685bbb4fcd882960b15b1715'; // Fill this dynamically if needed
+      const formData = Object.fromEntries(new FormData(form).entries());
+
+      // Convert radio strings to boolean
+      formData.isPlasticFreePackaging = formData.isPlasticFreePackaging === 'true';
+      formData.renewableEnergyUsedInManufacturing = formData.renewableEnergyUsedInManufacturing === 'true';
+      formData.localCollectorNetwork = formData.localCollectorNetwork === 'true';
+
+      try {
+        const res = await fetch(`/qr/create/${productID}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await res.json();
+        alert(result.message || 'Submitted!');
+      } catch (err) {
+        alert('Error submitting QR info');
+        console.error(err);
+      }
+    });
+  </script>
+
+</body>
+</html>
