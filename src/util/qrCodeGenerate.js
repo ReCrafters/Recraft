@@ -12,7 +12,7 @@ module.exports.generateQR = async (productID) => {
     if (!product) {
       throw new Error('Product not found');
     }
-    const scanRedirectURL = `$https://qrinterface.onrender.com/${productID}`;
+    const scanRedirectURL = `https://qrinterface.onrender.com/${productID}`;
     const qrBase64 = await QRCode.toDataURL(scanRedirectURL);
     const base64Data = qrBase64.replace(/^data:image\/png;base64,/, '');
     const buffer = Buffer.from(base64Data, 'base64');
