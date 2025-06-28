@@ -1,21 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Your Cart</title>
+  <title>Your Shopping Cart | ReCraft</title>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/cart.css">
 </head>
 <body>
-  <h1>Your Cart</h1>
+  <div class="container">
+    <header>
+      <h1>Your Shopping Cart</h1>
+    </header>
 
-  <% if (user) { %>
-    <p>Welcome, <strong><%= user.name %></strong></p>
-    <button onclick="syncCart('<%= user._id %>')">Sync Cart to Backend</button>
-  <% } else { %>
-    <p>You are browsing as a guest. <a href="/login">Log in</a> to save your cart.</p>
-  <% } %>
+    <% if (user) { %>
+      <div class="user-info">
+        <p>Welcome back, <strong><%= user.name %></strong></p>
+      </div>
+    <% } else { %>
+      <div class="guest-message">
+        <p>You are browsing as a guest. <a href="/login">Log in</a> to save your cart and complete your purchase.</p>
+      </div>
+    <% } %>
 
-  <div id="cart-items" data-user="<%= user ? user._id : '' %>"></div>
-
+    <div class="cart-container">
+      <div id="cart-items" class="cart-items" data-user="<%= user ? user._id : '' %>"></div>
+      
+      <div id="cart-summary" class="cart-summary" style="display: none;">
+        <h3 class="summary-title">Order Summary</h3>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotal">₹0</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span>FREE</span>
+        </div>
+        <div class="summary-row total-row">
+          <span>Total</span>
+          <span id="total">₹0</span>
+        </div>
+        <button class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
 
   <script src="/js/cart.js"></script>
 </body>
