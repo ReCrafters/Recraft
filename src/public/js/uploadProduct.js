@@ -136,32 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
     certInput.files = dt.files;
   }
 
-// === QR Code Preview ===
-const qrInput = document.getElementById('qrCodeLink');
-const qrPreview = document.getElementById('qrPreview');
 
-if (qrInput) {
-  qrInput.addEventListener('change', function () {
-    const file = this.files[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-      alert('Please upload a valid image file for QR code.');
-      this.value = '';
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      qrPreview.innerHTML = `
-        <div class="qr-preview-container">
-          <img src="${e.target.result}" alt="QR Preview" class="qr-preview-image">
-        </div>
-      `;
-    };
-    reader.readAsDataURL(file);
-  });
-}
 
   // === Form Submission ===
   const form = document.getElementById('uploadProductForm');

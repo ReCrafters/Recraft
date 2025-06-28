@@ -33,15 +33,11 @@ module.exports.createProduct = async (req, res) => {
       return res.status(400).json({ error: 'Required fields: name, price, category, stock' });
     }
     const images = [];
-    let qrCodeLink = '';
     const verifiedDocuments = [];
     if (req.files?.images?.length > 0) {
       req.files.images.forEach(file => {
         images.push(file.path); 
       });
-    }
-    if (req.files?.qrCodeLink?.[0]) {
-      qrCodeLink = req.files.qrCodeLink[0].path;
     }
     if (req.files?.verifiedDocuments?.length > 0) {
       const pdfFiles = req.files.verifiedDocuments.filter(file => file.mimetype === 'application/pdf');
@@ -61,7 +57,6 @@ module.exports.createProduct = async (req, res) => {
       tags,
       isVerified,
       verifiedDocuments,
-      qrCodeLink,
       sellerId
     });
     await product.save();
