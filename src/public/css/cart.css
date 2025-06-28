@@ -253,12 +253,12 @@
     }
 
     .item-clickable {
-  cursor: pointer;
-  flex-grow: 1;
-}
-.item-clickable:hover {
-  opacity: 0.9;
-}
+        cursor: pointer;
+        flex-grow: 1;
+    }
+    .item-clickable:hover {
+    opacity: 0.9;
+    }
 
     .notification {
       position: fixed;
