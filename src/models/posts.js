@@ -40,7 +40,8 @@ const postSchema = new Schema({
     trim: true
   },
   media: [{
-    type: String  // URL of images/videos
+    url: String,
+    type: String
   }],
   likes: [likeSchema],        // Array of like objects
   comments: [commentSchema],  // Array of comment objects

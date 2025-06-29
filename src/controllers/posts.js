@@ -53,31 +53,42 @@ module.exports.createPost = async (req, res) => {
     if (!req.isAuthenticated()) {
       return res.status(401).json({ error: 'User not authenticated' });
     }
+
     const {
       caption,
-      media,
       category,
       materialType,
       impactScore,
-      location  // Should be in the form: { type: 'Point', coordinates: [lng, lat] }
+      location, // { type: 'Point', coordinates: [lng, lat] }
     } = req.body;
 
+    // Parsing of location if sent as string
+    const parsedLocation = typeof location === 'string' ? JSON.parse(location) : location;
+
     // Required validation
-    if (!caption || !category || !location || !Array.isArray(location.coordinates) || location.coordinates.length !== 2) {
+    if (
+      !caption ||
+      !category ||
+      !parsedLocation ||
+      !Array.isArray(parsedLocation.coordinates) ||
+      parsedLocation.coordinates.length !== 2
+    ) {
       return res.status(400).json({
-        error: 'Required fields: caption, category, valid location with coordinates [lng, lat]'
+        error: 'Required fields: caption, category, valid location with coordinates [lng, lat]',
       });
     }
-
-    // Create post instance
+    const mediaFiles = req.files.map(file => ({
+      url: file.path,
+      type: file.mimetype.startsWith('video') ? 'video' : file.mimetype.startsWith('image') ? 'image' : 'raw'
+    }));
     const post = new Post({
       userID: req.user._id,
       caption,
-      media: Array.isArray(media) ? media : [],
+      media: mediaFiles, 
       category,
       materialType: materialType || '',
       impactScore: impactScore || '',
-      location
+      location: parsedLocation
     });
 
     await post.save();
@@ -92,6 +103,7 @@ module.exports.createPost = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 module.exports.showPost = async (req, res) => {
   try {
