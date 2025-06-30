@@ -13,7 +13,6 @@ module.exports.createForm = async (req, res) => {
       req.flash('error', 'Unauthorized: Only sellers can submit forms.');
       return res.status(401).redirect('/login');
     }
-    console.log('Received form data:', req.body);
     const {       
       productID,
       isRecycled,
@@ -29,6 +28,11 @@ module.exports.createForm = async (req, res) => {
     if (!productID) {
       req.flash('error', 'Product ID is required.');
       return res.redirect('/form'); 
+    }
+    const existingForm = await Form.findOne({ productID });
+    if (existingForm) {
+      req.flash('error', 'Form already exists. Please update it.');
+      return res.status(200).json({ redirectTo: `/form/${existingForm._id}` });
     }
     const sellerID = req.user._id; 
     const certificationPDFs = req.files?.map(file => file.path) || [];
@@ -87,7 +91,7 @@ module.exports.createForm = async (req, res) => {
 */
 
 module.exports.showForm = async (req, res) => {
-  const form = await Form.findById(req.params._id);
+  const form = await Form.findById(req.params.id);
   if (!form) {
     return res.status(404).json({ error: 'Form not found' });
   }

@@ -106,6 +106,10 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             const data = await response.json();
+              if (data.redirectTo) {
+                    window.location.href = data.redirectTo;  
+                    return;
+                }
             if (response.ok) {
                 alert('Form submitted successfully!');
                 form.reset();
