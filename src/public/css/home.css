@@ -480,3 +480,14 @@ body {
     text-align: center;
   }
 }
+
+@media (max-width: 768px) {
+  
+  .nav-links {
+    gap: 1rem;
+  }
+  
+  .nav-links a:not(.btn-nav) {
+    display: none;
+  }
+}

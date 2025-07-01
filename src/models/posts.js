@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+// In models/Post.js
 const likeSchema = new Schema({
   userID: {
     type: Schema.Types.ObjectId,
-    ref: 'BaseUser',
+    ref: 'User',
     required: true
   },
   timestamp: {
@@ -40,8 +41,15 @@ const postSchema = new Schema({
     trim: true
   },
   media: [{
-    url: String,
-    type: String
+    url: {
+      type: String,
+      required: true
+    },
+    type: {
+      type: String,
+      enum: ['image', 'video', 'raw'],
+      required: true
+    }
   }],
   likes: [likeSchema],        // Array of like objects
   comments: [commentSchema],  // Array of comment objects

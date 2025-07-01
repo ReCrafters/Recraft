@@ -138,3 +138,81 @@ module.exports.deleteUserPhoto = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+module.exports.follow= async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const currentUserId = req.user._id;
+    if (userId === currentUserId.toString()) {
+      return res.status(400).json({ error: "You can't follow yourself" });
+    }
+
+    const userToFollow = await User.findById(userId);
+    const currentUser = await User.findById(currentUserId);
+
+    if (!userToFollow || !currentUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const isFollowing = currentUser.following.includes(userId);
+
+    if (isFollowing) {
+      // Unfollow
+      currentUser.following.pull(userId);
+      userToFollow.followers.pull(currentUserId);
+    } else {
+      // Follow
+      currentUser.following.push(userId);
+      userToFollow.followers.push(currentUserId);
+    }
+
+    await Promise.all([currentUser.save(), userToFollow.save()]);
+
+    res.json({
+      success: true,
+      action: isFollowing ? 'unfollowed' : 'followed',
+      followingCount: currentUser.following.length,
+      followersCount: userToFollow.followers.length,
+      isFollowing: !isFollowing, 
+      wasFollowing: isFollowing  
+    });
+
+  } catch (error) {
+    console.error('Follow error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+module.exports.getFollowing= async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+      .populate('following', 'username profileImage')
+      .select('following');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(user.following);
+  } catch (error) {
+    console.error('Error getting following list:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+module.exports.getFollowers = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+      .populate('followers', 'username profileImage')
+      .select('followers');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(user.followers);
+  } catch (error) {
+    console.error('Error getting followers list:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}

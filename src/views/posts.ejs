@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community | ReCraft</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/moment"></script>
+    <link rel="stylesheet" href="/css/posts.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-left">
+            <img src="/images/recraft-logo-transparent.png" alt="ReCraft Logo" class="nav-logo">
+            <span class="nav-brand">ReCraft</span>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="#products">Products</a>
+            <a href="#profile">My Profile</a>
+            <a href="/posts">Community</a>
+            <a href="/cart"><span><i class="fa-solid fa-cart-shopping"></i></span> </a>
+            <a href="/users/logout" class="btn btn-nav">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Community Posts</h1>
+            <a href="/posts/newPost" class="create-post-btn">
+                <i class="fas fa-plus"></i> New Post
+            </a>
+        </div>
+
+        <% if (posts.length > 0) { %>
+            <div class="posts-list">
+                <% posts.forEach(post => { %>
+                    <div class="post-card" data-postid="<%= post._id %>">
+                        <!-- Post Header -->
+                        <div class="post-header">
+                            <a href="/users/<%= post.userID ? post.userID._id : '#' %>">
+                                <% if (post.userID && post.userID.image) { %>
+                                    <img src="<%= post.userID.image %>" class="user-avatar" alt="<%= post.userID.username %>">
+                                <% } else { %>
+                                    <div class="user-avatar default-avatar">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                <% } %>
+                            </a>
+                            <div class="user-info">
+                                <a href="/users/<%= post.userID ? post.userID._id : '#' %>" class="username">
+                                    <%= post.userID ? post.userID.username : 'Anonymous' %>
+                                </a>
+                                <div class="post-time"><%= moment(post.createdAt).fromNow() %></div>
+                            </div>
+                            <div class="post-actions">
+                                <button class="post-menu-btn">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                                <div class="post-menu">
+                                    <% if (currentUser && post.userID && !currentUser._id.equals(post.userID._id)) { %>
+                                        <div class="menu-item follow <%= currentUser && post.userID && currentUser.following.includes(post.userID._id.toString()) ? 'active' : '' %>">
+                                            <i class="fas fa-<%= currentUser && post.userID && currentUser.following.includes(post.userID._id.toString()) ? 'check' : 'user-plus' %>"></i>
+                                            <span><%= currentUser && post.userID && currentUser.following.includes(post.userID._id.toString()) ? 'Following' : 'Follow User' %></span>
+                                        </div>
+                                    <% } %>
+                                    <div class="menu-item report">
+                                        <i class="fas fa-flag"></i>
+                                        <span>Report Post</span>
+                                    </div>
+                                    <div class="menu-item save" data-postid="<%= post._id %>">
+                                    <i class="<%= currentUser && currentUser.savedPosts.includes(post._id.toString()) ? 'fas' : 'far' %> fa-bookmark"></i>
+                                    <span>
+                                        <%= currentUser && currentUser.savedPosts.includes(post._id.toString()) ? 'Saved' : 'Save' %> Post
+                                    </span>
+                                    </div>
+                                    <% if (currentUser && post.userID && currentUser._id.equals(post.userID._id)) { %>
+                                        <div class="menu-item delete">
+                                            <i class="fas fa-trash"></i>
+                                            <span>Delete Post</span>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Post Content -->
+                        <div class="post-content">
+                            <p class="post-caption"><%= post.caption %></p>
+                            <span class="post-category"><%= post.category %></span>
+                        </div>
+
+                        <!-- Media Gallery -->
+                        <% if (post.media && post.media.length > 0) { %>
+                            <div class="media-gallery">
+                                <div class="media-grid <%= post.media.length === 1 ? 'single' : '' %>">
+                                    <% post.media.slice(0, 4).forEach((media, index) => { %>
+                                        <div class="media-item">
+                                            <% if (media.type === 'video') { %>
+                                                <video controls>
+                                                    <source src="<%= media.url %>" type="video/mp4">
+                                                </video>
+                                            <% } else { %>
+                                                <img src="<%= media.url %>" alt="Post media" loading="lazy">
+                                            <% } %>
+                                            <% if (index === 3 && post.media.length > 4) { %>
+                                                <div class="media-count">+<%= post.media.length - 4 %></div>
+                                            <% } %>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                            </div>
+                        <% } %>
+
+                        <!-- Post Footer -->
+                        <div class="post-footer">
+                            <div class="post-stats">
+                                <span class="likes-count"><%= post.likes.length %> likes</span>
+                                <span class="comments-count"><%= post.comments.length %> comments</span>
+                            </div>
+                            <div class="post-actions">
+                                <button class="action-btn like <%= post.likes.some(like => like.userID.toString() === (currentUser && currentUser._id.toString())) ? 'active' : '' %>">
+                                    <i class="<%= post.likes.some(like => like.userID.toString() === (currentUser && currentUser._id.toString())) ? 'fas' : 'far' %> fa-heart"></i>
+                                    Like
+                                </button>
+                                <button class="action-btn comment">
+                                    <i class="far fa-comment"></i>
+                                    Comment
+                                </button>
+                                <button class="action-btn share">
+                                    <i class="fas fa-share"></i>
+                                    Share
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Comments Section -->
+                        <div class="comments-section">
+                            <% if (post.comments.length > 0) { %>
+                                <% post.comments.forEach(comment => { %>
+                                    <div class="comment" data-commentid="<%= comment._id %>">
+                                        <a href="/users/<%= comment.userID ? comment.userID._id : '#' %>">
+                                            <% if (comment.userID && comment.userID.image) { %>
+                                                <img src="<%= comment.userID.image %>" class="comment-avatar" alt="<%= comment.userID.username %>">
+                                            <% } else { %>
+                                                <div class="comment-avatar default-avatar">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                            <% } %>
+                                        </a>
+                                        <div class="comment-content">
+                                            <div class="comment-header">
+                                                <a href="/users/<%= comment.userID ? comment.userID._id : '#' %>" class="comment-user">
+                                                    <%= comment.userID ? comment.userID.username : 'Anonymous' %>
+                                                </a>
+                                                <span class="comment-time"><%= moment(comment.timestamp).fromNow() %></span>
+                                            </div>
+                                            <p class="comment-text"><%= comment.text %></p>
+                                            <% if (currentUser && comment.userID && currentUser._id.equals(comment.userID._id)) { %>
+                                                <div class="comment-actions">
+                                                    <span class="comment-action delete-comment">Delete</span>
+                                                </div>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            <% } %>
+                        </div>
+
+                        <!-- Comment Form -->
+                        <% if (currentUser) { %>
+                            <form class="comment-form">
+                                <input type="text" class="comment-input" placeholder="Write a comment..." required>
+                                <button type="submit" class="comment-submit">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </form>
+                        <% } %>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-images"></i>
+                </div>
+                <h3 class="empty-text">No posts yet in the community</h3>
+                <% if (currentUser) { %>
+                    <a href="/posts/newPost" class="create-post-btn">
+                        Create your first post
+                    </a>
+                <% } else { %>
+                    <a href="/users/login" class="create-post-btn">
+                        Login to create a post
+                    </a>
+                <% } %>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Image Modal -->
+<div class="image-modal" id="imageModal">
+    <span class="modal-close">&times;</span>
+    <div class="modal-content">
+        <img id="modalImage" src="" alt="Full size image">
+        <div class="modal-nav">
+            <button class="nav-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+            <button class="nav-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.post-card').forEach(post => {
+        const likeBtn = post.querySelector('.action-btn.like');
+        if (likeBtn.classList.contains('active')) {
+            const icon = likeBtn.querySelector('i');
+            icon.classList.remove('far');
+            icon.classList.add('fas');
+        }
+    });
+});
+</script>
+    <script src="/js/posts.js"></script>
+</body>
+</html>

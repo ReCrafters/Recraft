@@ -4,6 +4,8 @@ const passport = require('passport');
 const wrapAsync = require('../util/wrapAsync.js');
 const userController = require('../controllers/users.js');
 const upload = require('../config/multer');
+const User= require('../models/info/baseUser.js')
+const {isLoggedIn}= require('../middleware.js')
 
 // Login routes
 router.route('/login')
@@ -32,6 +34,13 @@ router.route('/:id')
   .get(userController.showUser)
   .put(userController.updateUser);
 
+router.post('/:id/follow', isLoggedIn, userController.follow);
+
+// Get user's following list
+router.get('/:id/following', userController.getFollowing);
+
+// Get user's followers list
+router.get('/:id/followers', userController.getFollowers);
 
 router.route('/:id/photo')
   .put(upload.single('image'), userController.updateUserPhoto)

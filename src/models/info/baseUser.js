@@ -42,6 +42,12 @@ const baseUserSchema = new mongoose.Schema({
     min: 0,
   },
 
+  savedPosts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post',
+    default: []
+  }],
+
   createdAt: {
     type: Date,
     default: Date.now,

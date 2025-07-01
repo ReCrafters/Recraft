@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Your Green Action | EcoPost</title>
+    <link rel="stylesheet" href="/css/uploadPost.css">
+    <link rel="stylesheet" href="/css/additionals.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <% if (success && success.length > 0) { %>
+  <% success.forEach(function(msg) { %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <p><%= msg %></p>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% }); %>
+<% } %>
+
+<% if (error && error.length > 0) { %>
+  <% error.forEach(function(msg) { %>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <p><%= msg %></p>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% }); %>
+<% } %>
+
+    <div class="container">
+        <div class="logo">Recraft<span>Post</span></div>
+        
+        <div class="card">
+            <h1>Share Your Green Action</h1>
+            
+            <form id="postForm" action="/posts" method="POST" enctype="multipart/form-data">
+                <!-- Media Upload -->
+                <div class="form-group">
+                    <label class="required">Media Upload</label>
+                    <div class="media-upload" id="mediaUpload">
+                        <i class="fas fa-images"></i>
+                        <p>Drag & drop or click to upload</p>
+                        <p class="text-sm">Supports JPG, PNG, MP4 (Max 5 files)</p>
+                        <input type="file" id="mediaInput" name="media" accept="image/*,video/*" multiple style="display: none;">
+                    </div>
+                    <div class="media-preview" id="mediaPreview"></div>
+                    <div class="error-message" id="mediaError">Only images and videos allowed (max 5 files)</div>
+                </div>
+                
+                <!-- Caption -->
+                <div class="form-group">
+                    <label for="caption" class="required">Caption</label>
+                    <textarea id="caption" name="caption" placeholder="What sustainable action did you take today?"></textarea>
+                    <div class="char-count" id="charCount">0/200</div>
+                    <div class="error-message" id="captionError">Caption is required</div>
+                </div>
+                
+                <!-- Category -->
+                <div class="form-group">
+                    <label for="category" class="required">Category</label>
+                    <select id="category" name="category">
+                        <option value="" disabled selected>Select a category</option>
+                        <option value="Recycling">Recycling</option>
+                        <option value="Reuse">Reuse</option>
+                        <option value="Donation">Donation</option>
+                        <option value="Upcycling">Upcycling</option>
+                        <option value="DIY">DIY</option>
+                    </select>
+                    <div class="error-message" id="categoryError">Please select a category</div>
+                </div>
+                
+                <!-- Material Type -->
+                <div class="form-group">
+                    <label for="materialType">Material Type (Optional)</label>
+                    <div class="material-input">
+                        <input type="text" id="materialType" name="materialType" placeholder="e.g. Plastic, Metal, Fabric">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                </div>
+                
+                <!-- Location -->
+                <div class="form-group">
+                    <label class="required">Location</label>
+                    <button type="button" id="getLocationBtn" class="btn btn-secondary" style="margin-bottom: 16px;">
+                        <i class="fas fa-location-arrow"></i> Use Current Location
+                    </button>
+                    <div class="location-container">
+                        <div>
+                            <label for="longitude">Longitude</label>
+                            <input type="number" id="longitude" name="longitude" step="0.000001" placeholder="-122.4194">
+                        </div>
+                        <div>
+                            <label for="latitude">Latitude</label>
+                            <input type="number" id="latitude" name="latitude" step="0.000001" placeholder="37.7749">
+                        </div>
+                    </div>
+                    <div class="error-message" id="locationError">Please provide location coordinates</div>
+                </div>
+                
+                <!-- Submit Button -->
+                <button type="submit" id="submitBtn" class="btn">
+                    <i class="fas fa-leaf"></i> Share Your Action
+                </button>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Sharing your sustainable action...</p>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+<script src="/js/uploadPost.js"></script>
+</body>
+</html>

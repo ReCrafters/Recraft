@@ -53,6 +53,11 @@ const userSchema = new mongoose.Schema({
     ref: 'user'
   }],
 
+  lastPostDate: {
+  type: Date,
+  default: null,
+}
+
 });
 
 const UserModel = BaseUser.discriminator('user', userSchema);

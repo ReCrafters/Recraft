@@ -39,6 +39,9 @@ const Order=require("./models/orders.js");
 //Model for qr code
 const QRcode= require('./models/qrInfo.js');
 
+//Model for Reports
+const Report= require('./models/report.js')
+
 // Middleware and Helper
 const { isLoggedIn } = require("./middleware.js");
 
@@ -50,6 +53,7 @@ const formRouter = require("./routes/form.js");
 const cartRouter = require('./routes/cart.js');
 const orderRouter = require('./routes/orders.js');
 const qrRouter = require('./routes/qrInfo.js');
+const reportRouter = require('./routes/report.js')
 
 
 const app = express();
@@ -115,6 +119,9 @@ app.use('/order', orderRouter);
 
 //Route 7: QR Code
 app.use('/qr', qrRouter);
+
+//Route 8: Report
+app.use('/report', reportRouter)
 
 // Auth Check
 app.get('/check-auth', (req, res) => {
