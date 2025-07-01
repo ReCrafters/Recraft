@@ -13,6 +13,10 @@ body {
   background: #1D1C1A;
   padding: 1rem 3vw;
   color: #CCB39E;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
 }
 
 .nav-left {
