@@ -17,11 +17,6 @@ const userSchema = new mongoose.Schema({
     default: 0,
   },
 
-  posts: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Post',
-  }],
-
   streakCount: {
     type: Number,
     default: 0,
@@ -43,17 +38,8 @@ const userSchema = new mongoose.Schema({
     default: 0,
   },
 
-  followers: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user'
-  }],
-
-  following: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user'
-  }],
-
-  lastPostDate: {
+  
+lastPostDate: {
   type: Date,
   default: null,
 }

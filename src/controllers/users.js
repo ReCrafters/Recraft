@@ -1,5 +1,6 @@
 const User = require('../models/info/baseUser');
 const cloudinary = require('../config/cloudinary');
+const Post= require('../models/posts');
 
 module.exports.renderSignUp = (req, res) => {
   res.render('signup.ejs');
@@ -75,14 +76,135 @@ module.exports.logout = (req, res, next) => {
 
 module.exports.showUser = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id);
-  res.json(user);
+  try {
+    const user = await User.findById(id)
+      .populate({
+        path: 'posts',
+        populate: { path: 'userID', select: 'username caption media likes comments' }
+      })
+      .populate({
+        path: 'savedPosts',
+        populate: { path: 'userID', select: 'username caption media' }
+      })
+      .populate({
+        path: 'followers',
+        select: 'username image ',
+        // Safely check if current user follows each follower
+        transform: (doc) => {
+          const isFollowing = req.user ? 
+            (doc.followers || []).some(f => f.equals(req.user._id)) : 
+            false;
+          return { ...doc.toObject(), isFollowingCurrentUser: isFollowing };
+        }
+      })
+      .populate({
+        path: 'following',
+        select: 'username image',
+        // Safely check if current user follows each followed user
+        transform: (doc) => {
+          const isFollowing = req.user ? 
+            (doc.followers || []).some(f => f.equals(req.user._id)) : 
+            false;
+          return { ...doc.toObject(), isFollowingCurrentUser: isFollowing };
+        }
+      });
+
+    if (!user) {
+      req.flash('error', 'User not found');
+      return res.redirect('/');
+    }
+
+    const isCurrentUser = req.user && req.user._id.equals(user._id);
+    const isFollowing = req.user && user.followers.some(f => f._id.equals(req.user._id));
+    let profileView;
+    switch(user.role) {
+      case 'seller':
+        profileView = 'sellerProfile';
+        break;
+      case 'admin':
+        profileView = 'adminProfile';
+        break;
+      default:
+        profileView = 'userProfile';
+    }
+    res.render(profileView, {
+      user,
+      isCurrentUser,
+      isFollowing,
+      currentUserId: req.user?._id,
+      moment: require('moment')
+    });
+
+  } catch (err) {
+    console.error('Error in showUser:', err);
+    req.flash('error', 'Failed to load profile');
+    res.redirect('/');
+  }
 };
+
 
 module.exports.updateUser = async (req, res) => {
   const { id } = req.params;
-  const updatedUser = await User.findByIdAndUpdate(id, req.body, { new: true });
-  res.json(updatedUser);
+  const { name, username, bio } = req.body;
+  
+  try {
+    // 1. Find the user first to get current image details
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // 2. Initialize update data with text fields
+    const updateData = { name, username, bio };
+
+    // 3. Handle image upload if file exists
+    if (req.file) {
+      // Delete old image from Cloudinary if it exists
+      if (user.imagePublicId) {
+        await cloudinary.uploader.destroy(user.imagePublicId);
+      }
+
+      // Upload new image to Cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'user-profiles',
+        width: 500,
+        height: 500,
+        crop: 'limit'
+      });
+
+      updateData.image = result.secure_url;
+      updateData.imagePublicId = result.public_id;
+    }
+
+    // 4. Update the user
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    ).select('-password -__v'); // Exclude sensitive fields
+
+    // 5. Return updated user data
+    res.json({
+      success: true,
+      user: updatedUser
+    });
+
+  } catch (error) {
+    console.error('Error updating user:', error);
+    
+    // Handle specific errors
+    if (error.code === 11000) { // Duplicate key error
+      return res.status(400).json({ 
+        error: 'Username already exists',
+        field: 'username'
+      });
+    }
+    
+    res.status(500).json({ 
+      error: 'Failed to update profile',
+      details: error.message 
+    });
+  }
 };
 
 module.exports.updateUserPhoto = async (req, res) => {

@@ -32,7 +32,7 @@ router.get('/logout', userController.logout);
 
 router.route('/:id')
   .get(userController.showUser)
-  .put(userController.updateUser);
+  .put(upload.single('image'),userController.updateUser);
 
 router.post('/:id/follow', isLoggedIn, userController.follow);
 

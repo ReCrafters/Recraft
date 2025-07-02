@@ -1,5 +1,5 @@
 const Post = require('../models/posts.js');
-const User= require('../models/info/userModel.js')
+const User= require('../models/info/baseUser.js')
 
 module.exports.index = async (req, res) => {
   try {

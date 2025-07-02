@@ -48,9 +48,29 @@ const baseUserSchema = new mongoose.Schema({
     default: []
   }],
 
+  
+  posts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post',
+  }],
+
+  followers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'BaseUser'  
+  }],
+
+  following: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'BaseUser'  
+  }],
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+
+  bio:{
+    type:String,
+    default:'No Bio'
   },
 
   updatedAt: {
