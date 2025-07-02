@@ -148,23 +148,17 @@ module.exports.updateUser = async (req, res) => {
   const { name, username, bio } = req.body;
   
   try {
-    // 1. Find the user first to get current image details
     const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-
-    // 2. Initialize update data with text fields
     const updateData = { name, username, bio };
 
-    // 3. Handle image upload if file exists
     if (req.file) {
-      // Delete old image from Cloudinary if it exists
       if (user.imagePublicId) {
         await cloudinary.uploader.destroy(user.imagePublicId);
       }
 
-      // Upload new image to Cloudinary
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: 'user-profiles',
         width: 500,
@@ -176,14 +170,12 @@ module.exports.updateUser = async (req, res) => {
       updateData.imagePublicId = result.public_id;
     }
 
-    // 4. Update the user
     const updatedUser = await User.findByIdAndUpdate(
       id,
       updateData,
       { new: true, runValidators: true }
-    ).select('-password -__v'); // Exclude sensitive fields
+    ).select('-password -__v'); 
 
-    // 5. Return updated user data
     res.json({
       success: true,
       user: updatedUser
@@ -192,8 +184,7 @@ module.exports.updateUser = async (req, res) => {
   } catch (error) {
     console.error('Error updating user:', error);
     
-    // Handle specific errors
-    if (error.code === 11000) { // Duplicate key error
+    if (error.code === 11000) {
       return res.status(400).json({ 
         error: 'Username already exists',
         field: 'username'
