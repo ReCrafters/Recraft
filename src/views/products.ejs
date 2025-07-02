@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recraft - Eco-Friendly Marketplace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/products.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <img src="/images/recraft-logo-transparent.png" alt="Recraft Logo">
+                Recraft
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/cart">Cart</a>
+                <% if(req.user){%>
+                <a href="/users/<%= req.user._id %>">Your Profile</a>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <% const categoryHeadlines = {
+            'Clothing': 'Sustainable Fashion Finds',
+            'Accessories': 'Eco-Conscious Accessories',
+            'Home Decor': 'Green Home Solutions',
+            'Beauty': 'Natural Beauty Products',
+            'Fitness': 'Eco-Friendly Fitness Gear',
+            'Stationery': 'Green Writing Essentials',
+            'Electronics': 'Sustainable Tech Gadgets',
+            'Food': 'Organic & Local Produce',
+            'Kitchenware': 'Eco Kitchen Essentials',
+            'Toys': 'Eco-Friendly Playtime',
+            'Footwear': 'Sustainable Footwear',
+            'Bags': 'Eco Bags & Carriers',
+            'Furniture': 'Green Living Furniture',
+            'Others': 'Other Eco Products'
+        }; %>
+
+        <% 
+        // Group products by category
+        const productsByCategory = {};
+        products.forEach(product => {
+            if (!productsByCategory[product.category]) {
+                productsByCategory[product.category] = [];
+            }
+            productsByCategory[product.category].push(product);
+        });
+
+        // Sample review comments
+        const reviewComments = [
+            "This product exceeded my expectations! The quality is amazing.",
+            "Very eco-friendly and durable. Will definitely buy again.",
+            "Good product but delivery took longer than expected.",
+            "Perfect for my needs. Love the sustainable materials!",
+            "The craftsmanship is outstanding. Worth every penny.",
+            "Not exactly as pictured but still a good product.",
+            "Super comfortable and environmentally friendly. Highly recommend!",
+            "Great value for money. Very satisfied with my purchase."
+        ];
+        %>
+
+        <% Object.entries(productsByCategory).forEach(([category, categoryProducts]) => { %>
+            <section class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <%= categoryHeadlines[category] || category %>
+                        <span class="greenbits-badge">Eco-Friendly</span>
+                    </h2>
+                    <% if (categoryProducts.length > 3) { %>
+                        <a href="#" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
+                    <% } %>
+                </div>
+                <div class="products-scroll">
+                    <% categoryProducts.forEach(product => { %>
+                        <div class="product-card">
+                            <!-- Eco Indicator -->
+                            <div class="eco-indicator">
+                                <i class="fas fa-leaf"></i> Eco
+                            </div>
+
+                            <!-- Verified Badge -->
+                            <% if (product.isVerified) { %>
+                                <div class="verified-badge">
+                                    <i class="fas fa-check-circle"></i> Verified
+                                </div>
+                            <% } %>
+
+                            <!-- Review Badge if reviews exist -->
+                            <% if (product.rating.reviews && product.rating.reviews.length > 0) { %>
+                                <div class="review-badge">
+                                    <i class="fas fa-comment"></i> <%= product.rating.reviews.length %>
+                                    <div class="review-tooltip">
+                                        <% 
+                                        // Get a random review
+                                        const randomIndex = Math.floor(Math.random() * product.rating.reviews.length);
+                                        const randomReview = product.rating.reviews[randomIndex]; 
+                                        %>
+                                        
+                                        <% if (randomReview.user && randomReview.user.username) { %>
+                                            <div class="review-author">
+                                                <i class="fas fa-user"></i> <%= randomReview.user.username %>
+                                            </div>
+                                        <% } else if (randomReview.userId && randomReview.userId.username) { %>
+                                            <div class="review-author">
+                                                <i class="fas fa-user"></i> <%= randomReview.userId.username %>
+                                            </div>
+                                        <% } else { %>
+                                            <div class="review-author">
+                                                <i class="fas fa-user"></i> Anonymous User
+                                            </div>
+                                        <% } %>
+                                        
+                                        <div class="review-rating">
+                                            Rating: <%= '★'.repeat(randomReview.rating) %><%= '☆'.repeat(5 - randomReview.rating) %>
+                                        </div>
+                                        <div class="review-text">
+                                            "<%= randomReview.comment %>"
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+
+                            <!-- Product Title -->
+                            <div class="product-title"><%= product.name %></div>
+                            <div class="product-category"><%= product.category %></div>
+
+                            <!-- Star Rating -->
+                            <div class="stars">
+                                <% const fullStars = Math.floor(product.rating.avgRating || 0); %>
+                                <% const hasHalfStar = (product.rating.avgRating || 0) % 1 >= 0.5; %>
+                                <% const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0); %>
+                                
+                                <%= '★'.repeat(fullStars) %>
+                                <% if (hasHalfStar) { %>½<% } %>
+                                <%= '☆'.repeat(emptyStars) %>
+                                
+                                <% if (product.rating.avgRating) { %>
+                                    <span style="color: var(--dark); font-size: 0.7rem;"> (<%= product.rating.avgRating.toFixed(1) %>)</span>
+                                <% } %>
+                            </div>
+
+                            <!-- Product Image -->
+                            <div class="product-image-container">
+                                <% if (product.images && product.images.length > 0) { %>
+                                    <img src="<%= product.images[0] %>" class="product-image" alt="<%= product.name %>" />
+                                    <% if (product.images.length > 1) { %>
+                                        <button class="image-nav left"><i class="fas fa-chevron-left"></i></button>
+                                        <button class="image-nav right"><i class="fas fa-chevron-right"></i></button>
+                                    <% } %>
+                                <% } else { %>
+                                    <i class="fas fa-image placeholder-icon"></i>
+                                <% } %>
+                            </div>
+
+                            <!-- Metrics -->
+                            <div class="metrics">
+                                <!-- GreenBits Info -->
+                                <div class="metric-item greenbits-info">
+                                    <i class="fas fa-leaf" style="color: var(--eco-green);"></i> 
+                                    <% 
+                                    // Calculate GreenBits score
+                                    let tsv = 0;
+                                    let ssv = 0;
+                                    
+                                    if (product.form && product.form.metrices) {
+                                        const m = product.form.metrices;
+                                        
+                                        // Calculate TSV (Technical Sustainability Value)
+                                        if (m.isRecycledMaterial) tsv += 30;
+                                        tsv += (m.recycledPercentage || 0) * 0.3;
+                                        if (m.isBiodegradable) tsv += 20;
+                                        if (m.isReusable) tsv += 10;
+                                        if (m.isHandmade) tsv += 5;
+                                        if (m.isLocallySourced) tsv += 5;
+                                        tsv += (m.ecoCertification ? m.ecoCertification.length : 0) * 5;
+                                        
+                                        // Calculate SSV (Social Sustainability Value)
+                                        const energy = parseFloat(m.energyUsedForProduction) || 0;
+                                        if (energy < 50) ssv += 30;
+                                        else if (energy < 100) ssv += 15;
+                                        
+                                        const water = parseFloat(m.waterUsageLevel) || 0;
+                                        if (water < 50) ssv += 20;
+                                        else if (water < 100) ssv += 10;
+                                        
+                                        if (m.isHandmade) ssv += 15;
+                                        if (m.isLocallySourced) ssv += 15;
+                                        if (m.additionalComments && m.additionalComments.includes("packaging")) ssv += 5;
+                                    }
+                                    
+                                    // Normalize scores
+                                    tsv = Math.min(100, Math.max(0, tsv));
+                                    ssv = Math.min(100, Math.max(0, ssv));
+                                    
+                                    // Determine GreenBits (1-3)
+                                    const avgScore = (tsv + ssv) / 2;
+                                    let greenbits = 0;
+                                    if (avgScore >= 80) greenbits = 3;
+                                    else if (avgScore >= 50) greenbits = 2;
+                                    else if (avgScore > 0) greenbits = 1;
+                                    %>
+                                    <%= '♻️'.repeat(greenbits) %>
+                                    <%= '♻️'.repeat(3 - greenbits) %>
+                                    
+                                    <div class="greenbits-tooltip">
+                                        <div style="font-weight: bold; margin-bottom: 8px; text-align: center;">
+                                            <i class="fas fa-leaf" style="color: var(--eco-green);"></i> Sustainability Metrics
+                                        </div>
+                                        <% if (product.form && product.form.metrices) { 
+                                            const m = product.form.metrices;
+                                        %>
+                                            <div style="margin-bottom: 5px;"><strong>Recycled Material:</strong> <%= m.isRecycledMaterial ? 'Yes' : 'No' %></div>
+                                            <% if (m.isRecycledMaterial) { %>
+                                                <div style="margin-bottom: 5px;"><strong>Recycled Percentage:</strong> <%= m.recycledPercentage %>%</div>
+                                            <% } %>
+                                            <div style="margin-bottom: 5px;"><strong>Biodegradable:</strong> <%= m.isBiodegradable ? 'Yes' : 'No' %></div>
+                                            <div style="margin-bottom: 5px;"><strong>Reusable:</strong> <%= m.isReusable ? 'Yes' : 'No' %></div>
+                                            <div style="margin-bottom: 5px;"><strong>Energy Used:</strong> <%= m.energyUsedForProduction %></div>
+                                            <div style="margin-bottom: 5px;"><strong>Water Usage:</strong> <%= m.waterUsageLevel %>%</div>
+                                            <div style="margin-bottom: 5px;"><strong>Handmade:</strong> <%= m.isHandmade ? 'Yes' : 'No' %></div>
+                                            <div style="margin-bottom: 5px;"><strong>Locally Sourced:</strong> <%= m.isLocallySourced ? 'Yes' : 'No' %></div>
+                                        <% } else { %>
+                                            <div style="margin-bottom: 5px;">No detailed sustainability metrics available</div>
+                                        <% } %>
+                                        <hr style="margin: 8px 0; border-color: #eee;">
+                                        <div style="text-align: center;">
+                                            <strong>GreenBits Score:</strong> <%= greenbits %>/3
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- QR Scanner -->
+                                <% if (product.qrCodeLink) { %>
+                                    <div class="metric-item scanner-hover">
+                                        <i class="fas fa-qrcode"></i> Scan
+                                        <img src="<%= product.qrCodeLink %>" 
+                                             class="scanner-image"
+                                             alt="QR Code"/>
+                                    </div>
+                                <% } else { %>
+                                    <div class="metric-item">
+                                        <i class="fas fa-barcode"></i> No QR
+                                    </div>
+                                <% } %>
+                                
+                                <!-- Stock Indicator -->
+                                <div class="metric-item">
+                                    <i class="fas fa-box"></i> <%= product.stock %>
+                                </div>
+                            </div>
+
+                            <!-- Price -->
+                            <div class="price-container">
+                                <div class="price">
+                                    <div class="current-price">₹<%= product.price %></div>
+                                    <% 
+                                    const discountPercent = Math.floor(Math.random() * 30) + 5; // Random discount between 5-35%
+                                    const originalPrice = Math.round(product.price * (100 / (100 - discountPercent)));
+                                    %>
+                                    <div class="old-price">₹<%= originalPrice %></div>
+                                </div>
+                                <div class="discount"><%= discountPercent %>% OFF</div>
+                            </div>
+
+                            <!-- Stock -->
+                            <div class="stock">Only <%= product.stock %> left in stock!</div>
+
+                            <!-- Actions -->
+                            <div class="actions">
+                                <button class="btn add-cart-btn"data-id="<%= product._id %>"data-name="<%= product.name %>"data-price="<%= product.price %>"data-image="<%= product.images[0]%>"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                                <div class="btn btn-icon share-btn" style="position: relative;">
+                                    <i class="fas fa-share-alt"></i>
+                                    <div class="share-options">
+                                        <a href="#" onclick="shareProduct('<%= product._id %>', 'facebook')">
+                                            <i class="fab fa-facebook-f"></i> Facebook
+                                        </a>
+                                        <a href="#" onclick="shareProduct('<%= product._id %>', 'twitter')">
+                                            <i class="fab fa-twitter"></i> Twitter
+                                        </a>
+                                        <a href="#" onclick="shareProduct('<%= product._id %>', 'whatsapp')">
+                                            <i class="fab fa-whatsapp"></i> WhatsApp
+                                        </a>
+                                    </div>
+                                </div>
+                                <button class="btn btn-icon" title="Wishlist"><i class="fas fa-heart"></i></button>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </section>
+        <% }); %>
+    </div>
+
+    <script src="/js/products.js"></script>
+</body>
+</html>

@@ -6,8 +6,8 @@ const {getCombinedProductData} = require('../util/productService.js');
 const SellerModel = require('../models/info/sellerModel.js');
 module.exports.index = async (req, res) => {
   try {
-    const combined = await getCombinedProductData();
-    res.json({ products: combined });
+    const products = await getCombinedProductData();
+    res.render('products.ejs', {products, req});
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Internal Server Error' });
