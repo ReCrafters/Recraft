@@ -4,8 +4,6 @@ const checkoutBtn = document.getElementById('checkout-btn');
 const userId = cartItemsDiv.dataset.user;
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-if (userId) syncCart();
-
 function saveCart() {
   localStorage.setItem('cart', JSON.stringify(cart));
   updateCartCount();
@@ -85,7 +83,6 @@ function updateQuantity(id, change) {
     item.quantity = Math.max(1, item.quantity + change);
     saveCart();
     displayCart();
-    if (userId) syncCart();
   }
 }
 
@@ -106,7 +103,6 @@ function removeFromCart(id) {
   cart = cart.filter(item => item.id !== id);
   saveCart();
   displayCart();
-  if (userId) syncCart();
 }
 
 // Event delegation for dynamically added elements
