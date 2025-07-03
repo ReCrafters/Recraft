@@ -1,4 +1,5 @@
 const Report= require('../models/report');
+const Post= require('../models/posts')
 module.exports.newReport=  async (req, res) => {
   try {
     const { reportedEntity, reason, detail } = req.body;
@@ -10,6 +11,10 @@ module.exports.newReport=  async (req, res) => {
       status: 'pending'
     });
     await report.save();
+      await Post.findByIdAndUpdate(
+      reportedEntity,
+      { $push: { reports: report._id } }
+    );
     res.status(201).json(report);
   } catch (error) {
     res.status(400).json({ error});
