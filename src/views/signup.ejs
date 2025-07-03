@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ReCraft - Sign Up</title>
+  <title>Sign Up | Recraft</title>
   <link rel="stylesheet" href="/css/signup.css" />
-  <link rel="stylesheet" href="/css/additionals.css" />
   <link rel="icon" href="/images/recraft-logo.png" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=visibility" />
   
@@ -13,23 +12,8 @@
 <body>
 
   <!-- Flash Messages -->
-<% if (success && success.length > 0) { %>
-  <% success.forEach(function(msg) { %>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-      <p><%= msg %></p>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  <% }); %>
-<% } %>
+<%- include('partials/flash') %>
 
-<% if (error && error.length > 0) { %>
-  <% error.forEach(function(msg) { %>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      <p><%= msg %></p>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  <% }); %>
-<% } %>
 
 
     <div class="container">

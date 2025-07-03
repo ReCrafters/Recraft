@@ -5,28 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sustainability Form | ReCraft</title>
     <link rel="stylesheet" href="/css/form.css">
-    <link rel="stylesheet" href="/css/additionals.css">
+    <link rel="icon" href="/images/recraft-logo.png" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
       <!-- Flash Messages -->
-<% if (success && success.length > 0) { %>
-  <% success.forEach(function(msg) { %>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-      <p><%= msg %></p>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  <% }); %>
-<% } %>
+<%- include('partials/flash') %>
 
-<% if (error && error.length > 0) { %>
-  <% error.forEach(function(msg) { %>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      <p><%= msg %></p>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  <% }); %>
-<% } %>
     <div class="container">
         <div class="form-header">
             <h1><i class="fas fa-leaf"></i> Sustainability Form</h1>
