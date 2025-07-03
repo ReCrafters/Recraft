@@ -4,7 +4,6 @@ const checkoutBtn = document.getElementById('checkout-btn');
 const userId = cartItemsDiv.dataset.user;
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-// Initialize cart
 if (userId) syncCart();
 
 function saveCart() {
@@ -108,16 +107,6 @@ function removeFromCart(id) {
   saveCart();
   displayCart();
   if (userId) syncCart();
-}
-
-function syncCart() {
-  if (!userId) return;
-  
-  fetch('/cart/sync', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userId, cart })
-  }).catch(console.error);
 }
 
 // Event delegation for dynamically added elements
