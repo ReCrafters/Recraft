@@ -72,7 +72,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Session and Flash Config
 app.use(session({
-  secret: process.env.secret,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({
