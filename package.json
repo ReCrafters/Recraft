@@ -3,7 +3,10 @@
     "version":"1.0.0",
     "description":"Backend is the ultimate backend solution",
     "main":"src/app.js",
-    "scripts":{"setup":"npm install && npm update","start":"node src/app.js"},
+    "scripts":{
+        "setup":"npm install && npm update",
+        "start":"node src/app.js"
+    },
     "keywords":["express","backend","Backend"],
     "license":"MIT",
     "dependencies":{
