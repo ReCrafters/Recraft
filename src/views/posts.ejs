@@ -53,6 +53,7 @@
                                             <span><%= currentUser && post.userID && currentUser.following.includes(post.userID._id.toString()) ? 'Following' : 'Follow User' %></span>
                                         </div>
                                     <% } %>
+                                    <% if(currentUser) {%>
                                     <div class="menu-item report">
                                         <i class="fas fa-flag"></i>
                                         <span>Report Post</span>
@@ -63,6 +64,7 @@
                                         <%= currentUser && currentUser.savedPosts.includes(post._id.toString()) ? 'Saved' : 'Save' %> Post
                                     </span>
                                     </div>
+                                    <% } %>
                                     <% if (currentUser && post.userID && currentUser._id.equals(post.userID._id)) { %>
                                         <div class="menu-item delete">
                                             <i class="fas fa-trash"></i>
@@ -108,10 +110,12 @@
                                 <span class="comments-count"><%= post.comments.length %> comments</span>
                             </div>
                             <div class="post-actions">
+                                <% if(currentUser){ %>
                                 <button class="action-btn like <%= post.likes.some(like => like.userID.toString() === (currentUser && currentUser._id.toString())) ? 'active' : '' %>">
                                     <i class="<%= post.likes.some(like => like.userID.toString() === (currentUser && currentUser._id.toString())) ? 'fas' : 'far' %> fa-heart"></i>
                                     Like
                                 </button>
+                                <% } %>
                                 <button class="action-btn comment">
                                     <i class="far fa-comment"></i>
                                     Comment
