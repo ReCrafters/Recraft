@@ -10,6 +10,7 @@
     max-width: 90%;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     animation: fadeIn 0.3s ease-in-out;
+    z-index: 20000;
   }
 
   .alert-success {
@@ -19,6 +20,12 @@
   }
 
   .alert-danger {
+    background-color: #fdecea;
+    border: 1px solid #f5c2c7;
+    color: #842029;
+  }
+
+    .alert-error {
     background-color: #fdecea;
     border: 1px solid #f5c2c7;
     color: #842029;
@@ -75,3 +82,24 @@
     </div>
   <% }); %>
 <% } %>
+
+<script>
+    function showFlashMessage(type, message) {
+  const container = document.createElement('div');
+  container.className = `alert alert-${type === 'error' ? 'danger' : 'success'}`;
+  container.innerText = message;
+  container.id = `flash-${type}`;
+  document.body.prepend(container);
+
+  setTimeout(() => {
+    container.remove();
+  }, 5000); // Auto-dismiss after 5s
+}
+
+function clearFlashMessages() {
+  const existingSuccess = document.getElementById('flash-success');
+  const existingError = document.getElementById('flash-error');
+  if (existingSuccess) existingSuccess.remove();
+  if (existingError) existingError.remove();
+}
+</script>

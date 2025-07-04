@@ -132,7 +132,8 @@ module.exports.showUser = async (req, res) => {
       isCurrentUser,
       isFollowing,
       currentUserId: req.user?._id,
-      moment: require('moment')
+      moment: require('moment'),
+      messages: req.flash()
     });
 
   } catch (err) {
@@ -176,24 +177,26 @@ module.exports.updateUser = async (req, res) => {
       { new: true, runValidators: true }
     ).select('-password -__v'); 
 
-    res.json({
+    return res.status(200).json({
       success: true,
+      message: 'Profile updated successfully',
       user: updatedUser
     });
 
+
   } catch (error) {
-    console.error('Error updating user:', error);
     
     if (error.code === 11000) {
-      return res.status(400).json({ 
-        error: 'Username already exists',
-        field: 'username'
+      return res.status(400).json({
+        success: false,
+        error: 'Username already exists'
       });
     }
-    
-    res.status(500).json({ 
-      error: 'Failed to update profile',
-      details: error.message 
+
+    return res.status(500).json({
+      success: false,
+      error: 'Something went wrong',
+      details: error.message
     });
   }
 };

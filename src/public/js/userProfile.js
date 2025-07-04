@@ -162,17 +162,24 @@ document.addEventListener('DOMContentLoaded', function() {
                         method: 'PUT',
                         body: formData
                     });
-                    if (!response.ok) throw new Error('Failed to update profile');
                     const result = await response.json();
+                    clearFlashMessages();
+                    if (!response.ok) {
+                        showFlashMessage('error', result.error || 'Failed to update profile');
+                        return;
+                    }
                     updateProfileUI(result.user);
                     DOM.modals.editProfile.classList.remove('active');
                     document.body.style.overflow = 'auto';
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            });
+                    showFlashMessage('success', result.message || 'Profile updated successfully');
+                    }catch(error) {
+                        console.error('Error:', error);
+                        clearFlashMessages();
+                        showFlashMessage('error', 'Something went wrong. Please try again.');
+                    }
+                });
+            }
         }
-    }
     function updateProfileUI(userData) {
         if (!userData) return;
         const elements = {
