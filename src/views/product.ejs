@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= product.name %> – Seller View</title>
+
+  <style>
+    :root {
+      --sand-1:#efe1ce;
+      --sand-2:#d8c3a8;
+      --ink:#181818;
+      --accent:#6b4b1d;
+      --radius:14px;
+    }
+    *{box-sizing:border-box;font-family:"Segoe UI",sans-serif}
+    body{
+      margin:0;
+      background:linear-gradient(to right,var(--sand-2),var(--sand-1));
+      color:var(--ink);
+    }
+
+    header{
+      background:#000;
+      color:#fff;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px 40px;
+    }
+    header .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color:#f8e4cc
+    }
+    header .brand img {
+      height: 38px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 600;
+    }
+    nav a{
+      color:#fff;
+      text-decoration:none;
+      margin-left:28px;
+      font-weight:500;
+      transition:opacity .15s;
+    }
+    nav a.logout-btn {
+      background-color: #5a3518;
+      padding: 6px 14px;
+      border-radius: 8px;
+      color: #f8e4cc;
+      font-weight: 600;
+    }
+    nav a.logout-btn:hover {
+      opacity: 0.85;
+    }
+    nav a:hover:not(.logout-btn) {opacity:.75}
+
+    .wrapper{padding:40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:1280px;margin:auto}
+    .img-col{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+    .main-img{
+      width:100%;max-width:600px;height:420px;object-fit:contain;
+      border-radius:var(--radius);box-shadow:0 6px 14px rgba(0,0,0,.12);
+      background:#fff;
+    }
+    .thumb-list{margin-top:18px;display:flex;gap:14px;flex-wrap:wrap}
+    .thumb{
+      width:86px;height:70px;border-radius:8px;overflow:hidden;
+      border:2px solid transparent;cursor:pointer;transition:border .15s;
+    }
+    .thumb:hover{border:2px solid var(--accent)}
+    .thumb img{width:100%;height:100%;object-fit:cover}
+
+    .details{display:flex;flex-direction:column;gap:24px;}
+    h2{margin:0;font-size:32px;font-weight:700}
+    .price{font-size:28px;font-weight:600;color:var(--accent)}
+
+    .meta-list {
+      display: grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:16px;
+    }
+    .meta-item {
+      font-size:15px;
+      padding:8px 0;
+    }
+    .meta-item span {
+      font-weight:600;
+      color: var(--accent);
+    }
+    .badge {
+      display:inline-block;background:var(--accent);color:#fff;padding:2px 8px;
+      border-radius:8px;font-size:12px;margin:2px 4px 2px 0;
+    }
+
+    .rating-box {
+      margin-top:16px;
+      font-size:18px;
+      font-weight:600;
+      color:#444;
+    }
+
+    .btn-row-top {
+      margin: 20px 0;
+      display:flex;gap:14px;flex-wrap:wrap;
+    }
+    .btn{
+      background:var(--accent);color:#fff;border:none;border-radius:8px;
+      padding:10px 20px;font-size:14px;font-weight:500;cursor:pointer;
+      transition:transform .15s;
+    }
+    .btn:hover{transform:translateY(-2px)}
+    .btn.outline{
+      background:transparent;color:var(--accent);border:2px solid var(--accent)
+    }
+
+    @media(max-width:960px){
+      .wrapper{grid-template-columns:1fr;gap:40px}
+      .main-img{height:360px}
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <img src="WhatsApp_Image_2025-07-01_at_21.28.14_01b060a4-removebg-preview.png" alt="ReCraft Logo">
+      <h1>ReCraft</h1>
+    </div>
+    <nav>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/product/<%= product._id %>/form">Fill Form</a>
+      <a href="/product/<%= product._id %>/generate-qr">Generate QR</a>
+      <a href="/product/<%= product._id %>/edit">Edit</a>
+      <a href="/product/<%= product._id %>/delete" onclick="return confirm('Delete this product?')">Delete</a>
+      <a class="logout-btn" href="/logout">Logout</a>
+    </nav>
+  </header>
+
+  <div class="wrapper">
+    <div class="img-col">
+      <img class="main-img" src="<%= product.images[0] %>" alt="<%= product.name %>">
+      <div class="rating-box">
+        Rating: <%= product.rating.avgRating.toFixed(1) %> ★
+      </div>
+    </div>
+
+    <div class="details">
+      <div>
+        <h2><%= product.name %></h2>
+        <div class="price">$ <%= product.price.toFixed(2) %></div>
+      </div>
+
+      <div class="meta-list">
+        <div class="meta-item"><span>Category:</span> <%= product.category %></div>
+        <div class="meta-item"><span>Stock:</span> <%= product.stock %> units</div>
+        <div class="meta-item"><span>Views:</span> <%= product.views %></div>
+        <div class="meta-item"><span>Purchases:</span> <%= product.purchases %></div>
+        <div class="meta-item"><span>Documents Verified:</span>
+          <% if(product.isVerified && product.verifiedDocuments.length){ %>
+            Yes - <a href="<%= product.verifiedDocuments[0] %>" target="_blank">View</a>
+          <% } else { %>
+            No
+          <% } %>
+        </div>
+        <div class="meta-item" style="grid-column:1/-1"><span>Tags:</span>
+          <% product.tags.forEach(tag=>{ %>
+            <span class="badge"><%= tag %></span>
+          <% }) %>
+        </div>
+        <div class="meta-item" style="grid-column:1/-1"><span>QR Code:</span>
+          <% if(product.qrCodeLink){ %>
+            <a href="<%= product.qrCodeLink %>" target="_blank">Open QR</a>
+          <% } else { %>
+            Not generated
+          <% } %>
+        </div>
+      </div>
+
+      <div>
+        <h3>About this item</h3>
+        <p><%= product.description %></p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
