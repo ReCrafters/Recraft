@@ -64,10 +64,10 @@
 <% if (success && success.length > 0) { %>
   <% success.forEach(function(msg, index) { %>
     <div id="alert-success-<%= index %>" class="alert alert-success" role="alert">
-      <p><%= msg %></p>
       <button type="button" class="btn-close" aria-label="Close" onclick="document.getElementById('alert-success-<%= index %>').remove()">
         <i class="fa-solid fa-xmark"></i>
       </button>
+    <p><%= msg %></p>
     </div>
   <% }); %>
 <% } %>
@@ -75,10 +75,10 @@
 <% if (error && error.length > 0) { %>
   <% error.forEach(function(msg, index) { %>
     <div id="alert-error-<%= index %>" class="alert alert-danger" role="alert">
-      <p><%= msg %></p>
       <button type="button" class="btn-close" aria-label="Close" onclick="document.getElementById('alert-error-<%= index %>').remove()">
         <i class="fa-solid fa-xmark"></i>
       </button>
+    <p><%= msg %></p>
     </div>
   <% }); %>
 <% } %>
