@@ -1,0 +1,171 @@
+<style>
+    .main-footer {
+  background: #1D1C1A;
+  color: #CCB39E;
+  padding: 3rem 6vw 1rem;
+  margin-top: 3rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.footer-section h4 {
+  color: #F5E9DA;
+  margin-bottom: 1.2rem;
+  font-size: 1.1rem;
+}
+
+.footer-section p {
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.social-links a {
+  color: #CCB39E;
+  font-size: 1.2rem;
+  transition: color 0.2s;
+}
+
+.social-links a:hover {
+  color: #A99480;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.8rem;
+}
+
+.footer-section ul li a {
+  color: #CCB39E;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-section ul li a:hover {
+  color: #A99480;
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  border-top: 1px solid #3A2615;
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-bottom p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.legal-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.legal-links a {
+  color: #CCB39E;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.legal-links a:hover {
+  text-decoration: underline;
+  color: #A99480;
+}
+
+@media (max-width: 600px) {
+  .stat-card {
+    min-width: 100%;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .legal-links {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .view-all {
+    align-self: flex-end;
+  }
+}
+</style>
+<footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-section">
+        <h4>About ReCraft</h4>
+        <p>Empowering sustainable businesses with eco-friendly solutions and marketplace tools.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="/seller/help">Help Center</a></li>
+          <li><a href="/seller/policies">Seller Policies</a></li>
+          <li><a href="/seller/verification">Verification Process</a></li>
+          <li><a href="/seller/shipping">Shipping Guidelines</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Business Tools</h4>
+        <ul>
+          <li><a href="/seller/analytics">Sales Analytics</a></li>
+          <li><a href="/seller/products">Product Management</a></li>
+          <li><a href="/seller/promotions">Marketing Tools</a></li>
+          <li><a href="/seller/sustainability">Sustainability Dashboard</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Contact Us</h4>
+        <p><i class="fas fa-envelope"></i> sellersupport@recraft.com</p>
+        <p><i class="fas fa-phone"></i> +91 1800 123 4567</p>
+        <p><i class="fas fa-map-marker-alt"></i> Sustainable Business Hub, Bangalore, India</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 ReCraft Sustainable Marketplace. All rights reserved.</p>
+      <div class="legal-links">
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </footer>

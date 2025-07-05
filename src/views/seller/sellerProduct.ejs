@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= product.name %> | Seller Dashboard</title>
+  <link rel="stylesheet" href="/css/sellerProduct.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<%- include('../partials/flash') %>
+
+  <!-- Navbar (same as dashboard) -->
+<%- include('../partials/navbar') %>
+
+  <!-- Product Header -->
+  <section class="product-header">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/seller/inventory">Inventory</a> &gt; <span><%= product.name %></span>
+      </div>
+      <div class="header-content">
+        <div class="product-title">
+          <h1><%= product.name %></h1>
+          <div class="product-status <%= product.isVerified ? 'verified' : 'unverified' %>">
+            <i class="fas <%= product.isVerified ? 'fa-check-circle' : 'fa-clock' %>"></i>
+            <%= product.isVerified ? 'Verified' : 'Pending Verification' %>
+          </div>
+        </div>
+        <div class="product-actions">
+          <a href="/products/<%= product._id %>/edit" class="btn btn-action edit">
+            <i class="fas fa-edit"></i> Edit
+          </a>
+          <button class="btn btn-action delete" id="deleteProduct">
+            <i class="fas fa-trash-alt"></i> Delete
+          </button>
+          <% if(!product.isVerified) { %>
+            <a href="/form/newForm" class="btn btn-action primary">
+              <i class="fas fa-file-alt"></i> Fill Sustainability Form
+            </a>
+          <% } %>
+          <a href="/qr/create/<%= product._id %>" class="btn btn-action primary">
+            <i class="fas fa-qrcode"></i> Generate QR Code
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Main Content -->
+  <section class="product-main">
+    <div class="container">
+      <div class="product-grid">
+        <!-- Product Images -->
+        <div class="product-images">
+          <div class="main-image">
+            <img src="<%= product.images[0] %>" alt="<%= product.name %>" id="mainImage">
+          </div>
+          <div class="thumbnail-container">
+            <% product.images.forEach((image, index) => { %>
+              <div class="thumbnail <%= index === 0 ? 'active' : '' %>" data-image="<%= image %>">
+                <img src="<%= image %>" alt="<%= product.name %> thumbnail">
+              </div>
+            <% }) %>
+            <% if(product.images.length === 0) { %>
+              <div class="thumbnail active" data-image="/images/product-placeholder.jpg">
+                <img src="/images/product-placeholder.jpg" alt="No image available">
+              </div>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="product-details">
+          <div class="detail-section">
+            <h3>Product Information</h3>
+            <div class="detail-row">
+              <span class="detail-label">Category:</span>
+              <span class="detail-value"><%= product.category %></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Price:</span>
+              <span class="detail-value">₹<%= product.price.toFixed(2) %></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Stock:</span>
+              <span class="detail-value <%= product.stock < 10 ? 'warning' : '' %> <%= product.stock === 0 ? 'danger' : '' %>">
+                <%= product.stock %>
+                <% if(product.stock < 10 && product.stock > 0) { %>
+                  <span class="stock-alert">(Low Stock)</span>
+                <% } else if(product.stock === 0) { %>
+                  <span class="stock-alert">(Out of Stock)</span>
+                <% } %>
+              </span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Views:</span>
+              <span class="detail-value"><%= product.views || 0 %></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Purchases:</span>
+              <span class="detail-value"><%= product.purchases || 0 %></span>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3>Sustainability Metrics</h3>
+            <% if(sustainabilityForm) { 
+              const ssv = sustainabilityForm&& sustainabilityForm.assignedSSV ? sustainabilityForm.assignedSSV : 0;
+              const tsv = sustainabilityForm&& sustainabilityForm.assignedTSV ? sustainabilityForm.assignedTSV : 0;
+            %>
+              <div class="metrics-display">
+                <div class="metric-circle">
+                  <div class="circle-container">
+                    <svg viewBox="0 0 36 36" class="circular-chart">
+                      <path class="circle-bg"
+                        d="M18 2.0845
+                          a 15.9155 15.9155 0 0 1 0 31.831
+                          a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <path class="circle-fill"
+                        stroke-dasharray="<%= ssv * 10 %>, 100"
+                        d="M18 2.0845
+                          a 15.9155 15.9155 0 0 1 0 31.831
+                          a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <text x="18" y="20.5" class="percentage">SSV</text>
+                      <text x="18" y="25.5" class="value"><%= ssv.toFixed(1) %></text>
+                    </svg>
+                  </div>
+                  <div class="metric-label">Sustainability Score</div>
+                </div>
+                <div class="metric-circle">
+                  <div class="circle-container">
+                    <svg viewBox="0 0 36 36" class="circular-chart">
+                      <path class="circle-bg"
+                        d="M18 2.0845
+                          a 15.9155 15.9155 0 0 1 0 31.831
+                          a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <path class="circle-fill"
+                        stroke-dasharray="<%= tsv * 10 %>, 100"
+                        d="M18 2.0845
+                          a 15.9155 15.9155 0 0 1 0 31.831
+                          a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <text x="18" y="20.5" class="percentage">TSV</text>
+                      <text x="18" y="25.5" class="value"><%= tsv.toFixed(1) %></text>
+                    </svg>
+                  </div>
+                  <div class="metric-label">Trust Score</div>
+                </div>
+              </div>
+              <div class="form-status <%= sustainabilityForm.isApproved ? 'approved' : 'pending' %>">
+                <i class="fas <%= sustainabilityForm.isApproved ? 'fa-check-circle' : 'fa-clock' %>"></i>
+                <%= sustainabilityForm.isApproved ? 'Sustainability Verified' : 'Verification Pending' %>
+                <% if(sustainabilityForm.feedback) { %>
+                  <div class="feedback">
+                    <strong>Feedback:</strong> <%= sustainabilityForm.feedback %>
+                  </div>
+                <% } %>
+              </div>
+            <% } else { %>
+              <div class="no-metrics">
+                <p>No sustainability form submitted for this product.</p>
+                <a href="/sustainability/newProduct" class="btn btn-action primary">
+                  <i class="fas fa-file-alt"></i> Submit Form
+                </a>
+              </div>
+            <% } %>
+          </div>
+
+          <div class="detail-section">
+            <h3>Description</h3>
+            <p><%= product.description %></p>
+          </div>
+
+          <div class="detail-section">
+            <h3>Tags</h3>
+            <div class="tags-container">
+              <% JSON.parse(product.tags[0]).forEach(tag => { %>
+                <span class="tag"><%= tag %></span>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Analytics -->
+  <section class="product-analytics">
+    <div class="container">
+      <h2><i class="fas fa-chart-line"></i> Product Analytics</h2>
+      
+      <div class="analytics-grid">
+        <div class="analytics-card">
+          <h3>Sales Performance</h3>
+          <canvas id="salesChart"></canvas>
+        </div>
+        <div class="analytics-card">
+          <h3>Customer Engagement</h3>
+          <canvas id="engagementChart"></canvas>
+        </div>
+      </div>
+
+      <div class="analytics-summary">
+        <div class="summary-card">
+          <div class="summary-icon">
+            <i class="fas fa-eye"></i>
+          </div>
+          <div class="summary-content">
+            <h4>Total Views</h4>
+            <p><%= product.views || 0 %></p>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-icon">
+            <i class="fas fa-shopping-bag"></i>
+          </div>
+          <div class="summary-content">
+            <h4>Total Sales</h4>
+            <p><%= product.purchases || 0 %></p>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-icon">
+            <i class="fas fa-percentage"></i>
+          </div>
+          <div class="summary-content">
+            <h4>Conversion Rate</h4>
+            <p><%= product.views ? ((product.purchases / product.views) * 100).toFixed(2) : '0' %>%</p>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-icon">
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="summary-content">
+            <h4>Average Rating</h4>
+            <p><%= product.rating.avgRating ? product.rating.avgRating.toFixed(1) : 'No ratings' %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Reviews -->
+    <!-- Product Reviews Section -->
+    <section class="product-reviews">
+    <div class="container">
+        <div class="reviews-header">
+        <h2><i class="fas fa-comment-alt"></i> Customer Reviews</h2>
+        <div class="rating-summary">
+            <div class="average-rating">
+            <span class="stars">
+                <% for(let i = 1; i <= 5; i++) { %>
+                <i class="fas fa-star <%= i <= Math.round(product.rating.avgRating || 0) ? 'active' : '' %>"></i>
+                <% } %>
+            </span>
+            <span class="value"><%= product.rating.avgRating ? product.rating.avgRating.toFixed(1) : '0' %></span>
+            <span class="count">(<%= product.rating.reviews.length %> reviews)</span>
+            </div>
+        </div>
+        </div>
+
+        <% if(product.rating.reviews.length > 0) { %>
+        <div class="reviews-grid">
+            <% product.rating.reviews.slice(0, 4).forEach(review => { %>
+            <div class="review-card">
+                <div class="review-header">
+                <div class="reviewer">
+                    <div class="avatar">
+                    <%= review.user.name.charAt(0).toUpperCase() %>
+                    </div>
+                    <div class="reviewer-info">
+                    <h4><%= review.user.name %></h4>
+                    <div class="stars">
+                        <% for(let i = 1; i <= 5; i++) { %>
+                        <i class="fas fa-star <%= i <= review.rating ? 'active' : '' %>"></i>
+                        <% } %>
+                    </div>
+                    </div>
+                </div>
+                <div class="review-date">
+                    <%= review.createdAt.toLocaleDateString() %>
+                </div>
+                </div>
+                <div class="review-content">
+                <p><%= review.comment %></p>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+
+        <% if(product.rating.reviews.length > 4) { %>
+            <div class="view-all-reviews">
+            <a href="/products/<%= product._id %>/reviews" class="btn btn-action">
+                View All Reviews (<%= product.rating.reviews.length %>)
+            </a>
+            </div>
+        <% } %>
+        <% } else { %>
+        <div class="no-reviews">
+            <h3>No Reviews Yet</h3>
+            <p>This product hasn't received any reviews yet.</p>
+        </div>
+        <% } %>
+    </div>
+    </section>
+  <!--Footer-->
+<%- include('../partials/footer')%>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal" id="deleteModal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3>Delete Product</h3>
+      <p>Are you sure you want to delete "<%= product.name %>"? This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancelDelete">Cancel</button>
+        <form action="/products/<%= product._id %>" method="POST" id="deleteForm">
+          <input type="hidden" name="_method" value="DELETE">
+          <button type="submit" class="btn btn-danger">Delete Product</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/sellerProduct.js"></script>
+</body>
+</html>

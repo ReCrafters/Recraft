@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Seller Dashboard</title>
+  <link rel="stylesheet" href="/css/sellerDashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<%- include('../partials/flash') %>
+
+  <!-- Navbar -->
+<%- include('../partials/navbar') %>
+
+  <!-- Welcome Banner -->
+  <section class="welcome-banner">
+    <div class="welcome-content">
+      <h1>Welcome, <span class="username"><%= user.name %></span>!</h1>
+      <p>Manage your business, track sales, and grow your sustainable store.</p>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-box-open"></i></div>
+          <div class="stat-label">Total Products</div>
+          <div class="stat-value"><%= seller.products.length %></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-receipt"></i></div>
+          <div class="stat-label">Total Orders</div>
+          <div class="stat-value"><%= seller.orders.length %></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
+          <div class="stat-label">Pending Verifications</div>
+          <div class="stat-value"><%= seller.sustainabilityForms.filter(f => !f.isApproved).length %></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+          <div class="stat-label">Monthly Earnings</div>
+          <div class="stat-value">₹<%= (seller.analytics.totalSales * 0.3).toFixed(2) %></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+          <div class="stat-label">Avg TSV</div>
+          <div class="stat-value"><%= seller.analytics.avgTSV %></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-leaf"></i></div>
+          <div class="stat-label">Avg SSV</div>
+          <div class="stat-value"><%= seller.analytics.avgSSV %></div>
+        </div>
+      </div>
+    </div>
+    <div class="profile-photo-wrapper" data-user-id="<%= user._id %>">
+      <% if (user.image) { %>
+        <img src="<%= user.image %>" alt="Profile Photo" class="profile-photo" id="profileImage">
+      <% } else { %>
+        <div class="profile-placeholder" id="profilePlaceholder">
+          <span>+</span>
+        </div>
+      <% } %>
+      <input type="file" id="profileUploadInput" name="profileImage" accept="image/*" style="display: none" />
+      <div class="photo-menu" id="photoMenu">
+        <button id="changePhoto" class="menu-btn">Change Photo</button>
+        <% if (user.image) { %>
+          <button id="deletePhoto" class="menu-btn delete-btn">Delete Photo</button>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Business Status Section -->
+  <section class="business-status">
+    <div class="status-card <%= seller.businessDetails.badge === 'Verified' ? 'verified' : 'unverified' %>">
+      <h3>Business Status</h3>
+      <div class="status-content">
+        <i class="fas <%= seller.businessDetails.badge === 'Verified' ? 'fa-check-circle' : 'fa-exclamation-circle' %>"></i>
+        <div>
+          <p class="status-title"><%= seller.businessDetails.businessName %></p>
+          <p class="status-subtitle"><%= seller.businessDetails.badge %></p>
+          <% if (seller.businessDetails.badge === 'Unverified') { %>
+            <a href="/seller/verification" class="verify-btn">Complete Verification</a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <div class="quick-actions">
+      <h3>Quick Actions</h3>
+      <div class="action-buttons">
+        <a href="/products/newProduct" class="action-btn">
+          <i class="fas fa-plus"></i> Add Product
+        </a>
+        <a href="/seller/analytics" class="action-btn">
+          <i class="fas fa-chart-pie"></i> View Analytics
+        </a>
+        <a href="/seller/orders" class="action-btn">
+          <i class="fas fa-truck"></i> Manage Orders
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Products Section -->
+  <section class="recent-products">
+    <div class="section-header">
+      <h2>Your Products</h2>
+      <a href="/seller/inventory" class="view-all">View All</a>
+    </div>
+    <div class="product-grid">
+      <% seller.products.slice(0, 4).forEach(product => { %>
+        <div class="product-card">
+          <img src="<%= product.images[0] %>" alt="<%= product.name %>">
+          <div class="product-info">
+            <h3><%= product.name %></h3>
+            <p class="price">₹<%= product.price.toFixed(2) %></p>
+            <div class="product-meta">
+              <span><i class="fas fa-eye"></i> <%= product.views %></span>
+              <span><i class="fas fa-shopping-bag"></i> <%= product.purchases %></span>
+              <span class="<%= product.isVerified ? 'verified' : 'unverified' %>">
+                <i class="fas <%= product.isVerified ? 'fa-check-circle' : 'fa-clock' %>"></i>
+                <%= product.isVerified ? 'Verified' : 'Pending' %>
+              </span>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <%- include('../partials/footer') %>
+
+  <script src="/js/sellerDashboard.js"></script>
+</body>
+</html>

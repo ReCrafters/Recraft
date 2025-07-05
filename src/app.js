@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const {ObjectId} = mongoose.Types;
 const cors = require("cors");
 const path = require("path");
 const session = require("express-session");
@@ -54,6 +55,7 @@ const cartRouter = require('./routes/cart.js');
 const orderRouter = require('./routes/orders.js');
 const qrRouter = require('./routes/qrInfo.js');
 const reportRouter = require('./routes/report.js')
+const sellerRouter= require('./routes/seller.js')
 
 
 const app = express();
@@ -123,6 +125,9 @@ app.use('/qr', qrRouter);
 //Route 8: Report
 app.use('/report', reportRouter)
 
+//Route 9: Seller
+app.use('/seller', sellerRouter);
+
 // Auth Check
 app.get('/check-auth', (req, res) => {
   if (req.isAuthenticated()) {
@@ -137,7 +142,7 @@ app.get('/check-auth', (req, res) => {
 app.get('/dashboard', isLoggedIn, async (req, res) => {
   const role = req.user.role;
   if (role === 'admin') return res.redirect('/admin-dashboard');
-  if (role === 'seller') return res.redirect('/seller-dashboard');
+  if (role === 'seller') return res.redirect('/seller');
   try {
     const combined = await getCombinedProductData();
     const userDetails=req.user;
@@ -154,10 +159,6 @@ app.get('/dashboard', isLoggedIn, async (req, res) => {
 app.get('/admin-dashboard', isLoggedIn, (req, res) => {
   res.render('adminDashboard', { user: req.user });
 });
-app.get('/seller-dashboard', isLoggedIn, (req, res) => {
-  res.render('sellerDashboard', { user: req.user });
-});
-
 
 
 // Public Landing Page

@@ -1,0 +1,94 @@
+  <style>
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1D1C1A;
+  padding: 1rem 3vw;
+  color: #CCB39E;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  background: transparent;
+}
+
+.nav-brand {
+  font-size: 1.7rem;
+  color: #CCB39E;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: #CCB39E;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: #A99480;
+}
+
+.btn-nav {
+  margin-left: 1rem;
+  background: #553820;
+  color: #fff;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  transition: background 0.2s;
+}
+
+.btn-nav:hover {
+  background: #9A836D;
+} 
+
+@media (max-width: 768px) {
+  .nav-links {
+    gap: 1rem;
+  }
+  
+  .nav-links a:not(.btn-nav) {
+    display: none;
+  }
+
+}
+  </style>
+  
+  <nav class="main-nav">
+    <div class="nav-left">
+      <img src="/images/recraft-logo-transparent.png" alt="ReCraft Logo" class="nav-logo">
+      <span class="nav-brand">ReCraft</span>
+    </div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/seller/inventory">Inventory</a>
+      <a href="/users/<%= user._id %>">My Profile</a>
+      <a href="/posts">Community</a>
+      <a href="/seller/form">Forms</a>
+      <a href="/posts">Orders</a>
+      <a href="/users/logout" class="btn btn-nav">Logout</a>
+    </div>
+  </nav>
