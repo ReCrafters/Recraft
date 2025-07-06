@@ -9,13 +9,13 @@ body {
 
 /* Sustainability Forms Styles */
 .forms-header {
-  background: linear-gradient(90deg, #e8f5e9 0%, #ffffff 100%);
+  background: linear-gradient(90deg, #834205 0%, #e9862a 100%);
   padding: 2rem 6vw;
   border-bottom: 1px solid #d0e0d0;
 }
 
 .forms-header h1 {
-  color: #2e7d32;
+  color: #ffffff;
   font-size: 2rem;
   margin-bottom: 0.5rem;
   display: flex;
@@ -32,7 +32,7 @@ body {
 }
 
 .forms-intro p {
-  color: #5e4736;
+  color: #ffffff;
   max-width: 600px;
   margin: 0;
 }
@@ -311,6 +311,11 @@ body {
 .btn-primary {
     background-color: rgb(156, 113, 55);
     color: white;
+}
+
+.btn-primary:hover {
+  background: rgba(0,0,0,0.05);
+  transform: scale(1.1);
 }
 
 /* Empty State */
