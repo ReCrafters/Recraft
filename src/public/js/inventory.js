@@ -51,25 +51,29 @@
     });
 
     document.getElementById('confirmDelete').addEventListener('click', () => {
-      if(productToDelete) {
-        fetch(`/products/${productToDelete}`, {
-          method: 'DELETE'
-        })
-        .then(response => response.json())
-        .then(data => {
-          if(data.success) {
+    if (productToDelete) {
+      fetch(`/products/${productToDelete}`, {
+        method: 'DELETE'
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          showFlashMessage('success', data.message);
+          setTimeout(() => {
             location.reload();
-          } else {
-            alert('Error deleting product');
-          }
-        })
-        .catch(err => {
-          console.error('Error:', err);
-          alert('Error deleting product');
-        });
-      }
-      deleteModal.style.display = 'none';
-    });
+          }, 1500);
+        } else if (data.error) {
+          showFlashMessage('error', data.error);
+        }
+      })
+      .catch(err => {
+        console.error('Error:', err);
+        showFlashMessage('error', 'Something went wrong. Please try again.');
+      });
+    }
+    deleteModal.style.display = 'none';
+  });
+
 
     // Close modal when clicking outside
     window.addEventListener('click', (e) => {

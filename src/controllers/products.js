@@ -150,16 +150,16 @@ module.exports.deleteProduct = async (req, res) => {
     try{
         const product = await Product.findByIdAndDelete(req.params.id);
         if(!product){
-            return res.status(404).json({ error: 'Product not found' });
+          return res.status(404).json({ error: 'Product not found' });
         }
         await SellerModel.findByIdAndUpdate(
             product.sellerId,
             { $pull: { inventory: product._id } }
         );
-        res.json({ message: 'Product deleted successfully' });
+        return res.status(200).json({ message: 'Product deleted successfully' });
     }catch(err){
         console.log(err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 }
 
