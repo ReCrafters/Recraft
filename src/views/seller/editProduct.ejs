@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit <%= product.name %> | ReCraft</title>
+    <link rel="stylesheet" href="/css/productEdit.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <%- include('../partials/flash') %>
+
+    <!-- Navbar -->
+    <%- include('../partials/navbar') %>
+
+    <main class="edit-product-container">
+        <h1>Edit Product: <%= product.name %></h1>
+        
+        <form action="/products/<%= product._id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="edit-product-form">
+            <div class="form-section">
+                <h2>Basic Information</h2>
+                <div class="form-group">
+                    <label for="name">Product Name</label>
+                    <input type="text" id="name" name="name" value="<%= product.name %>" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="4" required><%= product.description %></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="price">Price (₹)</label>
+                        <input type="number" id="price" name="price" step="0.01" value="<%= product.price %>" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="stock">Stock Quantity</label>
+                        <input type="number" id="stock" name="stock" value="<%= product.stock %>" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" required>
+                            <option value="Clothing" <%= product.category === 'Clothing' ? 'selected' : '' %>>Clothing</option>
+                            <option value="Kitchenware" <%= product.category === 'Kitchenware' ? 'selected' : '' %>>Kitchenware</option>
+                            <option value="Bags" <%= product.category === 'Bags' ? 'selected' : '' %>>Bags</option>
+                            <option value="Accessories" <%= product.category === 'Accessories' ? 'selected' : '' %>>Accessories</option>
+                            <option value="Home Decor" <%= product.category === 'Home Decor' ? 'selected' : '' %>>Home Decor</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Product Images</h2>
+                <div class="image-upload-container">
+                    <div class="current-images">
+                        <% product.images.forEach((image, index) => { %>
+                            <div class="image-preview" data-image-url="<%= image %>">
+                                <img src="<%= image %>" alt="Product image <%= index + 1 %>">
+                                <button type="button" class="delete-image" data-image-index="<%= index %>">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        <% }) %>
+                    </div>
+                    
+                    <div class="new-images">
+                        <label for="newImages" class="upload-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Upload New Images</span>
+                            <input type="file" id="newImages" name="images" multiple accept="image/*" style="display: none;">
+                        </label>
+                        <div class="image-preview-container" id="newImagesPreview"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Tags</h2>
+                <div class="form-group">
+                    <label for="tags">Tags (comma separated)</label>
+                    <input type="text" id="tags" name="tags" value="<%= JSON.parse(product.tags[0]).join(', ') %>">
+                    <small>Example: organic, handmade, eco-friendly</small>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Update Product</button>
+                <a href="/products/<%= product._id %>" class="btn btn-secondary">Cancel</a>
+            </div>
+            
+            <!-- Hidden field for deleted images -->
+            <input type="hidden" id="deletedImages" name="deletedImages" value="">
+        </form>
+    </main>
+
+    <script src="/js/productEdit.js"></script>
+</body>
+</html>

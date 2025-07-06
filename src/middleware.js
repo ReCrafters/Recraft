@@ -23,16 +23,18 @@ module.exports.isAdmin= (req, res, next) => {
 
 module.exports.verifyProductOwner = async (req, res, next) => {
   try {
-    const product = await Product.findById(req.body.productID);
+
+
+    const product = await Product.findById(req.params.id);
     if (!product || product.sellerId.toString() !== req.user._id.toString()) {
       req.flash('error', 'Invalid product selection');
-      return res.status(403).json({ error: 'Not Product Owner' });
+      return res.redirect('/seller/form');
     }
     next();
   } catch (err) {
     console.error(err);
     req.flash('error', 'Product verification failed');
-    res.redirect('/form');
+    res.redirect('/seller/form');
   }
 };
 

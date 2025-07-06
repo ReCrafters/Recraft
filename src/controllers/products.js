@@ -4,6 +4,7 @@ const Form = require('../models/form.js');
 const User= require('../models/info/userModel');
 const {getCombinedProductData} = require('../util/productService.js');
 const SellerModel = require('../models/info/sellerModel.js');
+const cloudinary = require('../config/cloudinary');
 module.exports.index = async (req, res) => {
   try {
     const products = await getCombinedProductData();
@@ -104,18 +105,47 @@ module.exports.showProduct = async (req, res) => {
 };
 
 module.exports.updateProduct = async (req, res) => {
-    try{
-        const { name, description, price, category, images, stock, tags, isVerified, verifiedDocuments, qrCodeLink } = req.body;
-        const product = await Product.findByIdAndUpdate(req.params.id, { name, description, price, category, images, stock, tags, isVerified, verifiedDocuments, qrCodeLink }, { new: true });
-        if(!product){
-            return res.status(404).json({ error: 'Product not found' });
+    try {
+        const { id } = req.params;
+        const { name, description, price, category, stock, tags, deletedImages } = req.body;
+        const product = await Product.findById(id);
+        if (!product) {
+            req.flash('error', 'Product not found');
+            return res.redirect('/products');
         }
-        res.json(product);
-    }catch(err){
-        console.log(err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        if (deletedImages && deletedImages.length > 0) {
+            const deletedImagesArray = JSON.parse(deletedImages);
+            for (let url of deletedImagesArray) {
+                const publicId = url.split('/').pop().split('.')[0];
+                await cloudinary.uploader.destroy(`recraft/${publicId}`);
+            }
+            product.images = product.images.filter(img => !deletedImagesArray.includes(img));
+        }
+        if (req.files && req.files.images) {
+          const newImages = req.files.images.map(f => f.path); 
+          product.images.push(...newImages);
+        }
+        if (req.files && req.files.verifiedDocuments) {
+            const newDocs = req.files.verifiedDocuments.map(f => f.path);
+            product.verifiedDocuments.push(...newDocs);
+        }
+        product.name = name;
+        product.description = description;
+        product.price = price;
+        product.category = category;
+        product.stock = stock;
+        product.tags = [JSON.stringify(tags.split(',').map(tag => tag.trim()))];
+        await product.save();
+        req.flash('success', 'Product updated successfully');
+        res.redirect(`/seller/products/${product._id}`);
+        
+    } catch (err) {
+        console.error(err);
+        req.flash('error', 'Failed to update product');
+        res.redirect(`/products/${req.params.id}/edit`);
     }
-}
+};
+
 module.exports.deleteProduct = async (req, res) => {
     try{
         const product = await Product.findByIdAndDelete(req.params.id);
@@ -182,3 +212,15 @@ module.exports.showReview = async (req,res)=>{
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
+module.exports.renderEditForm = async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    
+    if (!product) {
+        req.flash('error', 'Product not found');
+        return res.redirect('/products');
+    }
+    
+    res.render('seller/editProduct', { product , user: req.user});
+};

@@ -10,6 +10,7 @@ const localStrategy = require("passport-local");
 const MongoStore = require("connect-mongo");
 const {getCombinedProductData} = require("./util/productService.js");
 require("dotenv").config();
+const methodOverride = require('method-override')
 
 // DB Utils
 const connectDB = require("./config/db");
@@ -71,6 +72,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.use(methodOverride('_method'))
 
 // Session and Flash Config
 app.use(session({

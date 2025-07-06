@@ -11,7 +11,6 @@ router.route('/')
     .post(  
         upload.fields([
         { name: 'images', maxCount: 5 },
-        { name: 'qrCodeLink', maxCount: 1 },
         { name: 'verifiedDocuments', maxCount: 3 }
     ]),wrapAsync(productsController.createProduct))
 
@@ -20,8 +19,19 @@ router.route('/newProduct')
 
 router.route('/:id')
     .get(wrapAsync(productsController.showProduct))
-    .put(wrapAsync(verifyProductOwner,productsController.updateProduct))
+    .put(
+        isLoggedIn,
+        verifyProductOwner,
+        upload.fields([
+            { name: 'images', maxCount: 5 },
+            { name: 'verifiedDocuments', maxCount: 3 }
+        ]),
+        wrapAsync(productsController.updateProduct)
+    )
     .delete(verifyProductOwner,wrapAsync(productsController.deleteProduct))
+
+router.route('/:id/edit')
+    .get(isLoggedIn,verifyProductOwner,wrapAsync(productsController.renderEditForm));
 
 router.route('/:id/review')
     .get(wrapAsync(productsController.showReview))
