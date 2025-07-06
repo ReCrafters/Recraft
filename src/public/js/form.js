@@ -83,49 +83,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     const form = document.getElementById('sustainabilityForm');
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const submitButton = form.querySelector('button[type="submit"]');
-        const originalButtonText = submitButton.innerHTML;
-        submitButton.disabled = true;
-        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-        
-        try {
-            const formData = new FormData(form);
-            formData.delete('certifications');
-            files.forEach(file => {
-                formData.append('certifications', file); 
-            });
-            const response = await fetch('/form', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    //dON;T MESS  WITH THIS LINE
-                }
-            });
-            
-            const data = await response.json();
-              if (data.redirectTo) {
-                    window.location.href = data.redirectTo;  
-                    return;
-                }
-            if (response.ok) {
-                alert('Form submitted successfully!');
-                form.reset();
-                files = [];
-                updateFileList();
-                updateFileInput();
-                submitButton.disabled = false;
-                submitButton.innerHTML = originalButtonText;
-            } else {
-                alert(data.error);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Network error. Please check your connection and try again.');
-            submitButton.disabled = false;
-            submitButton.innerHTML = originalButtonText;
-        }
-    });
+form.addEventListener('submit', function () {
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+});
 });

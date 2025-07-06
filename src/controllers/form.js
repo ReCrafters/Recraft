@@ -27,12 +27,12 @@ module.exports.createForm = async (req, res) => {
     } = req.body;
     if (!productID) {
       req.flash('error', 'Product ID is required.');
-      return res.redirect('/form'); 
+      return res.redirect('/seller/form'); 
     }
     const existingForm = await Form.findOne({ productID });
     if (existingForm) {
       req.flash('error', 'Form already exists. Please update it.');
-      return res.status(200).json({ redirectTo: `/form/${existingForm._id}` });
+      return res.redirect('/seller/form');
     }
     const sellerID = req.user._id; 
     const certificationPDFs = req.files?.map(file => file.path) || [];
@@ -56,7 +56,7 @@ module.exports.createForm = async (req, res) => {
     await newForm.save();
     await SellerModel.findByIdAndUpdate(sellerID, { $push: { sustainabilityForms: newForm._id } });
     req.flash('success', 'Form submitted successfully.');
-    res.status(201).json({ message: 'Form submitted successfully.' });
+    res.redirect('/seller/form');
   } catch (err) {
     console.error('Error creating form:', err);
     res.status(500).json({ 
