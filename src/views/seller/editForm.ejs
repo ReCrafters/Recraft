@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Sustainability Form | ReCraft</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(to right, #c6a98d, #f1dfc7);
+            color: #3a2d1f;
+            line-height: 1.6;
+        }
+        
+        .form-edit-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .form-header {
+            margin-bottom: 2rem;
+        }
+        
+        .form-header h1 {
+            color: #3a2d1f;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        
+        .sustainability-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .form-section h2 {
+            color: #553820;
+            margin-bottom: 1.2rem;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #e0d5c5;
+            padding-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #3a2d1f;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #A99480;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #3a2d1f;
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-group small {
+            display: block;
+            margin-top: 0.3rem;
+            color: #6a5848;
+            font-size: 0.8rem;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            margin-bottom: 0.8rem;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .multi-select-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .multi-select-option {
+            background: #F5E9DA;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .multi-select-option:hover {
+            background: #e0d5c5;
+        }
+        
+        .multi-select-option.selected {
+            background: #553820;
+            color: white;
+        }
+        
+        .multi-select-option input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .certifications-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .certification-item {
+            background: #F5E9DA;
+            padding: 0.5rem 0.8rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .certification-item span {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .remove-cert {
+            background: none;
+            border: none;
+            color: #F44336;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.8rem;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: #553820;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #3A2615;
+        }
+        
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #3a2d1f;
+        }
+        
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            color: #6a5848;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #3a2d1f;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            font-weight: normal;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .multi-select-container {
+                flex-direction: column;
+            }
+            
+            .multi-select-option {
+                width: 100%;
+            }
+        }
+        
+        .custom-multi-select {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .checkbox-tag {
+            background: #f0f0f0;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid #ccc;
+            transition: 0.3s;
+        }
+
+        .checkbox-tag:hover {
+            background: #e0e0e0;
+            cursor: pointer;
+        }
+
+        .checkbox-tag.selected {
+            background: #553820;
+            color: white;
+            border-color: #553820;
+        }
+
+        .feedback-alert {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+        }
+
+        .feedback-alert h3 {
+            margin-top: 0;
+            color: #856404;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <%- include('../partials/flash') %>
+    <%- include('../partials/navbar') %>
+
+    <main class="form-edit-container">
+        <div class="form-header">
+            <h1>Edit Sustainability Form</h1>
+        </div>
+
+        <% if(form.feedback && !form.isApproved) { %>
+            <div class="feedback-alert">
+                <h3><i class="fas fa-exclamation-circle"></i> Feedback from Reviewer</h3>
+                <p><%= form.feedback %></p>
+            </div>
+        <% } %>
+
+        <form action="/form/<%= form._id %>?_method=PUT" method="POST" class="sustainability-form" enctype="multipart/form-data">
+            <!-- Material Information Section -->
+            <div class="form-section">
+                <h2>Material Information</h2>
+                
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" name="metrices[isRecycledMaterial]" id="isRecycledMaterial" <% if(form.metrices.isRecycledMaterial) { %>checked<% } %>>
+                        <span>Contains Recycled Materials</span>
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Check if your product contains any recycled materials</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="form-group" id="recycledPercentageGroup" <% if(!form.metrices.isRecycledMaterial) { %>style="display: none;"<% } %>>
+                    <label for="recycledPercentage">
+                        Percentage of Recycled Material
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Enter the percentage of recycled content in your product (e.g., 30 for 30%)</span>
+                        </div>
+                    </label>
+                    <input type="number" id="recycledPercentage" name="metrices[recycledPercentage]" 
+                           min="0" max="100" value="<%= form.metrices.recycledPercentage || 0 %>">
+                    <small>Enter percentage (0-100)</small>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" name="metrices[isBiodegradable]" <% if(form.metrices.isBiodegradable) { %>checked<% } %>>
+                        <span>Product is Biodegradable</span>
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Check if your product can decompose naturally without harming the environment</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" name="metrices[isReusable]" <% if(form.metrices.isReusable) { %>checked<% } %>>
+                        <span>Product is Reusable</span>
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Check if your product is designed to be used multiple times</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Energy Information Section -->
+            <div class="form-section">
+                <h2>Energy Information</h2>
+                
+                <div class="form-group">
+                    <label>
+                        Energy Source Types
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Select all energy sources used during production</span>
+                        </div>
+                    </label>
+
+                    <div class="custom-multi-select">
+                        <% const energySources = [
+                            { value: 'Grid', label: 'Grid Electricity' },
+                            { value: 'Solar', label: 'Solar' },
+                            { value: 'Wind', label: 'Wind' },
+                            { value: 'Hydro', label: 'Hydro' },
+                            { value: 'Biomass', label: 'Biomass' },
+                            { value: 'Generator', label: 'Diesel Generator' },
+                            { value: 'Coal', label: 'Coal-based Energy' },
+                            { value: 'Manual', label: 'Manual (e.g. Handloom)' }
+                        ]; %>
+                        <% energySources.forEach(source => { %>
+                            <label class="checkbox-tag <% if(form.metrices.energySourceType && form.metrices.energySourceType.includes(source.value)) { %>selected<% } %>">
+                                <input type="checkbox" name="metrices[energySourceType][]" value="<%= source.value %>" <% if(form.metrices.energySourceType && form.metrices.energySourceType.includes(source.value)) { %>checked<% } %>>
+                                <span><%= source.label %></span>
+                                <div class="tooltip">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltiptext"><%= 
+                                        source.value === 'Grid' ? 'Conventional power supply' :
+                                        source.value === 'Solar' ? 'Energy from solar panels' :
+                                        source.value === 'Wind' ? 'Energy from wind turbines' :
+                                        source.value === 'Hydro' ? 'Energy from water streams/dams' :
+                                        source.value === 'Biomass' ? 'Organic waste-powered energy' :
+                                        source.value === 'Generator' ? 'Petrol/Diesel-based backup' :
+                                        source.value === 'Coal' ? 'Traditional non-renewable energy' :
+                                        'Human-powered production'
+                                    %></span>
+                                </div>
+                            </label>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="totalEnergyUsedKWh">
+                        Total Energy Used (kWh)
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Total energy consumed during production (e.g., 1500 for 1500 kWh)</span>
+                        </div>
+                    </label>
+                    <input type="number" id="totalEnergyUsedKWh" name="metrices[totalEnergyUsedKWh]" 
+                           min="0" step="0.01" value="<%= typeof form.metrices.totalEnergyUsedKWh !== 'undefined' ? form.metrices.totalEnergyUsedKWh : '' %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="renewableEnergyPercentage">
+                        Renewable Energy Percentage
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Percentage of energy from renewable sources (e.g., 70 for 70%)</span>
+                        </div>
+                    </label>
+                    <input type="number" id="renewableEnergyPercentage" name="metrices[renewableEnergyPercentage]" 
+                           min="0" max="100" value="<%= typeof form.metrices.renewableEnergyPercentage !== 'undefined' ? form.metrices.renewableEnergyPercentage : '' %>">
+                    <small>Enter percentage (0-100)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="energySavingPractices">
+                        Energy Saving Practices
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">List practices separated by commas (e.g., LED lighting, Energy-efficient machinery)</span>
+                        </div>
+                    </label>
+                    <input type="text" id="energySavingPractices" name="metrices[energySavingPractices]" 
+                           value="<%= Array.isArray(form.metrices.energySavingPractices) ? form.metrices.energySavingPractices.join(', ') : '' %>">
+                </div>
+            </div>
+
+            <!-- Water Information Section -->
+            <div class="form-section">
+                <h2>Water Information</h2>
+                                
+                <div class="form-group">
+                    <label>
+                        Water Source Types
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Select all water sources used in production</span>
+                        </div>
+                    </label>
+
+                    <div class="custom-multi-select">
+                        <% const waterSources = [
+                            { value: 'Municipal', label: 'Municipal' },
+                            { value: 'Borewell', label: 'Borewell' },
+                            { value: 'Rainwater', label: 'Rainwater' },
+                            { value: 'Recycled', label: 'Recycled' },
+                            { value: 'River/Lake', label: 'River/Lake' },
+                            { value: 'Tanker', label: 'Tanker' }
+                        ]; %>
+                        <% waterSources.forEach(source => { %>
+                            <label class="checkbox-tag <% if(form.metrices.waterSourceType && form.metrices.waterSourceType.includes(source.value)) { %>selected<% } %>">
+                                <input type="checkbox" name="metrices[waterSourceType][]" value="<%= source.value %>" <% if(form.metrices.waterSourceType && form.metrices.waterSourceType.includes(source.value)) { %>checked<% } %>>
+                                <span><%= source.label %></span>
+                                <div class="tooltip">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltiptext"><%= 
+                                        source.value === 'Municipal' ? 'Public water supply' :
+                                        source.value === 'Borewell' ? 'Water from underground wells' :
+                                        source.value === 'Rainwater' ? 'Collected rainwater' :
+                                        source.value === 'Recycled' ? 'Reused water from processes' :
+                                        source.value === 'River/Lake' ? 'Direct from natural sources' :
+                                        'Water delivered by tankers'
+                                    %></span>
+                                </div>
+                            </label>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="totalWaterUsedLitres">
+                        Total Water Used (Litres)
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Total water consumed during production (e.g., 5000 for 5000 litres)</span>
+                        </div>
+                    </label>
+                    <input type="number" id="totalWaterUsedLitres" name="metrices[totalWaterUsedLitres]" 
+                           min="0" step="0.01" value="<%= typeof form.metrices.totalWaterUsedLitres !== 'undefined' ? form.metrices.totalWaterUsedLitres : '' %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="waterPerUnitLitres">
+                        Water Used Per Unit (Litres)
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Water used to produce one unit of product (e.g., 10 for 10 litres per item)</span>
+                        </div>
+                    </label>
+                    <input type="number" id="waterPerUnitLitres" name="metrices[waterPerUnitLitres]" 
+                           min="0" step="0.01" value="<%= typeof form.metrices.waterPerUnitLitres !== 'undefined' ? form.metrices.waterPerUnitLitres : '' %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="waterReusedPercentage">
+                        Water Reused Percentage
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Percentage of water that is recycled/reused (e.g., 40 for 40%)</span>
+                        </div>
+                    </label>
+                    <input type="number" id="waterReusedPercentage" name="metrices[waterReusedPercentage]" 
+                           min="0" max="100" value="<%= typeof form.metrices.waterReusedPercentage !== 'undefined' ? form.metrices.waterReusedPercentage : '' %>">
+                    <small>Enter percentage (0-100)</small>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" name="metrices[hasRainwaterHarvesting]" <% if(form.metrices.hasRainwaterHarvesting) { %>checked<% } %>>
+                        <span>Has Rainwater Harvesting System</span>
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Check if you collect and store rainwater for use</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" name="metrices[hasWaterRecyclingSystem]" <% if(form.metrices.hasWaterRecyclingSystem) { %>checked<% } %>>
+                        <span>Has Water Recycling System</span>
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Check if you treat and reuse wastewater</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="wastewaterDisposalMethod">
+                        Wastewater Disposal Method
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Describe how wastewater is disposed (e.g., Municipal sewer, On-site treatment)</span>
+                        </div>
+                    </label>
+                    <input type="text" id="wastewaterDisposalMethod" name="metrices[wastewaterDisposalMethod]" 
+                           value="<%= form.metrices.wastewaterDisposalMethod || '' %>">
+                </div>
+            </div>
+
+            <!-- Production Information Section -->
+            <div class="form-section">
+                <h2>Production Information</h2>
+                
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" name="metrices[isHandmade]" <% if(form.metrices.isHandmade) { %>checked<% } %>>
+                        <span>Handmade Product</span>
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Check if product is primarily made by hand</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" name="metrices[isLocallySourced]" <% if(form.metrices.isLocallySourced) { %>checked<% } %>>
+                        <span>Locally Sourced Materials</span>
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Check if materials come from within 100km radius</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Certifications Section -->
+            <div class="form-section">
+                <h2>Certifications & Additional Information</h2>
+                
+                <div class="form-group">
+                    <label>
+                        Eco Certifications (if any)
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Upload certification documents (PDF/JPEG/PNG, max 5MB each)</span>
+                        </div>
+                    </label>
+                    <div class="certifications-container">
+                        <% if(form.metrices.ecoCertification && form.metrices.ecoCertification.length > 0) { %>
+                            <% form.metrices.ecoCertification.forEach(cert => { %>
+                                <div class="certification-item">
+                                    <span><%= cert.split('/').pop() %></span>
+                                    <input type="hidden" name="metrices[ecoCertification]" value="<%= cert %>">
+                                    <button type="button" class="remove-cert"><i class="fas fa-times"></i></button>
+                                </div>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                    <input type="file" name="certificationFiles" multiple accept=".pdf,.jpg,.jpeg,.png">
+                    <small>Max 5 files (PDF, JPG, PNG, max 5MB each)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="additionalComments">
+                        Additional Comments
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Any other sustainability information about your product</span>
+                        </div>
+                    </label>
+                    <textarea id="additionalComments" name="metrices[additionalComments]" rows="4"><%= form.metrices.additionalComments || '' %></textarea>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Update Form</button>
+                <a href="/seller/form" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const recycledCheckbox = document.getElementById('isRecycledMaterial');
+            const recycledPercentageGroup = document.getElementById('recycledPercentageGroup');
+            
+            if (recycledCheckbox && recycledPercentageGroup) {
+                recycledCheckbox.addEventListener('change', function() {
+                    recycledPercentageGroup.style.display = this.checked ? 'block' : 'none';
+                    if (!this.checked) {
+                        document.getElementById('recycledPercentage').value = '0';
+                    }
+                });
+            }
+
+            document.querySelectorAll('.checkbox-tag input[type="checkbox"]').forEach(checkbox => {
+                const tag = checkbox.closest('.checkbox-tag');
+                checkbox.addEventListener('change', function() {
+                    tag.classList.toggle('selected', this.checked);
+                });
+            });
+
+            const certContainer = document.querySelector('.certifications-container');
+            if (certContainer) {
+                certContainer.addEventListener('click', function(e) {
+                    if (e.target.closest('.remove-cert')) {
+                        e.target.closest('.certification-item').remove();
+                    }
+                });
+            }
+            const fileInput = document.querySelector('input[name="certificationFiles"]');
+            if (fileInput) {
+                fileInput.addEventListener('change', function() {
+                    if (this.files.length > 5) {
+                        alert('You can upload a maximum of 5 files');
+                        this.value = '';
+                        return;
+                    }
+                    
+                    for (let i = 0; i < this.files.length; i++) {
+                        if (this.files[i].size > 5 * 1024 * 1024) {
+                            alert('File ' + this.files[i].name + ' is too large (max 5MB)');
+                            this.value = '';
+                            break;
+                        }
+                    }
+                });
+            }
+
+            const form = document.querySelector('.sustainability-form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    submitBtn.disabled = true;
+                    const spinner = document.createElement('i');
+                    spinner.className = 'fas fa-spinner fa-spin';
+                    submitBtn.innerHTML = 'Processing... ';
+                    submitBtn.appendChild(spinner);
+                });
+            }
+        });
+
+        function removeFile(index) {
+            const fileInput = document.getElementById('certifications');
+            const files = Array.from(fileInput.files);
+            files.splice(index, 1);
+            
+            const dataTransfer = new DataTransfer();
+            files.forEach(file => dataTransfer.items.add(file));
+            fileInput.files = dataTransfer.files;
+            
+            fileInput.dispatchEvent(new Event('change'));
+        }
+    </script>
+</body>
+</html>

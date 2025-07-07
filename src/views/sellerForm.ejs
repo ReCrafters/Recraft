@@ -51,27 +51,28 @@
                 </div>
             </div>
 
-            <!-- Sustainability Metrics -->
+            <!-- Material Information -->
             <div class="form-section">
-                <h2>Sustainability Metrics</h2>
+                <h2>Material Information</h2>
                 
                 <div class="form-group">
                     <label>Is Product Made of Recycled Material?</label>
-                    <select name="isRecycled" id="isRecycled" required>
+                    <select name="metrices[isRecycledMaterial]" id="isRecycledMaterial" required>
                         <option value="false">No</option>
                         <option value="true">Yes</option>
                     </select>
                 </div>
 
-                <div class="form-group" id="recycledPercentGroup">
-                    <label for="recycledPercent">Recycled Percentage</label>
-                    <input type="number" name="recycledPercent" id="recycledPercent" min="1" max="100" disabled>
+                <div class="form-group" id="recycledPercentageGroup" style="display: none;">
+                    <label for="recycledPercentage">Percentage of Recycled Material</label>
+                    <input type="number" name="metrices[recycledPercentage]" id="recycledPercentage" min="0" max="100">
+                    <small>Enter percentage (0-100)</small>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>Is Product Biodegradable?</label>
-                        <select name="isBiodegradable" required>
+                        <select name="metrices[isBiodegradable]" required>
                             <option value="false">No</option>
                             <option value="true">Yes</option>
                         </select>
@@ -79,17 +80,159 @@
 
                     <div class="form-group">
                         <label>Is Product Reusable?</label>
-                        <select name="isReusable" required>
+                        <select name="metrices[isReusable]" required>
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Energy Information -->
+            <div class="form-section">
+                <h2>Energy Information</h2>
+                
+                <div class="form-group">
+                    <label>
+                        Energy Source Types
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Select all energy sources used during production</span>
+                        </div>
+                    </label>
+                    <div class="custom-multi-select">
+                        <% const energySources = [
+                            { value: 'Grid', label: 'Grid Electricity', tooltip: 'Conventional power supply' },
+                            { value: 'Solar', label: 'Solar', tooltip: 'Energy from solar panels' },
+                            { value: 'Wind', label: 'Wind', tooltip: 'Energy from wind turbines' },
+                            { value: 'Hydro', label: 'Hydro', tooltip: 'Energy from water streams/dams' },
+                            { value: 'Biomass', label: 'Biomass', tooltip: 'Organic waste-powered energy' },
+                            { value: 'Generator', label: 'Diesel Generator', tooltip: 'Petrol/Diesel-based backup' },
+                            { value: 'Coal', label: 'Coal-based Energy', tooltip: 'Traditional non-renewable energy' },
+                            { value: 'Manual', label: 'Manual (e.g. Handloom)', tooltip: 'Human-powered production' }
+                        ]; %>
+                        <% energySources.forEach(source => { %>
+                            <label class="checkbox-tag">
+                                <input 
+                                    type="checkbox" 
+                                    name="metrices[energySourceType][]" 
+                                    value="<%= source.value %>">
+                                <span><%= source.label %></span>
+                                <div class="tooltip">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltiptext"><%= source.tooltip %></span>
+                                </div>
+                            </label>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="totalEnergyUsedKWh">Total Energy Used (kWh)</label>
+                        <input type="number" name="metrices[totalEnergyUsedKWh]" id="totalEnergyUsedKWh" step="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="renewableEnergyPercentage">Renewable Energy Percentage</label>
+                        <input type="number" name="metrices[renewableEnergyPercentage]" id="renewableEnergyPercentage" min="0" max="100" required>
+                        <small>Enter percentage (0-100)</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="energySavingPractices">Energy Saving Practices</label>
+                    <input type="text" name="metrices[energySavingPractices]" id="energySavingPractices" placeholder="Comma separated list">
+                </div>
+            </div>
+
+            <!-- Water Information -->
+            <div class="form-section">
+                <h2>Water Information</h2>
+                
+                <div class="form-group">
+                    <label>
+                        Water Source Types
+                        <div class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Select all water sources used in production</span>
+                        </div>
+                    </label>
+                    <div class="custom-multi-select">
+                        <% const waterSources = [
+                            { value: 'Municipal', label: 'Municipal', tooltip: 'Public water supply' },
+                            { value: 'Borewell', label: 'Borewell', tooltip: 'Water from underground wells' },
+                            { value: 'Rainwater', label: 'Rainwater', tooltip: 'Collected rainwater' },
+                            { value: 'Recycled', label: 'Recycled', tooltip: 'Reused water from processes' },
+                            { value: 'River/Lake', label: 'River/Lake', tooltip: 'Direct from natural sources' },
+                            { value: 'Tanker', label: 'Tanker', tooltip: 'Water delivered by tankers' }
+                        ]; %>
+                        <% waterSources.forEach(source => { %>
+                            <label class="checkbox-tag">
+                                <input 
+                                    type="checkbox" 
+                                    name="metrices[waterSourceType][]" 
+                                    value="<%= source.value %>">
+                                <span><%= source.label %></span>
+                                <div class="tooltip">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltiptext"><%= source.tooltip %></span>
+                                </div>
+                            </label>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="totalWaterUsedLitres">Total Water Used (Litres)</label>
+                        <input type="number" name="metrices[totalWaterUsedLitres]" id="totalWaterUsedLitres" step="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="waterPerUnitLitres">Water Used Per Unit (Litres)</label>
+                        <input type="number" name="metrices[waterPerUnitLitres]" id="waterPerUnitLitres" step="0.01" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="waterReusedPercentage">Water Reused Percentage</label>
+                    <input type="number" name="metrices[waterReusedPercentage]" id="waterReusedPercentage" min="0" max="100" required>
+                    <small>Enter percentage (0-100)</small>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Has Rainwater Harvesting System?</label>
+                        <select name="metrices[hasRainwaterHarvesting]">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Has Water Recycling System?</label>
+                        <select name="metrices[hasWaterRecyclingSystem]">
                             <option value="false">No</option>
                             <option value="true">Yes</option>
                         </select>
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label for="wastewaterDisposalMethod">Wastewater Disposal Method</label>
+                    <input type="text" name="metrices[wastewaterDisposalMethod]" id="wastewaterDisposalMethod">
+                </div>
+            </div>
+
+            <!-- Production Information -->
+            <div class="form-section">
+                <h2>Production Information</h2>
+                
                 <div class="form-row">
                     <div class="form-group">
                         <label>Is Product Locally Sourced?</label>
-                        <select name="isLocal" required>
+                        <select name="metrices[isLocallySourced]" required>
                             <option value="false">No</option>
                             <option value="true">Yes</option>
                         </select>
@@ -97,22 +240,10 @@
 
                     <div class="form-group">
                         <label>Is Product Handmade?</label>
-                        <select name="isHandmade" required>
+                        <select name="metrices[isHandmade]" required>
                             <option value="false">No</option>
                             <option value="true">Yes</option>
                         </select>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="energyUsed">Energy Used (kWh)</label>
-                        <input type="number" name="energyUsed" step="0.01" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="waterUsed">Water Used (Liters)</label>
-                        <input type="number" name="waterUsed" step="0.01" required>
                     </div>
                 </div>
             </div>
@@ -137,7 +268,7 @@
             <div class="form-section">
                 <div class="form-group">
                     <label for="comments">Additional Comments</label>
-                    <textarea name="comments" id="comments" rows="3"></textarea>
+                    <textarea name="metrices[additionalComments]" id="comments" rows="3"></textarea>
                 </div>
             </div>
 

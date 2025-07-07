@@ -180,7 +180,6 @@ module.exports.deletePost = async (req, res) => {
 };
 
 module.exports.uploadPost= async (req, res)=>{
-  console.log(req.user);
   try {
     res.render('uploadPost.ejs');
   } catch (err) {

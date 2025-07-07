@@ -15,7 +15,7 @@ router.route('/newForm')
 
 router.route('/:id')
   .get(wrapAsync(formController.showForm))
-  .put(wrapAsync(formController.updateForm))
+  .put(upload.array('certificationFiles', 5),wrapAsync(formController.updateForm))
   .delete(wrapAsync(formController.deleteForm));
 
 router.route('/:id/review')

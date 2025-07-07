@@ -72,21 +72,6 @@ module.exports.createProduct = async (req, res) => {
   }
 };
 
-
-/* Kindly ignore this, it's just for testing
-module.exports.createProduct = async (req, res) => {
-    try{
-        const { name, description, price, category, images, stock, tags, isVerified, verifiedDocuments, qrCodeLink, sellerId} = req.body;
-        const product = new Product({ name, description, price, category, images, stock, tags, isVerified, verifiedDocuments, qrCodeLink,sellerId});
-        await product.save();
-        res.status(201).json(product);
-    }catch(err){
-        console.log(err);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-}
-*/
-
 module.exports.showProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).lean();
@@ -156,6 +141,7 @@ module.exports.deleteProduct = async (req, res) => {
             product.sellerId,
             { $pull: { inventory: product._id } }
         );
+        await Form.findOneAndDelete({productID: product._id});
         return res.status(200).json({ message: 'Product deleted successfully' });
     }catch(err){
         console.log(err);

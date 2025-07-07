@@ -192,11 +192,11 @@
                 </td>
                 <td>
                   <div class="action-buttons">
-                    <a href="/sustainability/<%= sustainabilityForm._id %>" class="btn-action view" title="View Details">
+                    <a href="/form/<%= sustainabilityForm._id %>" class="btn-action view" title="View Details">
                       <i class="fas fa-eye"></i>
                     </a>
                     <% if(!sustainabilityForm.isApproved) { %>
-                      <a href="/sustainability/<%= sustainabilityForm._id %>/edit" class="btn-action edit" title="Edit Form">
+                      <a href="/form/<%= sustainabilityForm._id %>" class="btn-action edit" title="Edit Form">
                         <i class="fas fa-edit"></i>
                       </a>
                     <% } %>
