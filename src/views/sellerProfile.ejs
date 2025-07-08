@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= user.name %> | Recraft</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/sellerProfile.css">
+    <link rel="icon" href="/images/recraft-logo.png" />
+</head>
+<body>
+    <!-- flash messages -->
+    <%- include('partials/flash') %>
+
+    <div class="container">
+        <div class="profile-header">
+            <div class="avatar-section">
+                <% if (user.image) { %>
+                    <img src="<%= user.image %>" alt="<%= user.name %>" class="profile-avatar" loading="lazy">
+                <% } else { %>
+                    <div class="profile-avatar default-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                <% } %>
+                <div class="badge-banner">
+                    <span class="badge <%= user.badge.toLowerCase() %>"><%= user.badge %></span>
+                </div>
+            </div>
+            
+            <div class="profile-info">
+                <div class="profile-name-section">
+                    <h1 class="profile-name"><%= user.name %></h1>
+                    <span class="profile-username">@<%= user.username %></span>
+                </div>
+                
+                <div class="action-buttons">
+                    <% if (!isCurrentUser) { %>
+                        <button class="btn btn-primary follow-btn" id="followBtn" 
+                                data-user-id="<%= user._id %>"
+                                data-is-following="<%= isFollowing %>">
+                            <% if (isFollowing) { %>
+                                <span class="following-text">Following</span>
+                                <span class="follow-text" style="display:none">Follow</span>
+                            <% } else { %>
+                                <span class="follow-text">Follow</span>
+                                <span class="following-text" style="display:none">Following</span>
+                            <% } %>
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-envelope"></i> Message
+                        </button>
+                    <% } else { %>
+                        <button class="btn btn-outline" id="editProfileBtn" data-user-id="<%= user._id %>">
+                            <i class="fas fa-pencil-alt"></i> Edit Profile
+                        </button>
+                    <% } %>
+                    <button class="btn btn-outline" id="moreOptionsBtn">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                </div>
+                
+                <p class="profile-bio"><%= user.bio || 'No bio yet' %></p>
+                
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Joined</span>
+                        <span><%= moment(user.createdAt).format('MMM D, YYYY') %></span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-store"></i>
+                        <span><%= user.businessName %></span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-industry"></i>
+                        <span><%= user.businessType %></span>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-item" data-target="products">
+                        <div class="stat-number"><%= products.length %></div>
+                        <div class="stat-label">Products</div>
+                    </div>
+                    <div class="stat-item" data-target="posts">
+                        <div class="stat-number"><%= user.posts.length %></div>
+                        <div class="stat-label">Posts</div>
+                    </div>
+                    <div class="stat-item" data-target="followers">
+                        <div class="stat-number"><%= user.followers.length %></div>
+                        <div class="stat-label">Followers</div>
+                    </div>
+                    <div class="stat-item" data-target="following">
+                        <div class="stat-number"><%= user.following.length %></div>
+                        <div class="stat-label">Following</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="impact-section">
+            <div class="impact-item">
+                <div class="impact-icon"><i class="fas fa-rupee-sign"></i></div>
+                <div class="impact-title">Total Sales</div>
+                <div class="impact-value">
+                    <%= user.analytics.totalSales %>
+                    <span class="impact-unit">orders</span>
+                </div>
+            </div>
+            <div class="impact-item">
+                <div class="impact-icon"><i class="fas fa-star"></i></div>
+                <div class="impact-title">Avg TSV</div>
+                <div class="impact-value">
+                    <%= user.analytics.avgTSV %>
+                    <span class="impact-unit">rating</span>
+                </div>
+            </div>
+            <div class="impact-item">
+                <div class="impact-icon"><i class="fas fa-thumbs-up"></i></div>
+                <div class="impact-title">Avg SSV</div>
+                <div class="impact-value">
+                    <%= user.analytics.avgSSV %>
+                    <span class="impact-unit">rating</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tabs-container">
+            <div class="tabs" id="profileTabs">
+                <div class="tab active" data-tab="products">Products</div>
+                <div class="tab" data-tab="posts">Posts</div>
+                <% if (isCurrentUser) { %>
+                    <div class="tab" data-tab="saved">Saved</div>
+                <% } %>
+                <div class="tab-indicator"></div>
+            </div>
+            
+            <!-- Products Tab -->
+            <div class="tab-content active" id="productsTab">
+                <% if (products.length > 0) { %>
+                    <div class="products-grid">
+                        <% products.forEach(product => { %>
+                            <div class="product-item" data-product-id="<%= product._id %>">
+                                <% if (product.images && product.images.length > 0) { %>
+                                    <img src="<%= product.images[0] %>" 
+                                         alt="<%= product.name %>" 
+                                         class="product-thumbnail" 
+                                         loading="lazy">
+                                <% } else { %>
+                                    <div class="product-thumbnail no-media-thumbnail">
+                                        <i class="fas fa-box-open"></i>
+                                    </div>
+                                <% } %>
+                                <% if (product.isVerified) { %>
+                                    <div class="verified-badge"><i class="fas fa-check-circle"></i></div>
+                                <% } %>
+                                <div class="product-overlay">
+                                    <div class="product-stats">
+                                        <div class="product-stat">
+                                            <i class="fas fa-eye"></i> <%= product.views || 0 %>
+                                        </div>
+                                        <div class="product-stat">
+                                            <i class="fas fa-shopping-bag"></i> <%= product.purchases || 0 %>
+                                        </div>
+                                        <div class="product-stat">
+                                            <i class="fas fa-star"></i> <%= product.rating.avgRating || 0 %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-box-open"></i></div>
+                        <div class="empty-text">No products yet</div>
+                        <% if (isCurrentUser) { %>
+                            <button class="btn btn-primary" id="createFirstProductBtn">
+                                <i class="fas fa-plus"></i> Add your first product
+                            </button>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+            
+            <!-- Posts Tab -->
+            <div class="tab-content" id="postsTab">
+                <% if (user.posts.length > 0) { %>
+                    <div class="posts-grid">
+                        <% user.posts.forEach(post => { %>
+                            <div class="post-item" data-post-id="<%= post._id %>">
+                                <% if (post.media && post.media.length > 0) { %>
+                                    <img src="<%= post.media[0].url %>" 
+                                         alt="<%= post.caption || 'Post' %>" 
+                                         class="post-thumbnail" 
+                                         loading="lazy">
+                                <% } else { %>
+                                    <div class="post-thumbnail no-media-thumbnail">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                <% } %>
+                                <% if (user.savedPosts.some(sp => sp._id.equals(post._id))) { %>
+                                    <div class="saved-badge"><i class="fas fa-bookmark"></i></div>
+                                <% } %>
+                                <div class="post-overlay">
+                                    <div class="post-stats">
+                                        <div class="post-stat">
+                                            <i class="fas fa-eye"></i> <%= post.views || 0 %>
+                                        </div>
+                                        <div class="post-stat">
+                                            <i class="fas fa-heart"></i> <%= post.likes.length || 0 %>
+                                        </div>
+                                        <div class="post-stat">
+                                            <i class="fas fa-comment"></i> <%= post.comments.length || 0 %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-camera"></i></div>
+                        <div class="empty-text">No posts yet</div>
+                        <% if (isCurrentUser) { %>
+                            <button class="btn btn-primary" id="createFirstPostBtn">
+                                <i class="fas fa-plus"></i> Create your first post
+                            </button>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+            
+            <!-- Saved Posts Tab -->
+            <% if (isCurrentUser) { %>
+                <div class="tab-content" id="savedTab">
+                    <% if (user.savedPosts.length > 0) { %>
+                        <div class="posts-grid">
+                            <% user.savedPosts.forEach(post => { %>
+                                <div class="post-item" data-post-id="<%= post._id %>">
+                                    <% if (post.media && post.media.length > 0) { %>
+                                        <img src="<%= post.media[0].url %>" 
+                                             alt="<%= post.caption || 'Saved Post' %>" 
+                                             class="post-thumbnail"
+                                             loading="lazy">
+                                    <% } else { %>
+                                        <div class="post-thumbnail no-media-thumbnail">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                    <% } %>
+                                    <div class="saved-badge"><i class="fas fa-bookmark"></i></div>
+                                    <div class="post-overlay">
+                                        <div class="post-stats">
+                                            <div class="post-stat">
+                                                <i class="fas fa-eye"></i> <%= post.views || 0 %>
+                                            </div>
+                                            <div class="post-stat">
+                                                <i class="fas fa-heart"></i> <%= post.likes.length || 0 %>
+                                            </div>
+                                            <div class="post-stat">
+                                                <i class="fas fa-comment"></i> <%= post.comments.length || 0 %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <div class="empty-icon"><i class="fas fa-bookmark"></i></div>
+                            <div class="empty-text">No saved posts</div>
+                            <button class="btn btn-outline" id="explorePostsBtn">
+                                <i class="fas fa-compass"></i> Explore posts
+                            </button>
+                        </div>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalProductTitle"></h3>
+                <button class="modal-close" id="productModalClose" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="media-viewer">
+                    <div class="media-slider-container">
+                        <div class="media-slider-track" id="productMediaSliderTrack">
+                            <!-- Slides will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="media-nav">
+                        <button class="media-nav-button prev" id="productPrevButton" aria-label="Previous image">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="media-nav-button next" id="productNextButton" aria-label="Next image">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-details">
+                    <div class="product-meta">
+                        <span class="product-price" id="modalProductPrice"></span>
+                        <span class="product-category" id="modalProductCategory"></span>
+                        <span class="product-stock" id="modalProductStock"></span>
+                    </div>
+                    <p class="modal-description" id="modalProductDescription"></p>
+                    <div class="modal-stats">
+                        <div class="modal-stat">
+                            <i class="fas fa-eye"></i> <span id="modalProductViews">0</span> views
+                        </div>
+                        <div class="modal-stat">
+                            <i class="fas fa-shopping-bag"></i> <span id="modalProductPurchases">0</span> purchases
+                        </div>
+                        <div class="modal-stat">
+                            <i class="fas fa-star"></i> <span id="modalProductRating">0</span> rating
+                        </div>
+                        <div class="modal-stat">
+                            <i class="fas fa-calendar-alt"></i> <span id="modalProductDate"></span>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <% if (isCurrentUser) { %>
+                            <button class="btn btn-outline" id="editProductBtn">
+                                <i class="fas fa-edit"></i> Edit Product
+                            </button>
+                        <% } else { %>
+                            <button class="btn btn-primary" id="addToCartBtn">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Modal -->
+    <div class="modal" id="postModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalPostTitle"></h3>
+                <button class="modal-close" id="postModalClose" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="media-viewer">
+                    <div class="media-slider-container">
+                        <div class="media-slider-track" id="postMediaSliderTrack">
+                            <!-- Slides will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="media-nav">
+                        <button class="media-nav-button prev" id="postPrevButton" aria-label="Previous image">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="media-nav-button next" id="postNextButton" aria-label="Next image">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-details">
+                    <div class="post-meta">
+                        <span class="material-type" id="modalMaterialType"></span>
+                        <span class="post-category" id="modalCategory"></span>
+                    </div>
+                    <p class="modal-description" id="modalDescription"></p>
+                    <div class="modal-stats">
+                        <div class="modal-stat">
+                            <i class="fas fa-eye"></i> <span id="modalViews">0</span> views
+                        </div>
+                        <div class="modal-stat">
+                            <i class="fas fa-heart"></i> <span id="modalLikes">0</span> likes
+                        </div>
+                        <div class="modal-stat">
+                            <i class="fas fa-comment"></i> <span id="modalComments">0</span> comments
+                        </div>
+                        <div class="modal-stat">
+                            <i class="fas fa-calendar-alt"></i> <span id="modalDate"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Profile</h3>
+                <button class="modal-close" id="editProfileClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <div class="form-group">
+                        <label for="editName">Name</label>
+                        <input type="text" id="editName" value="<%= user.name %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="editUsername">Username</label>
+                        <input type="text" id="editUsername" value="<%= user.username %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="editBio">Bio</label>
+                        <textarea id="editBio"><%= user.bio || '' %></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBusinessName">Business Name</label>
+                        <input type="text" id="editBusinessName" value="<%= user.businessName %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="editBusinessType">Business Type</label>
+                        <select id="editBusinessType">
+                            <option value="Manufacturer" <%= user.businessType === 'Manufacturer' ? 'selected' : '' %>>Manufacturer</option>
+                            <option value="Retailer" <%= user.businessType === 'Retailer' ? 'selected' : '' %>>Retailer</option>
+                            <option value="Wholesaler" <%= user.businessType === 'Wholesaler' ? 'selected' : '' %>>Wholesaler</option>
+                            <option value="Artisan" <%= user.businessType === 'Artisan' ? 'selected' : '' %>>Artisan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editImage">Profile Picture</label>
+                        <input type="file" id="editImage" accept="image/*">
+                        <div class="image-preview" id="imagePreview">
+                            <% if (user.image) { %>
+                                <img src="<%= user.image %>" alt="Current profile picture">
+                            <% } %>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Followers/Following Modal -->
+    <div class="modal" id="followModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="followModalTitle">Followers</h3>
+                <button class="modal-close" id="followModalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="follow-tabs">
+                    <button class="follow-tab active" data-type="followers">Followers</button>
+                    <button class="follow-tab" data-type="following">Following</button>
+                </div>
+                <div class="follow-list">
+                    <!-- Followers List -->
+                    <div class="follow-section" id="followersSection">
+                        <% user.followers.forEach(follower => { %>
+                            <a href="/users/<%= follower._id.toString() %>" style="text-decoration: none; color:black;">
+                            <div class="follow-item">
+                                <img src="<%= follower.image || '/images/default-avatar.png' %>" 
+                                    alt="<%= follower.username %>" 
+                                    class="follow-item-avatar">
+                                <div class="follow-item-info">
+                                    <div class="follow-item-name"><%= follower.username %></div>
+                                </div>
+                                <% if (!isCurrentUser && currentUserId && !follower._id.equals(currentUserId)) { %>
+                                    <div class="follow-item-action">
+                                        <button class="btn btn-outline follow-user-btn" 
+                                                data-user-id="<%= follower._id %>"
+                                                data-is-following="<%= follower.isFollowingCurrentUser %>">
+                                            <%= follower.isFollowingCurrentUser ? 'Following' : 'Follow' %>
+                                        </button>
+                                    </div>
+                                <% } %>
+                            </div>
+                            </a>
+                        <% }); %>
+                    </div>
+                    
+                    <!-- Following List -->
+                    <div class="follow-section" id="followingSection" style="display:none">
+                        <% user.following.forEach(followed => { %>
+                            <a href="/users/<%= followed._id.toString() %>" style="text-decoration: none; color:black;">
+                            <div class="follow-item">
+                                <img src="<%= followed.image || '/images/default-avatar.png' %>" 
+                                    alt="<%= followed.username %>" 
+                                    class="follow-item-avatar">
+                                <div class="follow-item-info">
+                                    <div class="follow-item-name"><%= followed.username %></div>
+                                </div>
+                                <% if (!isCurrentUser && currentUserId && !followed._id.equals(currentUserId)) { %>
+                                    <div class="follow-item-action">
+                                        <button class="btn btn-outline follow-user-btn" 
+                                                data-user-id="<%= followed._id %>"
+                                                data-is-following="<%= followed.isFollowingCurrentUser %>">
+                                            <%= followed.isFollowingCurrentUser ? 'Following' : 'Follow' %>
+                                        </button>
+                                    </div>
+                                <% } %>
+                            </div>
+                            </a>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/sellerProfile.js"></script>
+</body>
+</html>

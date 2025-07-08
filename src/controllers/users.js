@@ -1,7 +1,7 @@
 const User = require('../models/info/baseUser');
 const cloudinary = require('../config/cloudinary');
 const Post= require('../models/posts');
-
+const Product = require('../models/products')
 module.exports.renderSignUp = (req, res) => {
   res.render('signup.ejs');
 };
@@ -89,7 +89,6 @@ module.exports.showUser = async (req, res) => {
       .populate({
         path: 'followers',
         select: 'username image ',
-        // Safely check if current user follows each follower
         transform: (doc) => {
           const isFollowing = req.user ? 
             (doc.followers || []).some(f => f.equals(req.user._id)) : 
@@ -100,7 +99,6 @@ module.exports.showUser = async (req, res) => {
       .populate({
         path: 'following',
         select: 'username image',
-        // Safely check if current user follows each followed user
         transform: (doc) => {
           const isFollowing = req.user ? 
             (doc.followers || []).some(f => f.equals(req.user._id)) : 
@@ -113,7 +111,10 @@ module.exports.showUser = async (req, res) => {
       req.flash('error', 'User not found');
       return res.redirect('/');
     }
-
+    let products = [];
+    if (user.role === 'seller') {
+      products = await Product.find({ sellerId: id }).populate('sellerId', 'username image');
+    }
     const isCurrentUser = req.user && req.user._id.equals(user._id);
     const isFollowing = req.user && user.followers.some(f => f._id.equals(req.user._id));
     let profileView;
@@ -129,6 +130,7 @@ module.exports.showUser = async (req, res) => {
     }
     res.render(profileView, {
       user,
+      products,
       isCurrentUser,
       isFollowing,
       currentUserId: req.user?._id,
