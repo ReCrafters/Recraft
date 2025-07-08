@@ -11,23 +11,7 @@
 <body>
     <!-- Flash Messages -->
     <%- include('partials/flash') %>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/" class="logo">
-                <img src="/images/recraft-logo-transparent.png" alt="Recraft Logo">
-                Recraft
-            </a>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/cart">
-                    Cart <span id="cart-count"></span>
-                </a>
-                <% if(req.user){%>
-                <a href="/users/<%= req.user._id %>">Your Profile</a>
-                <% } %>
-            </div>
-        </div>
-    </nav>
+    <%- include('partials/userNavbar') %>
 
     <div class="container">
         <% const categoryHeadlines = {

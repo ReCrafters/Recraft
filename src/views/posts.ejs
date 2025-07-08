@@ -12,7 +12,11 @@
 </head>
 <!-- Flash Messages -->
  <%- include('partials/flash') %>
-
+ <% if(currentUser.role==='user') {%>
+    <%- include('partials/userNavbar') %>
+<% }else{ %>
+    <%- include('partials/navbar') %>
+<% } %>
     <div class="container">
         <div class="page-header">
             <h1 class="page-title">Community Posts</h1>

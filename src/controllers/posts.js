@@ -14,6 +14,7 @@ module.exports.index = async (req, res) => {
     res.render('posts.ejs', {
       posts,
       currentUser: req.user,
+      user:req.user,
       moment: require('moment')
     });
   } catch (err) {

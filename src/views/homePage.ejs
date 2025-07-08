@@ -11,20 +11,7 @@
 <%- include('partials/flash') %>
 
   <!-- Navbar -->
-    <nav class="main-nav">
-        <div class="nav-left">
-            <img src="/images/recraft-logo-transparent.png" alt="ReCraft Logo" class="nav-logo">
-            <span class="nav-brand">ReCraft</span>
-        </div>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/products">Products</a>
-            <a href="/users/<%= user._id %>">My Profile</a>
-            <a href="/posts">Community</a>
-            <a href="/cart"><span><i class="fa-solid fa-cart-shopping"></i></span> </a>
-            <a href="/users/logout" class="btn btn-nav">Logout</a>
-        </div>
-    </nav>
+<%- include('partials/userNavbar') %>
 
   <!-- Welcome Banner -->
   <section class="welcome-banner">
