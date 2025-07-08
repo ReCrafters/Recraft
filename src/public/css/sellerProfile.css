@@ -687,6 +687,66 @@ body {
     gap: 10px;
 }
 
+/* Quantity Selector */
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.quantity-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--gray-300);
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.quantity-btn:hover {
+    background-color: var(--gray-100);
+}
+
+#productQuantity {
+    width: 50px;
+    text-align: center;
+    padding: 5px;
+    border: 1px solid var(--gray-300);
+    border-radius: 4px;
+}
+
+/* Product Actions */
+.product-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.btn-danger {
+    background-color: var(--error);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #d32f2f;
+}
+
+#buyNowBtn {
+    background-color: var(--accent-wood);
+    color: white;
+}
+
+#buyNowBtn:hover {
+    background-color: var(--primary-dark);
+}
+
 /* Form Styles */
 .form-group {
   margin-bottom: 16px;

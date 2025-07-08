@@ -11,7 +11,7 @@
 </head>
 <body>
     <!-- flash messages -->
-    <%- include('partials/flash') %>
+    <%- include('./partials/flash.ejs') %>
 
     <div class="container">
         <div class="profile-header">
@@ -280,67 +280,81 @@
         </div>
     </div>
 
-    <!-- Product Modal -->
-    <div class="modal" id="productModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="modalProductTitle"></h3>
-                <button class="modal-close" id="productModalClose" aria-label="Close modal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="media-viewer">
-                    <div class="media-slider-container">
-                        <div class="media-slider-track" id="productMediaSliderTrack">
-                            <!-- Slides will be inserted here by JavaScript -->
-                        </div>
-                    </div>
-                    <div class="media-nav">
-                        <button class="media-nav-button prev" id="productPrevButton" aria-label="Previous image">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button class="media-nav-button next" id="productNextButton" aria-label="Next image">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
+<!-- Product Modal -->
+<div class="modal" id="productModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modalProductTitle"></h3>
+            <button class="modal-close" id="productModalClose" aria-label="Close modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="media-viewer">
+                <div class="media-slider-container">
+                    <div class="media-slider-track" id="productMediaSliderTrack">
+                        <!-- Slides will be inserted here by JavaScript -->
                     </div>
                 </div>
-                <div class="modal-details">
-                    <div class="product-meta">
-                        <span class="product-price" id="modalProductPrice"></span>
-                        <span class="product-category" id="modalProductCategory"></span>
-                        <span class="product-stock" id="modalProductStock"></span>
+                <div class="media-nav">
+                    <button class="media-nav-button prev" id="productPrevButton" aria-label="Previous image">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="media-nav-button next" id="productNextButton" aria-label="Next image">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-details">
+                <div class="product-meta">
+                    <span class="product-price" id="modalProductPrice"></span>
+                    <span class="product-category" id="modalProductCategory"></span>
+                    <span class="product-stock" id="modalProductStock"></span>
+                    <% if (!isCurrentUser) { %>
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus" id="quantityMinus">-</button>
+                            <input type="number" id="productQuantity" value="1" min="1" max="100">
+                            <button class="quantity-btn plus" id="quantityPlus">+</button>
+                        </div>
+                    <% } %>
+                </div>
+                <p class="modal-description" id="modalProductDescription"></p>
+                <div class="modal-stats">
+                    <div class="modal-stat">
+                        <i class="fas fa-eye"></i> <span id="modalProductViews">0</span> views
                     </div>
-                    <p class="modal-description" id="modalProductDescription"></p>
-                    <div class="modal-stats">
-                        <div class="modal-stat">
-                            <i class="fas fa-eye"></i> <span id="modalProductViews">0</span> views
-                        </div>
-                        <div class="modal-stat">
-                            <i class="fas fa-shopping-bag"></i> <span id="modalProductPurchases">0</span> purchases
-                        </div>
-                        <div class="modal-stat">
-                            <i class="fas fa-star"></i> <span id="modalProductRating">0</span> rating
-                        </div>
-                        <div class="modal-stat">
-                            <i class="fas fa-calendar-alt"></i> <span id="modalProductDate"></span>
-                        </div>
+                    <div class="modal-stat">
+                        <i class="fas fa-shopping-bag"></i> <span id="modalProductPurchases">0</span> purchases
                     </div>
-                    <div class="product-actions">
-                        <% if (isCurrentUser) { %>
-                            <button class="btn btn-outline" id="editProductBtn">
-                                <i class="fas fa-edit"></i> Edit Product
-                            </button>
-                        <% } else { %>
-                            <button class="btn btn-primary" id="addToCartBtn">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
-                            </button>
-                        <% } %>
+                    <div class="modal-stat">
+                        <i class="fas fa-star"></i> <span id="modalProductRating">0</span> rating
                     </div>
+                    <div class="modal-stat">
+                        <i class="fas fa-calendar-alt"></i> <span id="modalProductDate"></span>
+                    </div>
+                </div>
+                <div class="product-actions">
+                    <% if (isCurrentUser) { %>
+                        <button class="btn btn-outline" id="editProductBtn">
+                            <i class="fas fa-edit"></i> Edit Product
+                        </button>
+                        <button class="btn btn-danger" id="deleteProductBtn">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    <% } else { %>
+                        <button class="btn btn-primary add-cart-btn" id="addToCartBtn"
+                                data-id="" data-name="" data-price="" data-image="">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                        <button class="btn btn-outline" id="buyNowBtn">
+                            <i class="fas fa-bolt"></i> Buy Now
+                        </button>
+                    <% } %>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Post Modal -->
     <div class="modal" id="postModal">

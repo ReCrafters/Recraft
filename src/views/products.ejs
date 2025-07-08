@@ -19,7 +19,9 @@
             </a>
             <div class="nav-links">
                 <a href="/">Home</a>
-                <a href="/cart">Cart</a>
+                <a href="/cart">
+                    Cart <span id="cart-count"></span>
+                </a>
                 <% if(req.user){%>
                 <a href="/users/<%= req.user._id %>">Your Profile</a>
                 <% } %>
