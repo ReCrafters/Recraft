@@ -1,196 +1,717 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title><%= product.name %> – Seller View</title>
-
-  <style>
-    :root {
-      --sand-1:#efe1ce;
-      --sand-2:#d8c3a8;
-      --ink:#181818;
-      --accent:#6b4b1d;
-      --radius:14px;
-    }
-    *{box-sizing:border-box;font-family:"Segoe UI",sans-serif}
-    body{
-      margin:0;
-      background:linear-gradient(to right,var(--sand-2),var(--sand-1));
-      color:var(--ink);
-    }
-
-    header{
-      background:#000;
-      color:#fff;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:18px 40px;
-    }
-    header .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color:#f8e4cc
-    }
-    header .brand img {
-      height: 38px;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 22px;
-      font-weight: 600;
-    }
-    nav a{
-      color:#fff;
-      text-decoration:none;
-      margin-left:28px;
-      font-weight:500;
-      transition:opacity .15s;
-    }
-    nav a.logout-btn {
-      background-color: #5a3518;
-      padding: 6px 14px;
-      border-radius: 8px;
-      color: #f8e4cc;
-      font-weight: 600;
-    }
-    nav a.logout-btn:hover {
-      opacity: 0.85;
-    }
-    nav a:hover:not(.logout-btn) {opacity:.75}
-
-    .wrapper{padding:40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:1280px;margin:auto}
-    .img-col{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-    }
-    .main-img{
-      width:100%;max-width:600px;height:420px;object-fit:contain;
-      border-radius:var(--radius);box-shadow:0 6px 14px rgba(0,0,0,.12);
-      background:#fff;
-    }
-    .thumb-list{margin-top:18px;display:flex;gap:14px;flex-wrap:wrap}
-    .thumb{
-      width:86px;height:70px;border-radius:8px;overflow:hidden;
-      border:2px solid transparent;cursor:pointer;transition:border .15s;
-    }
-    .thumb:hover{border:2px solid var(--accent)}
-    .thumb img{width:100%;height:100%;object-fit:cover}
-
-    .details{display:flex;flex-direction:column;gap:24px;}
-    h2{margin:0;font-size:32px;font-weight:700}
-    .price{font-size:28px;font-weight:600;color:var(--accent)}
-
-    .meta-list {
-      display: grid;
-      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-      gap:16px;
-    }
-    .meta-item {
-      font-size:15px;
-      padding:8px 0;
-    }
-    .meta-item span {
-      font-weight:600;
-      color: var(--accent);
-    }
-    .badge {
-      display:inline-block;background:var(--accent);color:#fff;padding:2px 8px;
-      border-radius:8px;font-size:12px;margin:2px 4px 2px 0;
-    }
-
-    .rating-box {
-      margin-top:16px;
-      font-size:18px;
-      font-weight:600;
-      color:#444;
-    }
-
-    .btn-row-top {
-      margin: 20px 0;
-      display:flex;gap:14px;flex-wrap:wrap;
-    }
-    .btn{
-      background:var(--accent);color:#fff;border:none;border-radius:8px;
-      padding:10px 20px;font-size:14px;font-weight:500;cursor:pointer;
-      transition:transform .15s;
-    }
-    .btn:hover{transform:translateY(-2px)}
-    .btn.outline{
-      background:transparent;color:var(--accent);border:2px solid var(--accent)
-    }
-
-    @media(max-width:960px){
-      .wrapper{grid-template-columns:1fr;gap:40px}
-      .main-img{height:360px}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= product.name %> | ReCraft</title>
+    <style>
+        :root {
+            --bg-color: #FAF9F7;
+            --text-base: #1D1C1A;
+            --headings: #553820;
+            --price: #A99480;
+            --buttons: #9A836D;
+            --badges: #CCB39E;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-base);
+            line-height: 1.6;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--headings);
+        }
+        
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .product-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        @media (max-width: 768px) {
+            .product-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Image Gallery */
+        .image-gallery {
+            position: relative;
+        }
+        
+        .main-image-container {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            cursor: zoom-in;
+            transition: transform 0.3s;
+        }
+        
+        .main-image:hover {
+            transform: scale(1.02);
+        }
+        
+        .thumbnail-container {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        
+        .thumbnail {
+            width: 60px;
+            height: 60px;
+            border-radius: 4px;
+            cursor: pointer;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+        
+        .thumbnail.active {
+            border: 2px solid var(--buttons);
+        }
+        
+        /* Zoom Modal */
+        .zoom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            width: auto;
+            height: auto;
+        }
+        
+        .modal-image {
+            max-width: 100%;
+            max-height: 80vh;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .modal-thumbnails {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .modal-thumbnail {
+            width: 50px;
+            height: 50px;
+            border-radius: 4px;
+            cursor: pointer;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+        
+        .modal-thumbnail.active {
+            border: 2px solid var(--buttons);
+        }
+        
+        .close-zoom {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+        
+        .prev {
+            left: 20px;
+        }
+        
+        .next {
+            right: 20px;
+        }
+        
+        /* Product Info */
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .product-title {
+            font-size: 1.8rem;
+            color: var(--headings);
+            margin-bottom: 0.5rem;
+        }
+        
+        .price {
+            font-size: 1.5rem;
+            color: var(--price);
+            font-weight: bold;
+        }
+        
+        .stock {
+            color: green;
+            font-weight: 500;
+        }
+        
+        .category, .tags {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            background-color: var(--badges);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        /* Seller Info */
+        .seller-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: rgba(154, 131, 109, 0.1);
+            border-radius: 8px;
+        }
+        
+        .seller-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .seller-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        
+        .badge {
+            background-color: var(--badges);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            align-self: flex-start;
+        }
+        
+        /* QR Code */
+        .qr-code-container {
+            margin-top: 1rem;
+            text-align: center;
+            padding: 1rem;
+            background-color: rgba(154, 131, 109, 0.05);
+            border-radius: 8px;
+        }
+        
+        .qr-code-title {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .qr-code-image {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        /* Reviews Section */
+        .reviews-section {
+            margin-top: 3rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .reviews-title {
+            font-size: 1.5rem;
+            color: var(--headings);
+            margin-bottom: 1.5rem;
+        }
+        
+        .review-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .review-item {
+            display: flex;
+            gap: 1rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .review-user-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .review-content {
+            flex: 1;
+        }
+        
+        .review-user-name {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stars {
+            color: gold;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Review Form */
+        .review-form {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: rgba(154, 131, 109, 0.05);
+            border-radius: 8px;
+        }
+        
+        .form-title {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            color: var(--headings);
+        }
+        
+        .rating-input {
+            margin-bottom: 1rem;
+        }
+        
+        .rating-stars {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .star {
+            font-size: 1.5rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .star:hover, .star.active {
+            color: gold;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 1rem;
+        }
+        
+        .submit-btn {
+            background-color: var(--buttons);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background-color: #887561;
+        }
+        
+        /* Buy Button */
+        .buy-section {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            display: none;
+            justify-content: center;
+        }
+        
+        .buy-btn {
+            background-color: var(--buttons);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        @media (max-width: 768px) {
+            .buy-section {
+                display: flex;
+            }
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--headings);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+        
+        /* Sustainability Badge */
+        .sustainability {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .verified-badge {
+            color: green;
+            font-weight: 500;
+        }
+        
+        /* Hidden form fields */
+        .hidden-rating {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-
-  <header>
-    <div class="brand">
-      <img src="WhatsApp_Image_2025-07-01_at_21.28.14_01b060a4-removebg-preview.png" alt="ReCraft Logo">
-      <h1>ReCraft</h1>
-    </div>
-    <nav>
-      <a href="/dashboard">Dashboard</a>
-      <a href="/product/<%= product._id %>/form">Fill Form</a>
-      <a href="/product/<%= product._id %>/generate-qr">Generate QR</a>
-      <a href="/product/<%= product._id %>/edit">Edit</a>
-      <a href="/product/<%= product._id %>/delete" onclick="return confirm('Delete this product?')">Delete</a>
-      <a class="logout-btn" href="/logout">Logout</a>
-    </nav>
-  </header>
-
-  <div class="wrapper">
-    <div class="img-col">
-      <img class="main-img" src="<%= product.images[0] %>" alt="<%= product.name %>">
-      <div class="rating-box">
-        Rating: <%= product.rating.avgRating.toFixed(1) %> ★
-      </div>
-    </div>
-
-    <div class="details">
-      <div>
-        <h2><%= product.name %></h2>
-        <div class="price">$ <%= product.price.toFixed(2) %></div>
-      </div>
-
-      <div class="meta-list">
-        <div class="meta-item"><span>Category:</span> <%= product.category %></div>
-        <div class="meta-item"><span>Stock:</span> <%= product.stock %> units</div>
-        <div class="meta-item"><span>Views:</span> <%= product.views %></div>
-        <div class="meta-item"><span>Purchases:</span> <%= product.purchases %></div>
-        <div class="meta-item"><span>Documents Verified:</span>
-          <% if(product.isVerified && product.verifiedDocuments.length){ %>
-            Yes - <a href="<%= product.verifiedDocuments[0] %>" target="_blank">View</a>
-          <% } else { %>
-            No
-          <% } %>
+    <header>
+        <div class="logo">ReCraft</div>
+        <nav>
+            <!-- Navigation links would go here -->
+        </nav>
+    </header>
+    
+    <div class="main-container">
+        <div class="product-container">
+            <div class="image-gallery">
+                <div class="main-image-container">
+                    <img src="<%= product.images[0] %>" alt="<%= product.name %>" class="main-image" id="productImage">
+                </div>
+                <div class="thumbnail-container">
+                    <% product.images.forEach((image, index) => { %>
+                        <img src="<%= image %>" alt="Thumbnail <%= index + 1 %>" class="thumbnail <%= index === 0 ? 'active' : '' %>" data-index="<%= index %>">
+                    <% }); %>
+                </div>
+            </div>
+            
+            <div class="product-info">
+                <h1 class="product-title"><%= product.name %></h1>
+                <p><%= product.description %></p>
+                
+                <div class="price">₹<%= product.price %></div>
+                <div class="stock"><%= product.stock %> in stock</div>
+                
+                <div class="category">
+                    <span>Category:</span>
+                    <span><%= product.category %></span>
+                </div>
+                
+                <div class="tags">
+                    <span>Tags:</span>
+                    <% JSON.parse(product.tags[0]).forEach(tag => { %>
+                        <span class="tag"><%= tag %></span>
+                    <% }) %>
+                </div>
+                
+                <% if (product.isVerified) { %>
+                    <div class="sustainability">
+                        <span class="verified-badge">✓ Verified Sustainable Product</span>
+                    </div>
+                <% } %>
+                
+                <div class="seller-info">
+                    <img src="<%= product.sellerId.image %>" alt="<%= product.sellerId.name %>" class="seller-image">
+                    <div class="seller-details">
+                        <div><%= product.sellerId.name %></div>
+                        <div><%= product.sellerId.businessName %></div>
+                        <span class="badge"><%= product.sellerId.businessType %></span>
+                    </div>
+                </div>
+                
+                <div class="qr-code-container">
+                    <div class="qr-code-title">Product QR Code</div>
+                    <img src="<%= product.qrCodeLink %>" alt="QR Code" class="qr-code-image">
+                </div>
+                
+                <button class="buy-btn">Buy Now</button>
+            </div>
         </div>
-        <div class="meta-item" style="grid-column:1/-1"><span>Tags:</span>
-          <% product.tags.forEach(tag=>{ %>
-            <span class="badge"><%= tag %></span>
-          <% }) %>
+        
+        <div class="reviews-section">
+            <h2 class="reviews-title">Customer Reviews</h2>
+            
+            <div class="review-list" id="reviewList">
+                <% if (product.rating.reviews.length > 0) { %>
+                    <% product.rating.reviews.forEach(review => { %>
+                        <div class="review-item">
+                            <img src="<%= review.userId.image || '/images/default-user.jpg' %>" alt="<%= review.userId.username %>" class="review-user-image">
+                            <div class="review-content">
+                                <div class="review-user-name"><%= review.userId.username %></div>
+                                <div class="stars">
+                                    <% for (let i = 0; i < review.rating; i++) { %>★<% } %>
+                                    <% for (let i = review.rating; i < 5; i++) { %>☆<% } %>
+                                </div>
+                                <p><%= review.comment %></p>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p>No reviews yet. Be the first to review!</p>
+                <% } %>
+            </div>
+            
+            <% if (user) { %>
+                <form class="review-form" method="POST" action="/products/<%= product._id %>/review" id="reviewForm">
+                    <h3 class="form-title">Write a Review</h3>
+                    <div class="rating-input">
+                        <label>Rating:</label>
+                        <div class="rating-stars">
+                            <span class="star" data-rating="1">☆</span>
+                            <span class="star" data-rating="2">☆</span>
+                            <span class="star" data-rating="3">☆</span>
+                            <span class="star" data-rating="4">☆</span>
+                            <span class="star" data-rating="5">☆</span>
+                        </div>
+                        <input type="number" name="rating" class="hidden-rating" required min="1" max="5">
+                    </div>
+                    <textarea name="comment" placeholder="Share your thoughts about this product..." required></textarea>
+                    <button type="submit" class="submit-btn">Submit Review</button>
+                </form>
+            <% } else { %>
+                <p><a href="/login">Log in</a> to leave a review</p>
+            <% } %>
         </div>
-        <div class="meta-item" style="grid-column:1/-1"><span>QR Code:</span>
-          <% if(product.qrCodeLink){ %>
-            <a href="<%= product.qrCodeLink %>" target="_blank">Open QR</a>
-          <% } else { %>
-            Not generated
-          <% } %>
-        </div>
-      </div>
-
-      <div>
-        <h3>About this item</h3>
-        <p><%= product.description %></p>
-      </div>
     </div>
-  </div>
+    
+    <div class="buy-section">
+        <button class="buy-btn">Buy Now</button>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 ReCraft. All rights reserved.</p>
+    </footer>
+    
+    <!-- Zoom Modal -->
+    <div class="zoom-modal" id="zoomModal">
+        <span class="close-zoom">&times;</span>
+        <div class="nav-arrow prev">&#10094;</div>
+        <div class="modal-content">
+            <img src="" alt="Zoomed Product Image" class="modal-image" id="zoomedImage">
+            <div class="modal-thumbnails" id="modalThumbnails">
+                <% product.images.forEach((image, index) => { %>
+                    <img src="<%= image %>" alt="Thumbnail <%= index + 1 %>" class="modal-thumbnail <%= index === 0 ? 'active' : '' %>" data-index="<%= index %>">
+                <% }); %>
+            </div>
+        </div>
+        <div class="nav-arrow next">&#10095;</div>
+    </div>
 
+    <script>
+        // Image Gallery Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            const mainImage = document.getElementById('productImage');
+            let currentImageIndex = 0;
+
+            // Thumbnail click handler
+            thumbnails.forEach(thumb => {
+                thumb.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    currentImageIndex = index;
+                    mainImage.src = this.src;
+                    
+                    // Update active thumbnail
+                    document.querySelector('.thumbnail.active').classList.remove('active');
+                    this.classList.add('active');
+                    
+                    // Update modal thumbnails if modal is open
+                    if (document.getElementById('zoomModal').style.display === 'flex') {
+                        updateModalImage(index);
+                    }
+                });
+            });
+
+            // Zoom Modal Functionality
+            const zoomModal = document.getElementById('zoomModal');
+            const zoomedImage = document.getElementById('zoomedImage');
+            const closeZoom = document.querySelector('.close-zoom');
+            const modalThumbnails = document.querySelectorAll('.modal-thumbnail');
+            
+            // Open modal with clicked image
+            mainImage.addEventListener('click', () => {
+                zoomedImage.src = mainImage.src;
+                zoomModal.style.display = 'flex';
+                
+                // Update active modal thumbnail
+                document.querySelector('.modal-thumbnail.active').classList.remove('active');
+                modalThumbnails[currentImageIndex].classList.add('active');
+            });
+            
+            // Close modal
+            closeZoom.addEventListener('click', () => {
+                zoomModal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside image
+            zoomModal.addEventListener('click', (e) => {
+                if (e.target === zoomModal) {
+                    zoomModal.style.display = 'none';
+                }
+            });
+            
+            // Modal thumbnail click handler
+            modalThumbnails.forEach(thumb => {
+                thumb.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    currentImageIndex = index;
+                    updateModalImage(index);
+                });
+            });
+            
+            // Navigation arrows
+            document.querySelector('.prev').addEventListener('click', function() {
+                currentImageIndex = (currentImageIndex - 1 + thumbnails.length) % thumbnails.length;
+                updateModalImage(currentImageIndex);
+            });
+            
+            document.querySelector('.next').addEventListener('click', function() {
+                currentImageIndex = (currentImageIndex + 1) % thumbnails.length;
+                updateModalImage(currentImageIndex);
+            });
+            
+            // Update modal image and thumbnails
+            function updateModalImage(index) {
+                zoomedImage.src = thumbnails[index].src;
+                
+                // Update active thumbnails
+                document.querySelector('.thumbnail.active').classList.remove('active');
+                thumbnails[index].classList.add('active');
+                
+                document.querySelector('.modal-thumbnail.active').classList.remove('active');
+                modalThumbnails[index].classList.add('active');
+            }
+            
+            // Star Rating Functionality
+            const stars = document.querySelectorAll('.star');
+            const hiddenRatingInput = document.querySelector('.hidden-rating');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    hiddenRatingInput.value = rating;
+                    
+                    // Update star display
+                    stars.forEach((s, i) => {
+                        if (i < rating) {
+                            s.textContent = '★';
+                            s.classList.add('active');
+                        } else {
+                            s.textContent = '☆';
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+                
+                // Hover effects
+                star.addEventListener('mouseover', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    stars.forEach((s, i) => {
+                        if (i < rating) {
+                            s.textContent = '★';
+                        } else {
+                            s.textContent = '☆';
+                        }
+                    });
+                });
+                
+                star.addEventListener('mouseout', function() {
+                    const currentRating = hiddenRatingInput.value ? parseInt(hiddenRatingInput.value) : 0;
+                    stars.forEach((s, i) => {
+                        if (i < currentRating) {
+                            s.textContent = '★';
+                        } else {
+                            s.textContent = '☆';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>

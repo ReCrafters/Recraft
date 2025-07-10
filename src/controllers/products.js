@@ -1,14 +1,14 @@
 
 const Product = require('../models/products.js');
 const Form = require('../models/form.js');
-const User= require('../models/info/userModel');
+const User= require('../models/info/baseUser.js');
 const {getCombinedProductData} = require('../util/productService.js');
 const SellerModel = require('../models/info/sellerModel.js');
 const cloudinary = require('../config/cloudinary');
 module.exports.index = async (req, res) => {
   try {
     const products = await getCombinedProductData();
-    res.render('products.ejs', {products, req});
+    res.render('products.ejs', {products, req, user:req.user});
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -74,15 +74,16 @@ module.exports.createProduct = async (req, res) => {
 
 module.exports.showProduct = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id).lean();
+    const product = await Product.findById(req.params.id).populate('sellerId').lean().populate({
+      path: 'rating.reviews.userId',
+      select: 'username image', // Include only username and profileImage
+      model: 'BaseUser' 
+    });;
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });
     }
-    const form = await Form.findOne({ productID: product._id })
-      .sort({ createdAt: -1 }) 
-      .lean();
-    product.form = form || null;
-    res.json(product);
+      console.log(product.rating.reviews);
+    res.render('product', {product, user:req.user});
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -178,7 +179,8 @@ module.exports.createOrUpdateReview = async (req, res) => {
       product.rating.reviews.push({ userId, rating, comment });
     }
     await product.calculateAvgRating();
-    res.status(200).json({ message: 'Review submitted', avgRating: product.rating.avgRating });
+    req.flash('success', 'Review submitted successfully!');
+    res.redirect(`/products/${productId}`)
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
