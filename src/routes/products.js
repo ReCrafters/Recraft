@@ -37,4 +37,7 @@ router.route('/:id/review')
     .get(wrapAsync(productsController.showReview))
     .post(isLoggedIn, wrapAsync(productsController.createOrUpdateReview))
 
+router.route('/:id/info')
+    .get(wrapAsync(productsController.showProductInfo));
+
 module.exports = router;

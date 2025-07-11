@@ -622,7 +622,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 DOM.modals.product.classList.add('active');
                 document.body.style.overflow = 'hidden';
                 
-                const response = await fetch(`/products/${productId}`);
+                const response = await fetch(`/products/${productId}/info`);
                 if (!response.ok) throw new Error('Failed to fetch product');
                 
                 state.currentProduct = await response.json();

@@ -90,6 +90,23 @@ module.exports.showProduct = async (req, res) => {
   }
 };
 
+module.exports.showProductInfo = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id).lean();
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+    const form = await Form.findOne({ productID: product._id })
+      .sort({ createdAt: -1 }) 
+      .lean();
+    product.form = form || null;
+    res.json(product);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 module.exports.updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
