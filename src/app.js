@@ -171,6 +171,10 @@ app.get('/', (req, res) => {
   res.render('landingPage');
 });
 
+app.get('/cron', (req,res)=>{
+  res.send('Hi');
+})
+
 // Start Server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
