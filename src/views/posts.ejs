@@ -12,9 +12,9 @@
 </head>
 <!-- Flash Messages -->
  <%- include('partials/flash') %>
- <% if(currentUser.role==='user') {%>
+ <% if(currentUser&&currentUser.role==='user') {%>
     <%- include('partials/userNavbar') %>
-<% }else{ %>
+<% }else if(currentUser&&currentUser.role==='seller') { %>
     <%- include('partials/navbar') %>
 <% } %>
     <div class="container">
