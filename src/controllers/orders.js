@@ -1,27 +1,32 @@
 const Order = require('../models/orders');
 const User = require('../models/info/userModel');
 const Seller = require('../models/info/sellerModel');
+const Cart = require('../models/cart')
 
 module.exports.placeOrder = async (req, res) => {
   try {
     const userId = req.user._id; 
-    const { cart, paymentMethod } = req.body;
-    const { fullName, phone, address, city, state, pincode } = req.body;
-    if (
-      !cart || cart.length === 0 ||
-      !fullName || !phone || !address || !city || !state || !pincode
-    ) {
+    const { paymentMethod, fullName, phone, address, city, state, pincode } = req.body;
+    let cartItems;
+    try {
+      cartItems = JSON.parse(req.body.cart);
+    } catch (err) {
+      console.error('Cart parse error:', err);
+      return res.status(400).json({ error: 'Invalid cart data' });
+    }
+    if (!cartItems || cartItems.length === 0 || 
+        !fullName || !phone || !address || !city || !state || !pincode) {
       return res.status(400).json({ error: 'Missing or invalid order details' });
     }
     const shippingDetails = { fullName, phone, address, city, state, pincode };
-    const items = cart.map(item => ({
+    const items = cartItems.map(item => ({
       productId: item._id,
       name: item.name,
       price: item.price,
       quantity: item.quantity,
-      sellerId: item.sellerId,
+      sellerId: item.sellerId || null
     }));
-    const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const newOrder = await Order.create({
       userId,
       items,
@@ -33,15 +38,15 @@ module.exports.placeOrder = async (req, res) => {
     await User.findByIdAndUpdate(userId, {
       $push: { orderHistory: newOrder._id }
     });
-    const uniqueSellers = [...new Set(items.map(i => i.sellerId.toString()))];
-    await Promise.all(
-      uniqueSellers.map(sellerId =>
-        Seller.findByIdAndUpdate(sellerId, {
+    const sellerUpdates = items
+      .filter(item => item.sellerId)
+      .map(item => 
+        Seller.findByIdAndUpdate(item.sellerId, {
           $push: { salesHistory: newOrder._id }
         })
-      )
-    );
-    res.json({ message: 'Order placed successfully', orderId: newOrder._id });
+      );
+    await Promise.all(sellerUpdates);
+    res.json({'message':'completed'});
   } catch (err) {
     console.error('Order placement error:', err);
     res.status(500).json({ error: 'Failed to place order' });
@@ -49,8 +54,24 @@ module.exports.placeOrder = async (req, res) => {
 };
 
 
-module.exports.renderCheckout = (req, res) => {
-  res.render('checkout.ejs');
+module.exports.renderCheckout = async (req, res) => {
+  const userId = req.user;
+  const cart = await Cart.findOne({userId}).populate({
+        path: 'items._id',  
+        select: 'images[0]'  
+      });
+    if (!cart || cart.items.length === 0) {
+      req.flash('error', 'Your cart is empty');
+      return res.redirect('/cart');
+    }
+    console.log(cart);
+  const totalAmount = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    res.render('checkout', {
+      cartItems: cart.items, 
+      totalAmount,
+      user: req.user,
+      cartId: cart._id 
+    });
 };
 
 module.exports.showOrder = async (req, res) => {

@@ -3,9 +3,6 @@ const router = express.Router();
 const orderController = require('../controllers/orders.js');
 const { isLoggedIn, isSeller } = require('../middleware.js');
 
-router.get('/',(req,res)=>{
-  res.render('sample');
-});
 router.route('/checkout')
   .get(isLoggedIn, orderController.renderCheckout)
   .post(isLoggedIn, orderController.placeOrder);

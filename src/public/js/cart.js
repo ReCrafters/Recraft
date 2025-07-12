@@ -124,6 +124,7 @@ if (checkoutBtn) {
       document.body.appendChild(notification);
       setTimeout(() => notification.remove(), 3000);
     }
+    window.location.href= '/order/checkout';
   });
 }
 
@@ -138,3 +139,4 @@ window.onload = () => {
   displayCart();
   updateCartCount();
 };
+
