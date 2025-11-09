@@ -94,7 +94,36 @@ CLOUDINARY_API_SECRET= secret_cloudinary_key
 ### 4. Run the App
 
 node src/app.js
-\`\`\`
+
+
+---
+
+## 🤝 Contributors
+
+This project acknowledges **everyone’s contribution respectfully and transparently**, based on role and responsibility.
+
+**Organization Owner & Primary Developer**
+- Saksham ([@itsme-saksham18](https://github.com/itsme-saksham18))  
+  - Led the project end-to-end, including architecture design, full-stack development, UI/UX workflows, sustainability logic integrations, deployment, project documentation, and overall platform direction.
+
+**Significant Development Collaboration**
+- Payal ([@Payal1907](https://github.com/Payal1907))  
+  - Contributed meaningfully to multiple frontend modules, interface refinement, component structuring, and collaborative debugging during feature implementation.
+
+**Concept & Ideation Support**
+- Ankita ([@Ankita391](https://github.com/Ankita391))  
+  - Assisted with early-stage conceptual discussions and helped frame the sustainability-driven approach.
+
+- Vansh ([@Vansh12970](https://github.com/Vansh12970))  
+  - Supported the brainstorming phase and contributed to shaping the initial direction of the project.
+
+---
+
+## 📜 License
+This project is open-sourced for learning and ethical development.  
+Commercial use requires explicit permission from the project owner.
+
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
