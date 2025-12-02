@@ -1,0 +1,14 @@
+name: Keep Recraft Backend Alive
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"   # Run every 5 minutes
+  workflow_dispatch:
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Recraft backend
+        run: |
+          curl -m 20 -s https://recraft.onrender.com/ > /dev/null
